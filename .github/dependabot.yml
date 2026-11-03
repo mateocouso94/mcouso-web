@@ -4,12 +4,23 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule: { interval: weekly, day: monday }
+    # Solo parches y versiones menores: los saltos de versión mayor (Next 16,
+    # TypeScript 7...) se hacen a mano porque pueden romper la compilación.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      # @types/node debe seguir a la versión de Node del Dockerfile (22)
+      - dependency-name: "@types/node"
+        versions: [">=23"]
     groups:
       next-react:
         patterns: ["next", "react", "react-dom", "@types/react*"]
   - package-ecosystem: docker
     directory: /
     schedule: { interval: weekly, day: monday }
+    ignore:
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: monthly }
