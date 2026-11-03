@@ -1,0 +1,8 @@
+{
+  "name": "Mateo Couso · Infraestructura",
+  "short_name": "Mateo Couso",
+  "icons": [{ "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }],
+  "theme_color": "#172b32",
+  "background_color": "#eeeae0",
+  "display": "browser"
+}
