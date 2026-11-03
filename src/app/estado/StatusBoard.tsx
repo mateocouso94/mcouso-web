@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { fetchHomelabStatus, buildInfo, timeAgo } from '../../lib/status';
+import { fetchHomelabStatus, buildInfo, timeAgo, fmtPing } from '../../lib/status';
 import type { HomelabStatus } from '../../lib/status';
 
 const LABEL: Record<number, string> = { 1: 'OK', 0: 'Caído', 2: 'Pendiente', 3: 'Mantenimiento', [-1]: 'Sin datos' };
@@ -38,7 +38,7 @@ export default function StatusBoard() {
               <li key={m.id}>
                 <div className="status-row">
                   <b><i className={`status-dot ${CLS[m.status] ?? ''}`} />{m.name}</b>
-                  <span>{LABEL[m.status] ?? '—'}{m.ping != null ? ` · ${m.ping} ms` : ''}</span>
+                  <span>{LABEL[m.status] ?? '—'}{m.ping != null ? ` · ${fmtPing(m.ping)}` : ''}</span>
                   <span className="status-uptime">{m.uptime24 != null ? `${(m.uptime24 * 100).toFixed(2)} %` : '—'}<small> 24 h</small></span>
                 </div>
                 <div className="status-beats" aria-hidden="true">{m.beats.map((b, i) => <i key={i} className={CLS[b] ?? ''} />)}</div>

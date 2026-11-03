@@ -54,3 +54,7 @@ export function timeAgo(iso: string, lang: 'es' | 'en') {
   const [v, u] = min < 60 ? [min, lang === 'es' ? 'min' : 'min'] : min < 2880 ? [Math.round(min / 60), 'h'] : [Math.round(min / 1440), lang === 'es' ? 'días' : 'days'];
   return lang === 'es' ? `hace ${v} ${u}` : `${v} ${u} ago`;
 }
+
+export function fmtPing(ms: number) {
+  return ms < 1 ? '<1 ms' : `${Math.round(ms)} ms`;
+}
