@@ -41,7 +41,7 @@ export const en: PageCopy = {
   ],
 
   // --- 01 Expertise ---
-  stackEyebrow: '01 / EXPERTISE',
+  stackEyebrow: 'EXPERTISE',
   stackTitle: 'What I work with.',
   stackIntro:
     "Most of my hours are in virtualization, storage and backup. I use the rest every day, but not as deeply, and I say so in each area.",
@@ -152,7 +152,7 @@ export const en: PageCopy = {
   ],
 
   // --- 02 Experience ---
-  careerEyebrow: '02 / EXPERIENCE',
+  careerEyebrow: 'EXPERIENCE',
   careerTitle: "Where I've worked.",
   careerIntro:
     'At cloud.gal I owned projects from start to finish: from the first customer meeting to the follow-ups after go-live, with the design, build, migration and backups in between. Before that, at DXC, I ran VMware clusters for public-sector customers. Since 2026 I have been at Enxenio, focusing more on Linux and cloud.',
@@ -217,7 +217,7 @@ export const en: PageCopy = {
   ],
 
   // --- 03 Homelab ---
-  labEyebrow: '03 / HOMELAB',
+  labEyebrow: 'HOMELAB',
   labTitle: 'What I run at home.',
   labIntro:
     "Two mini PCs running Debian 13. One handles DNS and DHCP with AdGuard Home and monitors everything with Prometheus, Grafana and Uptime Kuma. The other runs the containers, including this website. I use it to try things I can't break at work. The site reaches the Internet through Cloudflare Tunnel, with no ports open on the router, and it redeploys itself every time I push a change to GitHub.",
@@ -242,7 +242,7 @@ export const en: PageCopy = {
   },
 
   // --- 04 Projects ---
-  projectsEyebrow: '04 / PROJECTS',
+  projectsEyebrow: 'PROJECTS',
   projectsTitle: 'Four projects, in detail.',
   projectsIntro:
     "These are real projects I worked on. I don't name customers or share internal data; everything else is told as it happened.",
@@ -302,7 +302,7 @@ export const en: PageCopy = {
   ],
 
   // --- 05 Education ---
-  trainingEyebrow: '05 / EDUCATION',
+  trainingEyebrow: 'EDUCATION',
   trainingTitle: 'Education & languages.',
   education: [
     { title: 'Higher Vocational Diploma · Networked IT Systems Administration', institution: 'IES San Clemente', period: '2013 — 2015' },
@@ -315,7 +315,7 @@ export const en: PageCopy = {
   ],
 
   // --- 06 Contact ---
-  contactEyebrow: '06 / CONTACT',
+  contactEyebrow: 'CONTACT',
   contactTitle: "Let's talk.",
   contactIntro:
     "If you need someone for VMware infrastructure, migrations or backup, or you'd like to chat about the site or the homelab, drop me a line.",
