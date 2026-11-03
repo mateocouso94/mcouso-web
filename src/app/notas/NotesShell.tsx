@@ -12,6 +12,7 @@ export default function NotesShell({ children }: { children: ReactNode }) {
         <nav aria-label="Navegación">
           <a href="/">Inicio</a>
           <a href="/notas/">Notas</a>
+          <a href="/estado/">Estado</a>
           <a href="/#contact">Contacto</a>
         </nav>
       </header>
