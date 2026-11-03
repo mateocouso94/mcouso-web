@@ -47,7 +47,7 @@ export default function Home() {
       <div className="page-wrap">
         <section className="hero" id="home">
           <div className="hero-copy">
-            <div className="folio"><span>{lang === 'es' ? 'PERFIL TÉCNICO' : 'TECHNICAL PROFILE'}</span><span>MC / 2026</span></div>
+            
             <p className="role"><i />{t.role}</p>
             <h1>{t.headline}</h1>
             <p className="intro">{t.intro}</p>
@@ -55,9 +55,9 @@ export default function Home() {
             <div className="hero-facts"><span>{t.location}</span><span>{t.years}</span><span>{t.credential}</span></div>
           </div>
           <aside className="portrait-panel">
-            <div className="portrait-frame"><img src="/profile.jpg" alt={t.portraitAlt} /><span className="portrait-index">01 / 06</span></div>
-            <div className="portrait-caption"><span>{lang === 'es' ? 'MIGRACIONES · VMWARE · DISASTER RECOVERY' : 'MIGRATIONS · VMWARE · DISASTER RECOVERY'}</span><b>Mateo Couso Hortas</b></div>
-            <div className="side-stamp">{lang === 'es' ? <>INGENIERO<br />INFRAESTRUCTURA</> : <>INFRASTRUCTURE<br />ENGINEER</>}<br /><strong>GALICIA</strong></div>
+            <div className="portrait-frame"><img src="/profile.jpg" alt={t.portraitAlt} /></div>
+            
+            
           </aside>
         </section>
 
