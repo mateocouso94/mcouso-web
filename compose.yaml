@@ -8,6 +8,9 @@ services:
     restart: unless-stopped
     ports:
       - "${PORTFOLIO_BIND:-192.168.0.30}:3000:3000"
+    environment:
+      # Dirección interna de Uptime Kuma, p. ej. http://192.168.0.X:3001 (va en .env, no se sube a git)
+      KUMA_URL: ${KUMA_URL:-http://127.0.0.1:9}
     read_only: true
     tmpfs:
       - /var/cache/nginx

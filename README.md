@@ -25,6 +25,7 @@ git push (main) ──► GitHub Actions ──► ghcr.io/mateocouso94/mcouso-w
                       nginx :3000  ◄── cloudflared ◄── Cloudflare ◄── mcouso.es
 ```
 
+- `deploy/update.sh` hace también `git pull`, así que los cambios en `compose.yaml` se aplican solos.
 - La web se compila como **sitio estático** (`output: 'export'`) y la sirve **nginx**. En producción no hay Node.js.
 - El servidor **descarga** la imagen: no hace falta abrir puertos ni darle a GitHub acceso a la red local.
 - **Dependabot** abre cada lunes Pull Requests con las actualizaciones de dependencias.
@@ -39,6 +40,18 @@ sudo cp deploy/mcouso-web-update.{service,timer} /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now mcouso-web-update.timer
 ```
+
+### Estado del homelab (consola y /estado/)
+
+La web lee el estado de Uptime Kuma a través de su propio nginx (solo dos URLs de lectura;
+el panel de Kuma no se expone). Para activarlo:
+
+1. En Uptime Kuma: **Status Pages → New Status Page** con slug **`homelab`**, añade los monitores que quieras mostrar y guarda.
+2. En el servidor, crea `/opt/ci/portfolio/.env` (ver `.env.example`):
+   `KUMA_URL=http://<IP-de-homelab-red>:3001`
+3. `docker compose up -d`
+
+Sin `.env`, la web funciona igual y la consola muestra "estado no disponible".
 
 ### Operación
 
