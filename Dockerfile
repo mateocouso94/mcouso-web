@@ -1,5 +1,5 @@
 # --- 1. Compilación: genera la web estática en /app/out ---
-FROM node:22-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY package.json package-lock.json ./
