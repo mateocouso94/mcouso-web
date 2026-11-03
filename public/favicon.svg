@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="8" fill="#1d4359"/>
-  <text x="8" y="42" fill="#f7f4ec" font-family="Georgia,serif" font-size="31" font-weight="700" letter-spacing="-3">MC</text>
-  <path d="M41 10h12v10" fill="none" stroke="#e17a55" stroke-width="3"/>
-  <circle cx="53" cy="20" r="4" fill="#e17a55"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MC"><rect width="64" height="64" rx="11" fill="#172b32"/><g fill="none" stroke="#f7f4ec" stroke-width="4.6" stroke-linecap="square" stroke-linejoin="miter"><path d="M11 44V21.5L19.2 32.5L27.4 21.5V44"/><path d="M52.5 25.2A9 10.6 0 1 0 52.5 40.3"/></g><path d="M11 52.5H52.5" stroke="#315e78" stroke-width="2.4"/><circle cx="51.5" cy="12.5" r="3.6" fill="#e0684a"/></svg>

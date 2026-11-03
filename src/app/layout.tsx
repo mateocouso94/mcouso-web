@@ -28,8 +28,14 @@ export const metadata: Metadata = {
     description: 'Ingeniero de sistemas: datacenters VMware, migraciones y DR con Veeam. Ahora también Linux, Azure y AWS.',
     images: ['/og.png'],
   },
-  icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }, { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' }],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
 };
+
+export const viewport = { themeColor: '#172b32' };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return <html lang="es"><body>{children}</body></html>;
