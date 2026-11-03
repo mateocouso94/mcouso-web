@@ -31,6 +31,13 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
   }, []);
   const active = useMemo(() => t.capabilities.find((item) => item.id === selected) ?? t.capabilities[0], [t, selected]);
 
+  // La dirección no está escrita en el HTML (contra los robots que recolectan correos):
+  // se monta solo cuando alguien pulsa el botón.
+  function openMail(event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    window.location.href = 'mailto:' + ['contacto', 'mcouso.es'].join('@');
+  }
+
   function deployLine(isSpanish: boolean) {
     const sha = buildInfo.sha.slice(0, 7);
     if (!buildInfo.time) return isSpanish ? `Versión local (${sha}).` : `Local build (${sha}).`;
@@ -69,7 +76,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
       stack: 'VMware · SAN / vSAN · Pure Storage · Veeam CDP · Disaster Recovery · Azure · AWS · Terraform',
       lab: 'homelab-red: AdGuard Home, Prometheus, Grafana, Uptime Kuma\nhomelab-apps: Docker Compose, nginx (esta web), cloudflared',
       career: 'Fermax → Plexus → Evelb → Landra → DXC → cloud.gal → Enxenio',
-      contact: 'contacto@mcouso.es',
+      contact: 'contacto(at)mcouso.es',
       deploy: deployLine(isSpanish),
       version: deployLine(isSpanish),
     };
@@ -216,7 +223,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
           <div className="education-grid"><div className="education-main"><div className="certification"><span className="cert-seal">VCP</span><div><small>VMware Certified Professional</small><h3>Data Center Virtualization</h3><b>VCP-DCV · 2023</b></div></div>{t.education.map((item) => <article className="study-row" key={item.title}><div><h3>{item.title}</h3><p>{item.institution}</p></div><span>{item.period}</span></article>)}</div><aside className="language-panel"><span>{lang === 'es' ? 'IDIOMAS' : 'LANGUAGES'}</span>{t.languages.map((item) => <div className="language-row" key={item.title}><b>{item.title}</b><small>{item.level}</small></div>)}</aside></div>
         </section>
 
-        <section className="contact-section" id="contact"><div className="contact-index">{t.contactEyebrow}</div><div className="contact-main"><h2>{t.contactTitle}</h2><p>{t.contactIntro}</p><div className="contact-actions"><a className="button-primary" href="mailto:contacto@mcouso.es">{t.emailCta} <span>↗</span></a><a href="https://es.linkedin.com/in/mateo-couso-hortas-71ba63164" target="_blank" rel="noreferrer">LINKEDIN ↗</a><a href="/CV-Mateo-Couso-Hortas-2026.pdf" download>PDF / CV ↓</a></div><div className="contact-email">contacto@mcouso.es</div></div></section>
+        <section className="contact-section" id="contact"><div className="contact-index">{t.contactEyebrow}</div><div className="contact-main"><h2>{t.contactTitle}</h2><p>{t.contactIntro}</p><div className="contact-actions"><a className="button-primary" href="#contact" onClick={openMail}>{t.emailCta} <span>↗</span></a><a href="https://es.linkedin.com/in/mateo-couso-hortas-71ba63164" target="_blank" rel="noreferrer">LINKEDIN ↗</a><a href="/CV-Mateo-Couso-Hortas-2026.pdf" download>PDF / CV ↓</a></div><div className="contact-email">contacto(at)mcouso.es</div></div></section>
       </div>
       <footer className="footer"><span>© {new Date().getFullYear()} MATEO COUSO HORTAS</span><span>{t.footer}</span><a href="#top">{lang === 'es' ? 'VOLVER ARRIBA ↑' : 'BACK TO TOP ↑'}</a></footer>
     </main>
