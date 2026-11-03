@@ -8,6 +8,8 @@ import type { PageCopy, NoteMeta } from '../content/types';
 import { es } from '../content/es';
 import { en } from '../content/en';
 import { formatDate } from '../lib/date';
+import { fetchHomelabStatus, buildInfo, timeAgo } from '../lib/status';
+import type { HomelabStatus } from '../lib/status';
 
 const content: Record<Lang, PageCopy> = { es, en };
 
@@ -18,23 +20,57 @@ export default function Home({ notes }: { notes: NoteMeta[] }) {
   const [output, setOutput] = useState(es.terminalDefault);
   const t = content[lang];
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  const [status, setStatus] = useState<HomelabStatus | null | undefined>(undefined);
+  useEffect(() => {
+    const ctrl = new AbortController();
+    fetchHomelabStatus(ctrl.signal).then(setStatus);
+    return () => ctrl.abort();
+  }, []);
   const active = useMemo(() => t.capabilities.find((item) => item.id === selected) ?? t.capabilities[0], [t, selected]);
 
-  function executeCommand(event: FormEvent<HTMLFormElement>) {
+  function deployLine(isSpanish: boolean) {
+    const sha = buildInfo.sha.slice(0, 7);
+    if (!buildInfo.time) return isSpanish ? `Versión local (${sha}).` : `Local build (${sha}).`;
+    const when = new Date(buildInfo.time).toLocaleString(isSpanish ? 'es-ES' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Madrid' });
+    return isSpanish
+      ? `Versión publicada: commit ${sha}, compilada el ${when} (${timeAgo(buildInfo.time, 'es')}).\nCódigo: github.com/mateocouso94/mcouso-web`
+      : `Live version: commit ${sha}, built ${when} (${timeAgo(buildInfo.time, 'en')}).\nSource: github.com/mateocouso94/mcouso-web`;
+  }
+
+  function statusLines(isSpanish: boolean, s: HomelabStatus | null) {
+    if (!s) return isSpanish ? 'Estado no disponible ahora mismo.' : 'Status not available right now.';
+    const icon = (n: number) => (n === 1 ? '●' : n === 0 ? '✕' : '◌');
+    const rows = s.monitors.map((m) => `${icon(m.status)} ${m.name.padEnd(22, ' ')} ${m.uptime24 != null ? (m.uptime24 * 100).toFixed(2) + '%' : '—'}${m.ping != null ? `  ${m.ping} ms` : ''}`);
+    const head = isSpanish ? `Homelab: ${s.up}/${s.total} servicios OK · uptime 24 h` : `Homelab: ${s.up}/${s.total} services up · 24 h uptime`;
+    return [head, ...rows, isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/estado'].join('\n');
+  }
+
+  async function executeCommand(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const cmd = command.trim().toLowerCase();
     const isSpanish = lang === 'es';
+    setCommand('');
+    if (cmd === 'clear') { setOutput(''); return; }
+    if (cmd === 'status' || cmd === 'uptime') {
+      setOutput(isSpanish ? 'Consultando Uptime Kuma…' : 'Querying Uptime Kuma…');
+      const s = await fetchHomelabStatus();
+      setStatus(s);
+      setOutput(statusLines(isSpanish, s));
+      return;
+    }
     const responses: Record<string, string> = {
-      help: isSpanish ? 'Comandos: whoami · stack · lab · career · contact · clear' : 'Commands: whoami · stack · lab · career · contact · clear',
+      help: isSpanish
+        ? 'status   estado real del homelab (Uptime Kuma)\ndeploy   versión publicada de esta web\nwhoami · stack · lab · career · contact · clear'
+        : 'status   live homelab status (Uptime Kuma)\ndeploy   live version of this site\nwhoami · stack · lab · career · contact · clear',
       whoami: isSpanish ? 'Mateo Couso Hortas — Ingeniero de Infraestructura Híbrida' : 'Mateo Couso Hortas — Hybrid Infrastructure Engineer',
       stack: 'VMware · SAN / vSAN · Pure Storage · Veeam CDP · Disaster Recovery · Azure · AWS · Terraform',
-      lab: 'homelab-red / AdGuard / homelab-apps / OpenWrt',
+      lab: 'homelab-red: AdGuard Home, Prometheus, Grafana, Uptime Kuma\nhomelab-apps: Docker Compose, nginx (esta web), cloudflared',
       career: 'Fermax → Plexus → Evelb → Landra → DXC → cloud.gal → Enxenio',
-      contact: 'contacto@mcouso.es'
+      contact: 'contacto@mcouso.es',
+      deploy: deployLine(isSpanish),
+      version: deployLine(isSpanish),
     };
-    if (cmd === 'clear') setOutput('');
-    else setOutput(responses[cmd] ?? (isSpanish ? `bash: ${cmd || '∅'}: comando no encontrado. Prueba help.` : `bash: ${cmd || '∅'}: command not found. Try help.`));
-    setCommand('');
+    setOutput(responses[cmd] ?? (isSpanish ? `bash: ${cmd || '∅'}: comando no encontrado. Prueba help.` : `bash: ${cmd || '∅'}: command not found. Try help.`));
   }
 
   return (
@@ -64,8 +100,13 @@ export default function Home({ notes }: { notes: NoteMeta[] }) {
 
         <section className="console-strip" aria-label={lang === 'es' ? 'Terminal interactiva' : 'Interactive terminal'}>
           <div className="console-heading"><span className="console-light" /><span>{t.terminalTitle}</span></div>
-          <div className="console-content"><p className="console-intro">{t.terminalHint} <span>whoami · help · stack · lab</span></p><form className="console-form" onSubmit={executeCommand}><label htmlFor="command">mateo@infra:~$</label><input id="command" value={command} onChange={(event) => setCommand(event.target.value)} placeholder={t.terminalPlaceholder} autoComplete="off" /><button type="submit" aria-label={lang === 'es' ? 'Ejecutar comando' : 'Run command'}>↵</button></form><div className="console-output" aria-live="polite">{output || <span className="empty-output">&nbsp;</span>}</div></div>
-          <div className="console-status"><span>{t.shellReady}</span></div>
+          <div className="console-content"><p className="console-intro">{t.terminalHint} <span>status · deploy · whoami · help</span></p><form className="console-form" onSubmit={executeCommand}><label htmlFor="command">mateo@infra:~$</label><input id="command" value={command} onChange={(event) => setCommand(event.target.value)} placeholder={t.terminalPlaceholder} autoComplete="off" /><button type="submit" aria-label={lang === 'es' ? 'Ejecutar comando' : 'Run command'}>↵</button></form><div className="console-output" aria-live="polite">{output || <span className="empty-output">&nbsp;</span>}</div></div>
+          <div className="console-status">
+            <a href="/estado/" className="console-live">
+              {status === undefined ? <span>…</span> : status ? <span><i className={status.up === status.total ? 'ok' : 'warn'} /> {lang === 'es' ? 'HOMELAB' : 'HOMELAB'} {status.up}/{status.total} OK</span> : <span><i className="off" /> {lang === 'es' ? 'ESTADO N/D' : 'STATUS N/A'}</span>}
+            </a>
+            <span title={buildInfo.time}>{buildInfo.sha.slice(0, 7)}{buildInfo.time ? ` · ${timeAgo(buildInfo.time, lang)}` : ''}</span>
+          </div>
         </section>
 
         <section className="impact-strip" aria-label={t.impactEyebrow}>

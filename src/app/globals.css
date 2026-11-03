@@ -115,3 +115,29 @@
 .prose img{max-width:100%;height:auto}
 .note-article .note-tags{margin-top:40px}
 @media(max-width:650px){.notes-list a{grid-template-columns:1fr}.notes-list time{grid-row:auto}.notes-wrap{padding:40px 16px 72px}}
+
+/* --- Consola con datos reales --- */
+.console-output{white-space:pre-wrap}
+.console-live{color:#e9e5da}
+.console-live:hover{color:#f18a68}
+.console-live i,.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#8e9a96;margin-right:6px;vertical-align:1px}
+.console-live i.ok,.status-dot.ok{background:#5fae7b;box-shadow:0 0 0 3px #5fae7b33}
+.console-live i.warn,.status-dot.warn{background:#e1a33f}
+.console-live i.off,.status-dot.down{background:#e17a55}
+/* --- Página de estado --- */
+.status-summary{font-size:19px;font-weight:500;margin:0 0 36px;padding:18px 20px;background:var(--paper-light);border:1px solid var(--line)}
+.status-summary small{display:block;font:12px var(--mono);color:var(--muted);margin-top:6px;font-weight:400}
+.status-group h2{font:12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-dark);margin:0 0 10px}
+.status-group ul{list-style:none;margin:0 0 34px;padding:0;border-top:1px solid var(--ink)}
+.status-group li{border-bottom:1px solid var(--line);padding:14px 4px}
+.status-row{display:grid;grid-template-columns:1fr auto 110px;gap:16px;align-items:baseline}
+.status-row b{font-weight:600;font-size:16px}
+.status-row span{font:13px var(--mono);color:var(--ink-soft)}
+.status-uptime{text-align:right}
+.status-uptime small{color:var(--muted)}
+.status-beats{display:flex;gap:2px;margin-top:10px;height:18px}
+.status-beats i{flex:1;max-width:10px;background:#c9c4b7}
+.status-beats i.ok{background:#5fae7b}.status-beats i.down{background:#e17a55}.status-beats i.warn{background:#e1a33f}
+.status-foot{font-size:14px;color:var(--muted);margin-top:24px}
+.status-foot a{color:var(--blue-dark);text-decoration:underline}
+@media(max-width:650px){.status-row{grid-template-columns:1fr auto}.status-uptime{grid-column:1 / -1;text-align:left}}
