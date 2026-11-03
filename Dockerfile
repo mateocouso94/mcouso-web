@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 # --- 2. Producción: solo nginx sirviendo ficheros estáticos ---
-FROM nginx:1.29-alpine
+FROM nginx:1.31-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/out /usr/share/nginx/html
 EXPOSE 3000
