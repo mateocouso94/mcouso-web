@@ -24,3 +24,6 @@ esxcli storage core device list
 - con guiones
 
 > Citas o avisos importantes.
+
+<!-- Truco: si el título o el resumen llevan dos puntos (":"), ponlos entre comillas:
+title: "Mi homelab: dos mini PC" -->

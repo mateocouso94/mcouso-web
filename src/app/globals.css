@@ -90,7 +90,7 @@
 .notes-header p{font-size:17px;line-height:1.7;color:var(--ink-soft);margin:0 0 40px}
 .notes-list{list-style:none;margin:0 0 28px;padding:0;border-top:1px solid var(--ink)}
 .notes-list li{border-bottom:1px solid var(--line)}
-.notes-list a{display:grid;grid-template-columns:150px 1fr;gap:4px 24px;padding:20px 4px;transition:background .2s}
+.notes-list a{display:grid;grid-template-columns:190px 1fr;gap:4px 24px;padding:20px 4px;transition:background .2s}
 .notes-list a:hover{background:var(--paper-light)}
 .notes-list time{font:12px var(--mono);color:var(--muted);letter-spacing:.04em;padding-top:4px;grid-row:span 2}
 .notes-list b{font-weight:600;font-size:19px;color:var(--ink)}
