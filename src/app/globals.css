@@ -59,3 +59,4 @@
   .hero h1{width:100%;max-width:100%;font-size:clamp(34px,9.2vw,48px);line-height:1;letter-spacing:-.055em;overflow-wrap:break-word;hyphens:auto}
 }
 @media(min-width:651px) and (max-width:950px){.topbar{gap:14px;padding-left:18px;padding-right:18px}.brand{min-width:190px}.topbar nav{gap:12px}.topbar nav a{font-size:8px}}
+.hero h1{hyphens:manual;-webkit-hyphens:manual}
