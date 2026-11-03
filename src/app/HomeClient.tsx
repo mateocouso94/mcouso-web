@@ -13,11 +13,11 @@ import type { HomelabStatus } from '../lib/status';
 
 const content: Record<Lang, PageCopy> = { es, en };
 
-export default function Home({ notes }: { notes: NoteMeta[] }) {
-  const [lang, setLang] = useState<Lang>('es');
+export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[]; initialLang?: Lang }) {
+  const [lang] = useState<Lang>(initialLang);
   const [selected, setSelected] = useState('virtualization');
   const [command, setCommand] = useState('');
-  const [output, setOutput] = useState(es.terminalDefault);
+  const [output, setOutput] = useState(content[initialLang].terminalDefault);
   const t = content[lang];
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
   const [status, setStatus] = useState<HomelabStatus | null | undefined>(undefined);
@@ -78,7 +78,7 @@ export default function Home({ notes }: { notes: NoteMeta[] }) {
       <header className="topbar">
         <a className="brand" href="#top" aria-label={lang === 'es' ? 'Mateo Couso, inicio' : 'Mateo Couso, home'}><span className="brand-mark"><img src="/brand-mark.svg" alt="" /></span><span className="brand-name">MATEO COUSO<br /><small>{lang === 'es' ? 'INFRAESTRUCTURA / SISTEMAS' : 'INFRASTRUCTURE / SYSTEMS'}</small></span></a>
         <nav aria-label={lang === 'es' ? 'Navegación principal' : 'Main navigation'}>{t.nav.map(([href, label]) => <a key={href} href={href}>{label}</a>)}</nav>
-        <button className="language" onClick={() => { const next = lang === 'es' ? 'en' : 'es'; setLang(next); setOutput(content[next].terminalDefault); }} aria-label={lang === 'es' ? 'Cambiar idioma' : 'Change language'}>{lang === 'es' ? 'EN' : 'ES'} <span>↗</span></button>
+        <a className="language" href={lang === 'es' ? '/en/' : '/'} hrefLang={lang === 'es' ? 'en' : 'es'} aria-label={lang === 'es' ? 'English version' : 'Versión en español'}>{lang === 'es' ? 'EN' : 'ES'} <span>↗</span></a>
       </header>
 
       <div className="page-wrap">
