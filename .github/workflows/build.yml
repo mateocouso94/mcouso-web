@@ -58,6 +58,11 @@ jobs:
           curl -fsS -o /dev/null http://127.0.0.1:3000/notas/
           curl -fsS -o /dev/null http://127.0.0.1:3000/estado/
           curl -fsSI http://127.0.0.1:3000/ | grep -qi "x-frame-options: DENY"
+          curl -fsSI http://127.0.0.1:3000/ | grep -qi "content-security-policy"
+          curl -fsS -o /dev/null http://127.0.0.1:3000/en/
+          curl -fsS http://127.0.0.1:3000/sitemap.xml | grep -q "/notas/"
+          curl -fsS http://127.0.0.1:3000/robots.txt | grep -q "Sitemap"
+          curl -fsS http://127.0.0.1:3000/.well-known/security.txt | grep -q "Contact:"
           code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000/api/status/homelab)
           echo "api/status sin Kuma -> $code (se espera 502)"; [ "$code" = "502" ]
           code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3000/api/status/homelab)
