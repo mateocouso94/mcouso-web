@@ -53,6 +53,14 @@ el panel de Kuma no se expone). Para activarlo:
 
 Sin `.env`, la web funciona igual y la consola muestra "estado no disponible".
 
+### Aviso si el despliegue automático falla
+
+En Uptime Kuma, crea un monitor **Push** (intervalo 900 s) y añade su URL, sin `?status=...`, al `.env`:
+`KUMA_PUSH_URL=http://192.168.0.30:3001/api/push/<token>`
+
+`update.sh` avisa "up" en cada ejecución correcta y "down" con el motivo si algo falla.
+Si el timer deja de ejecutarse, Kuma avisa solo al pasar el intervalo.
+
 ### Operación
 
 ```bash
