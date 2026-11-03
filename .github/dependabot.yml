@@ -1,0 +1,15 @@
+# Propone actualizaciones de dependencias como Pull Requests cada semana.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly, day: monday }
+    groups:
+      next-react:
+        patterns: ["next", "react", "react-dom", "@types/react*"]
+  - package-ecosystem: docker
+    directory: /
+    schedule: { interval: weekly, day: monday }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: monthly }

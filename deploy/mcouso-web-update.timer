@@ -1,0 +1,9 @@
+[Unit]
+Description=Comprueba cada 5 minutos si hay nueva versión de mcouso.es
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target

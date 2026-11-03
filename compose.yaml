@@ -1,10 +1,13 @@
 services:
   portfolio:
+    # Imagen compilada por GitHub Actions. Para compilar en local: docker compose build
+    image: ghcr.io/mateocouso94/mcouso-web:latest
     build: .
+    pull_policy: always
     container_name: mcouso-portfolio
     restart: unless-stopped
     ports:
-      - "192.168.0.30:3000:3000"
+      - "${PORTFOLIO_BIND:-192.168.0.30}:3000:3000"
     read_only: true
     tmpfs:
       - /var/cache/nginx

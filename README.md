@@ -13,22 +13,45 @@ Portfolio bilingüe (ES/EN) construido con Next.js 15, React 19 y TypeScript. Ex
 - Enlaces profesionales, CV descargable y contacto bilingüe en contacto@mcouso.es.
 - Publicación pública de la web a través de Cloudflare.
 
-## Despliegue con Docker Compose
+## Cómo se despliega
 
-La web se compila como **sitio estático** (`output: 'export'`) y se sirve con **nginx**.
-En producción no hay Node.js: solo ficheros HTML/CSS/JS. El contenedor escucha en
-`192.168.0.30:3000`, igual que antes, así que `cloudflared` no necesita cambios.
-
-```bash
-cd /opt/ci/portfolio
-docker compose build --pull
-docker compose up -d --force-recreate
-docker compose ps          # debe aparecer (healthy)
-docker compose logs -f portfolio
+```
+git push (main) ──► GitHub Actions ──► ghcr.io/mateocouso94/mcouso-web:latest
+                                              │
+              homelab-apps: timer systemd cada 5 min (deploy/update.sh)
+                                              │
+                     docker compose pull + up -d (solo si la imagen cambió)
+                                              │
+                      nginx :3000  ◄── cloudflared ◄── Cloudflare ◄── mcouso.es
 ```
 
-Las versiones de las dependencias están fijadas en `package-lock.json` (`npm ci`),
-así que cada compilación instala exactamente lo mismo.
+- La web se compila como **sitio estático** (`output: 'export'`) y la sirve **nginx**. En producción no hay Node.js.
+- El servidor **descarga** la imagen: no hace falta abrir puertos ni darle a GitHub acceso a la red local.
+- **Dependabot** abre cada lunes Pull Requests con las actualizaciones de dependencias.
+
+### Instalación en el servidor (una sola vez)
+
+```bash
+sudo git clone https://github.com/mateocouso94/mcouso-web /opt/ci/portfolio
+cd /opt/ci/portfolio
+docker compose pull && docker compose up -d
+sudo cp deploy/mcouso-web-update.{service,timer} /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now mcouso-web-update.timer
+```
+
+### Operación
+
+```bash
+systemctl list-timers mcouso-web-update.timer   # próxima comprobación
+journalctl -u mcouso-web-update -n 20           # qué ha desplegado
+docker compose ps                               # debe aparecer (healthy)
+```
+
+**Volver a una versión anterior:** cada imagen lleva también el hash del commit como etiqueta.
+Cambia `latest` por ese hash en `compose.yaml` y ejecuta `docker compose up -d`.
+
+**Compilar en local sin GitHub:** `docker compose build && docker compose up -d`.
 
 ## Publicación
 
