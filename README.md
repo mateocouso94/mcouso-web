@@ -10,7 +10,7 @@ Portfolio bilingüe (ES/EN) construido con Next.js 15, React 19 y TypeScript. Ex
 - Trayectoria profesional, formación, certificación VCP-DCV e idiomas.
 - Diagrama lógico de la home LAN: HGU Movistar, switch Gigabyte, Xiaomi AX3600/OpenWrt, dos mini PCs, AdGuard/macvlan y VPN hacia la red remota.
 - Proyectos de datacenter: migraciones SAN a vSAN, migraciones de datos entre CPDs y Veeam CDP con pruebas reales de Disaster Recovery.
-- Enlaces profesionales, CV descargable y contacto bilingüe en contacto@mcouso.es.
+- Enlaces profesionales, CV descargable y contacto bilingüe en contacto(at)mcouso.es.
 - Publicación pública de la web a través de Cloudflare.
 
 ## Cómo se despliega
