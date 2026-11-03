@@ -181,7 +181,7 @@ export const en: PageCopy = {
       role: 'VMware Systems Administrator',
       place: 'Santiago de Compostela · Remote',
       description:
-        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. The main customer had about 600 servers and 3,000 virtual machines.',
+        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters on Lenovo, Dell and HP servers, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. The main customer had about 600 servers and 3,000 virtual machines.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -266,7 +266,7 @@ export const en: PageCopy = {
       body: 'A seven-host cluster on a Dell storage array with mixed versions: four hosts on vSphere 6.5 and three on 7.0. It had to move to vSAN on local disks without touching customer networks.',
       approachLabel: 'HOW WE DID IT',
       approach:
-        "In phases. We added local disks to the hosts and started with three: we upgraded them, built vSAN on them and began moving VMs. The source cluster wasn't in vCenter, so live migrations were done with replication. Every host that freed up was upgraded and joined vSAN, until the new 7.0 cluster was complete. Same networks and same VLANs throughout.",
+        "In phases. We added local disks to the hosts and started with three: we upgraded them, built vSAN on them and began moving VMs. The source cluster wasn't in vCenter, so live migrations were done with replication. Every host that freed up was upgraded and joined vSAN, until the new 7.0.3 cluster was complete. Same networks and same VLANs throughout.",
       outcomeLabel: 'THE TRICKY PART',
       outcome:
         'The Distributed Switches had been created on 6.5 and had to be upgraded to 7.0.3 along the way. Beyond that, the only downtime was short, when each replication was finalized.',

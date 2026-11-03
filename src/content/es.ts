@@ -181,7 +181,7 @@ export const es: PageCopy = {
       role: 'Administrador de Sistemas VMware',
       place: 'Santiago de Compostela · Remoto',
       description:
-        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. El cliente principal tenía unos 600 servidores y 3.000 máquinas virtuales.',
+        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos sobre servidores Lenovo, Dell y HP, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. El cliente principal tenía unos 600 servidores y 3.000 máquinas virtuales.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -267,7 +267,7 @@ export const es: PageCopy = {
       body: 'Un clúster de siete hosts con almacenamiento en una cabina Dell y versiones mezcladas: cuatro hosts en vSphere 6.5 y tres en 7.0. Había que pasarlo a vSAN con discos locales sin tocar las redes de los clientes.',
       approachLabel: 'CÓMO LO HICIMOS',
       approach:
-        'Por fases. Añadimos discos locales a los hosts y empezamos con tres: los actualizamos, montamos la vSAN con ellos y empezamos a mover máquinas. El clúster de origen no estaba en el vCenter, así que las migraciones en caliente se hicieron con replicación. Cada host que quedaba libre se actualizaba y entraba en la vSAN, hasta completar el clúster nuevo en 7.0. Usamos las mismas redes y las mismas VLAN durante todo el proceso.',
+        'Por fases. Añadimos discos locales a los hosts y empezamos con tres: los actualizamos, montamos la vSAN con ellos y empezamos a mover máquinas. El clúster de origen no estaba en el vCenter, así que las migraciones en caliente se hicieron con replicación. Cada host que quedaba libre se actualizaba y entraba en la vSAN, hasta completar el clúster nuevo en 7.0.3. Usamos las mismas redes y las mismas VLAN durante todo el proceso.',
       outcomeLabel: 'LO COMPLICADO',
       outcome:
         'Los Distributed Switches se habían creado en 6.5 y hubo que actualizarlos a 7.0.3 por el camino. Aparte de eso, las únicas paradas fueron cortas, al finalizar cada replicación.',
