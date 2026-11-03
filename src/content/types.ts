@@ -49,6 +49,10 @@ export type PageCopy = {
   projectsTitle: string;
   projectsIntro: string;
   projects: { label: string; title: string; body: string; approachLabel: string; approach: string; outcomeLabel: string; outcome: string; footer: string; tags: string[]; href?: string }[];
+  notesEyebrow: string;
+  notesTitle: string;
+  notesIntro: string;
+  notesAll: string;
   trainingEyebrow: string;
   trainingTitle: string;
   education: { title: string; institution: string; period: string }[];
@@ -61,3 +65,5 @@ export type PageCopy = {
   capabilities: Capability[];
   jobs: Job[];
 };
+
+export type NoteMeta = { slug: string; title: string; date: string; summary: string; tags: string[] };
