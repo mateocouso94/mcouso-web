@@ -31,13 +31,58 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Compilar (y publicar si es main)
+      - name: Hora de compilación
+        id: meta
+        run: echo "now=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Compilar
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
+          load: true
+          tags: mcouso-web:test
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            BUILD_TIME=${{ steps.meta.outputs.now }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Arranca el contenedor igual que en el servidor y comprueba que responde
+      # antes de publicar nada. Si falla, la imagen no llega a ghcr.io.
+      - name: Prueba de humo
+        run: |
+          docker run -d --name smoke -p 3000:3000 --read-only \
+            --tmpfs /var/cache/nginx --tmpfs /var/run mcouso-web:test
+          for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:3000/ && break; sleep 1; done
+          curl -fsS http://127.0.0.1:3000/ | grep -q "Mateo Couso"
+          curl -fsS -o /dev/null http://127.0.0.1:3000/notas/
+          curl -fsS -o /dev/null http://127.0.0.1:3000/estado/
+          curl -fsSI http://127.0.0.1:3000/ | grep -qi "x-frame-options: DENY"
+          curl -fsSI http://127.0.0.1:3000/ | grep -qi "content-security-policy"
+          curl -fsS -o /dev/null http://127.0.0.1:3000/en/
+          curl -fsS http://127.0.0.1:3000/sitemap.xml | grep -q "/notas/"
+          curl -fsS http://127.0.0.1:3000/robots.txt | grep -q "Sitemap"
+          curl -fsS http://127.0.0.1:3000/.well-known/security.txt | grep -q "Contact:"
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000/api/status/homelab)
+          echo "api/status sin Kuma -> $code (se espera 502)"; [ "$code" = "502" ]
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3000/api/status/homelab)
+          echo "POST api/status -> $code (se espera 403)"; [ "$code" = "403" ]
+          echo "OK"
+
+      - name: Logs del contenedor si la prueba falla
+        if: failure()
+        run: docker logs smoke || true
+
+      - name: Publicar en ghcr.io
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.sha }}
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            BUILD_TIME=${{ steps.meta.outputs.now }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max

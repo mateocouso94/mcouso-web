@@ -9,6 +9,7 @@ export const es: PageCopy = {
     ['#career', 'Trayectoria'],
     ['#network', 'Homelab'],
     ['#notes', 'Proyectos'],
+    ['/notas/', 'Notas'],
     ['#contact', 'Contacto'],
   ],
 
@@ -27,8 +28,8 @@ export const es: PageCopy = {
   // --- Consola ---
   terminalTitle: 'consola · prueba un comando',
   terminalHint: 'Prueba un comando',
-  terminalDefault: 'Escribe help para ver los comandos.',
-  terminalPlaceholder: 'help | stack | lab | career | contact',
+  terminalDefault: 'Escribe status para ver el estado real del homelab, o help para ver el resto.',
+  terminalPlaceholder: 'status | deploy | help | whoami',
   shellReady: 'LISTA',
 
   // --- Cifras ---
@@ -221,7 +222,7 @@ export const es: PageCopy = {
   labEyebrow: 'HOMELAB',
   labTitle: 'Lo que tengo montado en casa.',
   labIntro:
-    'Dos mini PC con Debian 13. Uno hace de DNS y DHCP con AdGuard Home y monitoriza todo con Prometheus, Grafana y Uptime Kuma. El otro ejecuta los contenedores, entre ellos esta web. Lo uso para probar lo que en el trabajo no puedo romper. La web sale a Internet por Cloudflare Tunnel, sin abrir puertos en el router, y se actualiza sola cada vez que subo un cambio a GitHub.',
+    'Dos mini PC con Debian 13. Uno hace de DNS y DHCP con AdGuard Home y monitoriza todo con Prometheus, Grafana y Uptime Kuma. El otro ejecuta los contenedores, entre ellos esta web. Lo uso para probar lo que en el trabajo no puedo romper. La web sale a Internet por Cloudflare Tunnel, sin abrir puertos en el router, y se actualiza sola cada vez que subo un cambio a GitHub. El estado de los servicios se puede ver en directo en mcouso.es/estado.',
   networkCaption: 'DIAGRAMA LÓGICO · RED DE CASA',
   networkNote: 'Diagrama simplificado. He quitado las direcciones IP y los detalles de la red remota.',
   networkLabels: {
@@ -302,6 +303,12 @@ export const es: PageCopy = {
       href: 'https://www.linkedin.com/posts/mateo-couso-hortas-71ba63164_veeam-cdp-disasterrecovery-activity-7330625843246903297-BRAf',
     },
   ],
+
+  // --- Notas ---
+  notesEyebrow: 'NOTAS',
+  notesTitle: 'Lo que voy apuntando.',
+  notesIntro: 'Notas técnicas sobre cosas que he montado, roto o aprendido.',
+  notesAll: 'Ver todas las notas',
 
   // --- 05 Formación ---
   trainingEyebrow: 'FORMACIÓN',

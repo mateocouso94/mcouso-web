@@ -9,6 +9,7 @@ export const en: PageCopy = {
     ['#career', 'Experience'],
     ['#network', 'Homelab'],
     ['#notes', 'Projects'],
+    ['/notas/', 'Notes'],
     ['#contact', 'Contact'],
   ],
 
@@ -27,8 +28,8 @@ export const en: PageCopy = {
   // --- Console ---
   terminalTitle: 'console · try a command',
   terminalHint: 'Try a command',
-  terminalDefault: 'Type help to list the commands.',
-  terminalPlaceholder: 'help | stack | lab | career | contact',
+  terminalDefault: 'Type status for the live homelab status, or help for the rest.',
+  terminalPlaceholder: 'status | deploy | help | whoami',
   shellReady: 'READY',
 
   // --- Numbers ---
@@ -220,7 +221,7 @@ export const en: PageCopy = {
   labEyebrow: 'HOMELAB',
   labTitle: 'What I run at home.',
   labIntro:
-    "Two mini PCs running Debian 13. One handles DNS and DHCP with AdGuard Home and monitors everything with Prometheus, Grafana and Uptime Kuma. The other runs the containers, including this website. I use it to try things I can't break at work. The site reaches the Internet through Cloudflare Tunnel, with no ports open on the router, and it redeploys itself every time I push a change to GitHub.",
+    "Two mini PCs running Debian 13. One handles DNS and DHCP with AdGuard Home and monitors everything with Prometheus, Grafana and Uptime Kuma. The other runs the containers, including this website. I use it to try things I can't break at work. The site reaches the Internet through Cloudflare Tunnel, with no ports open on the router, and it redeploys itself every time I push a change to GitHub. You can see the live service status at mcouso.es/estado.",
   networkCaption: 'LOGICAL DIAGRAM · HOME NETWORK',
   networkNote: "Simplified diagram. I've left out IP addresses and the details of the remote network.",
   networkLabels: {
@@ -300,6 +301,12 @@ export const en: PageCopy = {
       href: 'https://www.linkedin.com/posts/mateo-couso-hortas-71ba63164_veeam-cdp-disasterrecovery-activity-7330625843246903297-BRAf',
     },
   ],
+
+  // --- Notes ---
+  notesEyebrow: 'NOTES',
+  notesTitle: 'Things I write down.',
+  notesIntro: "Technical notes on things I've built, broken or learned. Written in Spanish.",
+  notesAll: 'See all notes',
 
   // --- 05 Education ---
   trainingEyebrow: 'EDUCATION',
