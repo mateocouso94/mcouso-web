@@ -141,3 +141,16 @@
 .status-foot{font-size:14px;color:var(--muted);margin-top:24px}
 .status-foot a{color:var(--blue-dark);text-decoration:underline}
 @media(max-width:650px){.status-row{grid-template-columns:1fr auto}.status-uptime{grid-column:1 / -1;text-align:left}}
+
+/* Móvil: portada más compacta para que el botón del CV se vea sin desplazarse */
+@media(max-width:650px){
+  .hero{padding:22px 0 28px;gap:28px}
+  .role{margin:0 0 12px}
+  .hero h1{font-size:38px;line-height:1.05;margin-bottom:18px}
+  .intro{font-size:16px;line-height:1.65}
+  .hero-copy{display:flex;flex-direction:column}
+  .hero-copy .role{order:0}.hero-copy h1{order:1}
+  .hero-actions{order:2;margin:0 0 24px}
+  .intro{order:3}
+  .hero-facts{order:4;margin-top:24px}
+}
