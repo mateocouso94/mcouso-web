@@ -8,7 +8,7 @@ import type { PageCopy, NoteMeta } from '../content/types';
 import { es } from '../content/es';
 import { en } from '../content/en';
 import { formatDate } from '../lib/date';
-import { fetchHomelabStatus, buildInfo, timeAgo } from '../lib/status';
+import { fetchHomelabStatus, buildInfo, timeAgo, fmtPing } from '../lib/status';
 import type { HomelabStatus } from '../lib/status';
 
 const content: Record<Lang, PageCopy> = { es, en };
@@ -21,6 +21,9 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
   const t = content[lang];
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
   const [status, setStatus] = useState<HomelabStatus | null | undefined>(undefined);
+  // "hace X min" depende de la hora actual: solo se calcula en el navegador para no chocar con el HTML generado al compilar
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   useEffect(() => {
     const ctrl = new AbortController();
     fetchHomelabStatus(ctrl.signal).then(setStatus);
@@ -40,7 +43,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
   function statusLines(isSpanish: boolean, s: HomelabStatus | null) {
     if (!s) return isSpanish ? 'Estado no disponible ahora mismo.' : 'Status not available right now.';
     const icon = (n: number) => (n === 1 ? '●' : n === 0 ? '✕' : '◌');
-    const rows = s.monitors.map((m) => `${icon(m.status)} ${m.name.padEnd(22, ' ')} ${m.uptime24 != null ? (m.uptime24 * 100).toFixed(2) + '%' : '—'}${m.ping != null ? `  ${m.ping} ms` : ''}`);
+    const rows = s.monitors.map((m) => `${icon(m.status)} ${m.name.padEnd(22, ' ')} ${m.uptime24 != null ? (m.uptime24 * 100).toFixed(2) + '%' : '—'}${m.ping != null ? `  ${fmtPing(m.ping)}` : ''}`);
     const head = isSpanish ? `Homelab: ${s.up}/${s.total} servicios OK · uptime 24 h` : `Homelab: ${s.up}/${s.total} services up · 24 h uptime`;
     return [head, ...rows, isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/estado'].join('\n');
   }
@@ -105,7 +108,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
             <a href="/estado/" className="console-live">
               {status === undefined ? <span>…</span> : status ? <span><i className={status.up === status.total ? 'ok' : 'warn'} /> {lang === 'es' ? 'HOMELAB' : 'HOMELAB'} {status.up}/{status.total} OK</span> : <span><i className="off" /> {lang === 'es' ? 'ESTADO N/D' : 'STATUS N/A'}</span>}
             </a>
-            <span title={buildInfo.time}>{buildInfo.sha.slice(0, 7)}{buildInfo.time ? ` · ${timeAgo(buildInfo.time, lang)}` : ''}</span>
+            <span title={buildInfo.time}>{buildInfo.sha.slice(0, 7)}{mounted && buildInfo.time ? ` · ${timeAgo(buildInfo.time, lang)}` : ''}</span>
           </div>
         </section>
 
