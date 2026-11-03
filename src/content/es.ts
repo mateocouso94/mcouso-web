@@ -41,7 +41,7 @@ export const es: PageCopy = {
   ],
 
   // --- 01 Especialidades ---
-  stackEyebrow: '01 / ESPECIALIDADES',
+  stackEyebrow: 'ESPECIALIDADES',
   stackTitle: 'Con qué trabajo.',
   stackIntro:
     'Donde más horas tengo es en virtualización, almacenamiento y backup. El resto lo uso a diario, pero con menos profundidad, y en cada área lo indico.',
@@ -152,7 +152,7 @@ export const es: PageCopy = {
   ],
 
   // --- 02 Trayectoria ---
-  careerEyebrow: '02 / TRAYECTORIA',
+  careerEyebrow: 'TRAYECTORIA',
   careerTitle: 'Dónde he trabajado.',
   careerIntro:
     'En cloud.gal llevaba los proyectos enteros: desde la primera reunión con el cliente hasta las de seguimiento después del despliegue, y entre medias el diseño, el montaje, la migración y los backups. Antes, en DXC, administré clústeres VMware para el sector público. Desde 2026 estoy en Enxenio, más centrado en Linux y cloud.',
@@ -218,7 +218,7 @@ export const es: PageCopy = {
   ],
 
   // --- 03 Homelab ---
-  labEyebrow: '03 / HOMELAB',
+  labEyebrow: 'HOMELAB',
   labTitle: 'Lo que tengo montado en casa.',
   labIntro:
     'Dos mini PC con Debian 13. Uno hace de DNS y DHCP con AdGuard Home y monitoriza todo con Prometheus, Grafana y Uptime Kuma. El otro ejecuta los contenedores, entre ellos esta web. Lo uso para probar lo que en el trabajo no puedo romper. La web sale a Internet por Cloudflare Tunnel, sin abrir puertos en el router, y se actualiza sola cada vez que subo un cambio a GitHub.',
@@ -243,7 +243,7 @@ export const es: PageCopy = {
   },
 
   // --- 04 Proyectos ---
-  projectsEyebrow: '04 / PROYECTOS',
+  projectsEyebrow: 'PROYECTOS',
   projectsTitle: 'Cuatro proyectos, contados con detalle.',
   projectsIntro:
     'Son proyectos reales en los que he trabajado. No doy nombres de clientes ni datos internos; el resto está contado tal como fue.',
@@ -304,7 +304,7 @@ export const es: PageCopy = {
   ],
 
   // --- 05 Formación ---
-  trainingEyebrow: '05 / FORMACIÓN',
+  trainingEyebrow: 'FORMACIÓN',
   trainingTitle: 'Formación e idiomas.',
   education: [
     { title: 'CFGS Administración de Sistemas Informáticos en Red', institution: 'IES San Clemente', period: '2013 — 2015' },
@@ -317,7 +317,7 @@ export const es: PageCopy = {
   ],
 
   // --- 06 Contacto ---
-  contactEyebrow: '06 / CONTACTO',
+  contactEyebrow: 'CONTACTO',
   contactTitle: '¿Hablamos?',
   contactIntro:
     'Si buscas a alguien para infraestructura VMware, migraciones o backup, o quieres comentar algo de la web o del homelab, escríbeme.',
