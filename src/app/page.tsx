@@ -62,9 +62,9 @@ export default function Home() {
         </section>
 
         <section className="console-strip" aria-label={lang === 'es' ? 'Terminal interactiva' : 'Interactive terminal'}>
-          <div className="console-heading"><span className="console-light" /><span>{t.terminalTitle}</span><small>TTY / 01</small></div>
+          <div className="console-heading"><span className="console-light" /><span>{t.terminalTitle}</span></div>
           <div className="console-content"><p className="console-intro">{t.terminalHint} <span>whoami · help · stack · lab</span></p><form className="console-form" onSubmit={executeCommand}><label htmlFor="command">mateo@infra:~$</label><input id="command" value={command} onChange={(event) => setCommand(event.target.value)} placeholder={t.terminalPlaceholder} autoComplete="off" /><button type="submit" aria-label={lang === 'es' ? 'Ejecutar comando' : 'Run command'}>↵</button></form><div className="console-output" aria-live="polite">{output || <span className="empty-output">&nbsp;</span>}</div></div>
-          <div className="console-status"><span>{t.shellReady}</span><span>TCP/IP · LINUX · VMWARE</span></div>
+          <div className="console-status"><span>{t.shellReady}</span></div>
         </section>
 
         <section className="impact-strip" aria-label={t.impactEyebrow}>
@@ -75,28 +75,28 @@ export default function Home() {
         <section className="section expertise" id="stack">
           <div className="section-heading"><span className="section-number">{t.stackEyebrow}</span><h2>{t.stackTitle}</h2><p>{t.stackIntro}</p></div>
           <div className="expertise-grid">
-            <div className="expertise-list">{t.capabilities.map((item, index) => <button key={item.id} className={`expertise-row ${selected === item.id ? 'is-active' : ''}`} onClick={() => setSelected(item.id)} aria-pressed={selected === item.id}><span className="exp-num">{String(index + 1).padStart(2, '0')}</span><span className="exp-text"><b>{item.title}</b><small>{item.summary}</small></span><span className="exp-mark">{selected === item.id ? '●' : '↗'}</span></button>)}</div>
-            <article className="expertise-detail"><div className="detail-meta"><span>{t.detailLabel}</span><span>/{active.id}.conf</span></div><div className="detail-rule" /><p className="detail-kicker">{active.summary}</p><h3>{active.title}</h3><p className="detail-body">{active.body}</p><ul>{active.details.map((detail) => <li key={detail}>{detail}</li>)}</ul><div className="detail-tags">{active.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><div className="detail-footer"><span>{t.detailFooterArea}</span><b>{t.detailFooterStatus}</b></div></article>
+            <div className="expertise-list">{t.capabilities.map((item, index) => <button key={item.id} className={`expertise-row ${selected === item.id ? 'is-active' : ''}`} onClick={() => setSelected(item.id)} aria-pressed={selected === item.id}><span className="exp-text"><b>{item.title}</b><small>{item.summary}</small></span><span className="exp-mark">{selected === item.id ? '●' : ''}</span></button>)}</div>
+            <article className="expertise-detail"><p className="detail-kicker">{active.summary}</p><h3>{active.title}</h3><p className="detail-body">{active.body}</p><ul>{active.details.map((detail) => <li key={detail}>{detail}</li>)}</ul><div className="detail-tags">{active.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></article>
           </div>
           <p className="section-footnote">{t.stackHint}</p>
         </section>
 
         <section className="section career" id="career">
           <div className="section-heading career-heading"><span className="section-number">{t.careerEyebrow}</span><h2>{t.careerTitle}</h2><p>{t.careerIntro}</p></div>
-          <div className="career-ledger">{t.jobs.map((job, index) => <article className="career-row" key={job.company}><div className="career-index"><span>{String(index + 1).padStart(2, '0')}</span><small>{job.period}</small></div><div className="career-content"><div className="career-company">{job.company}<span>{job.place}</span></div><h3>{job.role}</h3><p>{job.description}</p></div><div className="career-branch">{index === 0 ? t.careerCurrent : t.careerPast}</div></article>)}</div>
+          <div className="career-ledger">{t.jobs.map((job, index) => <article className="career-row" key={job.company}><div className="career-index"><small>{job.period}</small></div><div className="career-content"><div className="career-company">{job.company}<span>{job.place}</span></div><h3>{job.role}</h3><p>{job.description}</p></div>{index === 0 ? <div className="career-branch">{t.careerCurrent}</div> : <div className="career-branch" />}</article>)}</div>
         </section>
 
         <section className="section home-lan" id="network">
           <div className="section-heading"><span className="section-number">{t.labEyebrow}</span><h2>{t.labTitle}</h2><p>{t.labIntro}</p></div>
           <div className="network-panel">
-            <div className="network-topline"><span>{t.networkCaption}</span><span className="network-live"><i /> {t.networkLabels.logical}</span></div>
+            <div className="network-topline"><span>{t.networkCaption}</span></div>
             <div className="network-scroll">
               <svg className="network-svg" viewBox="0 0 1360 590" role="img" aria-label={lang === 'es' ? 'Diagrama de red doméstica: Internet, HGU Movistar, switch Gigabyte, Xiaomi OpenWrt, homelab-red, AdGuard, homelab-apps y red remota por VPN.' : 'Home network diagram: Internet, Movistar HGU, Gigabyte switch, Xiaomi OpenWrt, homelab-red, AdGuard, homelab-apps and remote VPN network.'}>
                 <defs>
                   <pattern id="gridDots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#b6b0a2" opacity=".55" /></pattern>
                   <marker id="arrowLine" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#bd573e" strokeWidth="1.2" /></marker>
                 </defs>
-                <rect x="0" y="0" width="1360" height="590" fill="url(#gridDots)" />
+                
                 <path className="net-line" d="M195 310 H245" /><path className="net-line" d="M465 310 H550" />
                 <path className="net-line secondary" d="M780 310 H840 V140 H880" /><path className="net-line secondary" d="M840 310 H880" /><path className="net-line secondary" d="M840 310 V495 H880" />
                 <path className="net-vpn" d="M1100 140 H1120" markerEnd="url(#arrowLine)" />
@@ -111,24 +111,36 @@ export default function Home() {
                 <circle className="junction" cx="840" cy="310" r="5" />
               </svg>
             </div>
-            <div className="network-legend"><span><i className="legend-solid" /> {lang === 'es' ? 'Conexión LAN' : 'LAN connection'}</span><span><i className="legend-dash" /> {t.networkLabels.tunnel}</span><span><i className="legend-ip" /> {lang === 'es' ? 'Servicio / nodo' : 'Service / node'}</span><span className="network-domain">{lang === 'es' ? 'RED INTERNA · DIRECCIONAMIENTO OMITIDO' : 'PRIVATE NETWORK · ADDRESSING OMITTED'}</span></div>
+            <ol className="network-mobile">
+              <li><b>{t.networkLabels.wan}</b></li>
+              <li><small>GATEWAY / ROUTER</small><b>{t.networkLabels.gateway}</b></li>
+              <li className="dark"><small>{lang === 'es' ? 'CONMUTACIÓN' : 'SWITCHING'}</small><b>{t.networkLabels.switch}</b></li>
+              <li className="branch">
+                <ul>
+                  <li><small>ROUTER / WIRELESS</small><b>{t.networkLabels.router}</b><span>{t.networkLabels.wifi}</span><em>{t.networkLabels.tunnel} → {t.networkLabels.remote}</em></li>
+                  <li><small>LENOVO THINKCENTRE M715q</small><b>{t.networkLabels.host}</b><span>{t.networkLabels.macvlan}</span><span>{t.networkLabels.monitoring}</span></li>
+                  <li><small>HP PRODESK 400 G6 MINI</small><b>{t.networkLabels.app}</b><span>{t.networkLabels.portfolio}</span></li>
+                </ul>
+              </li>
+            </ol>
+            <div className="network-legend"><span><i className="legend-solid" /> {lang === 'es' ? 'Conexión LAN' : 'LAN connection'}</span><span><i className="legend-dash" /> {t.networkLabels.tunnel}</span><span><i className="legend-ip" /> {lang === 'es' ? 'Servicio / nodo' : 'Service / node'}</span></div>
           </div>
           <p className="network-note">{t.networkNote}</p>
           <div className="lab-details">
             <article>
-              <span>{lang === 'es' ? 'NODO / 01' : 'NODE / 01'}</span>
+              <span>{lang === 'es' ? 'DNS · DHCP · MONITORIZACIÓN' : 'DNS · DHCP · MONITORING'}</span>
               <h3>homelab-red</h3>
               <p>ThinkCentre M715q Tiny · Debian 13</p>
               <small>{lang === 'es' ? 'AdGuard Home para DNS y DHCP; Prometheus 3.8.0, Grafana 12.3.0, Node Exporter 1.10.2, Blackbox Exporter 0.27.0 y Uptime Kuma para monitorización.' : 'AdGuard Home for DNS and DHCP; Prometheus 3.8.0, Grafana 12.3.0, Node Exporter 1.10.2, Blackbox Exporter 0.27.0 and Uptime Kuma for monitoring.'}</small>
             </article>
             <article>
-              <span>{lang === 'es' ? 'NODO / 02' : 'NODE / 02'}</span>
+              <span>{lang === 'es' ? 'CONTENEDORES' : 'CONTAINERS'}</span>
               <h3>homelab-apps</h3>
               <p>HP ProDesk 400 G6 Mini · Debian 13</p>
               <small>{lang === 'es' ? 'Docker Compose para el portfolio y aplicaciones propias. Servicios de aplicación separados del nodo dedicado a DNS y monitorización.' : 'Docker Compose for the portfolio and personal applications. Application services are separated from the node dedicated to DNS and monitoring.'}</small>
             </article>
             <article>
-              <span>{lang === 'es' ? 'RED / 03' : 'NETWORK / 03'}</span>
+              <span>{lang === 'es' ? 'RED' : 'NETWORK'}</span>
               <h3>{lang === 'es' ? 'Servicios de red' : 'Network services'}</h3>
               <p>Movistar HGU · Xiaomi AX3600 / OpenWrt · {lang === 'es' ? 'switch Gigabyte' : 'Gigabyte switch'}</p>
               <small>{lang === 'es' ? 'LAN principal con DHCP centralizado en el homelab y VPN LAN-to-LAN hacia una red remota. Direccionamiento y datos de acceso omitidos en la versión pública.' : 'Main LAN with DHCP centralized on the homelab and a LAN-to-LAN VPN to a remote network. Addressing and access details are omitted from this public version.'}</small>
@@ -139,7 +151,7 @@ export default function Home() {
         <section className="section field-notes" id="notes">
           <div className="section-heading"><span className="section-number">{t.projectsEyebrow}</span><h2>{t.projectsTitle}</h2><p>{t.projectsIntro}</p></div>
           <div className="notes-grid">{t.projects.map((project, index) => {
-            const cardContent = <><div className="note-top"><span>{project.label}</span><b>0{index + 1}</b></div><h3>{project.title}</h3><p className="note-summary">{project.body}</p><div className="note-subsection"><b>{project.approachLabel}</b><p>{project.approach}</p></div><div className="note-subsection outcome"><b>{project.outcomeLabel}</b><p>{project.outcome}</p></div><div className="note-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><div className="note-bottom">{project.footer}{project.href ? <span> ↗</span> : null}</div></>;
+            const cardContent = <><div className="note-top"><span>{project.label}</span></div><h3>{project.title}</h3><p className="note-summary">{project.body}</p><div className="note-subsection"><b>{project.approachLabel}</b><p>{project.approach}</p></div><div className="note-subsection outcome"><b>{project.outcomeLabel}</b><p>{project.outcome}</p></div><div className="note-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>{project.href ? <div className="note-bottom">{lang === 'es' ? 'Ver publicación en LinkedIn' : 'See the LinkedIn post'} <span>↗</span></div> : null}</>;
             return project.href
               ? <a key={project.label} className={`note ${index === 0 ? 'note-featured' : ''}`} href={project.href} target="_blank" rel="noreferrer">{cardContent}</a>
               : <article key={project.label} className={`note ${index === 0 ? 'note-featured' : ''}`}>{cardContent}</article>;
@@ -148,10 +160,10 @@ export default function Home() {
 
         <section className="section education" id="education">
           <div className="section-heading"><span className="section-number">{t.trainingEyebrow}</span><h2>{t.trainingTitle}</h2></div>
-          <div className="education-grid"><div className="education-main"><div className="certification"><span className="cert-seal">VCP</span><div><small>VMware Certified Professional</small><h3>Data Center Virtualization</h3><b>VCP-DCV · 2023</b></div></div>{t.education.map((item) => <article className="study-row" key={item.title}><div><h3>{item.title}</h3><p>{item.institution}</p></div><span>{item.period}</span></article>)}</div><aside className="language-panel"><span>{lang === 'es' ? 'IDIOMAS' : 'LANGUAGES'}</span>{t.languages.map((item) => <div className="language-row" key={item.title}><b>{item.title}</b><small>{item.level}</small></div>)}<div className="language-foot">{lang === 'es' ? 'CASTELLANO · GALLEGO · INGLÉS' : 'SPANISH · GALICIAN · ENGLISH'}</div></aside></div>
+          <div className="education-grid"><div className="education-main"><div className="certification"><span className="cert-seal">VCP</span><div><small>VMware Certified Professional</small><h3>Data Center Virtualization</h3><b>VCP-DCV · 2023</b></div></div>{t.education.map((item) => <article className="study-row" key={item.title}><div><h3>{item.title}</h3><p>{item.institution}</p></div><span>{item.period}</span></article>)}</div><aside className="language-panel"><span>{lang === 'es' ? 'IDIOMAS' : 'LANGUAGES'}</span>{t.languages.map((item) => <div className="language-row" key={item.title}><b>{item.title}</b><small>{item.level}</small></div>)}</aside></div>
         </section>
 
-        <section className="contact-section" id="contact"><div className="contact-index">{t.contactEyebrow}</div><div className="contact-main"><h2>{t.contactTitle}</h2><p>{t.contactIntro}</p><div className="contact-actions"><a className="button-primary" href="mailto:contacto@mcouso.es">{t.emailCta} <span>↗</span></a><a href="https://es.linkedin.com/in/mateo-couso-hortas-71ba63164" target="_blank" rel="noreferrer">LINKEDIN ↗</a><a href="/CV-Mateo-Couso-Hortas-2026.pdf" download>PDF / CV ↓</a></div><div className="contact-email">contacto@mcouso.es</div></div><div className="contact-stamp">MATEO<br />COUSO<br /><b>2026</b></div></section>
+        <section className="contact-section" id="contact"><div className="contact-index">{t.contactEyebrow}</div><div className="contact-main"><h2>{t.contactTitle}</h2><p>{t.contactIntro}</p><div className="contact-actions"><a className="button-primary" href="mailto:contacto@mcouso.es">{t.emailCta} <span>↗</span></a><a href="https://es.linkedin.com/in/mateo-couso-hortas-71ba63164" target="_blank" rel="noreferrer">LINKEDIN ↗</a><a href="/CV-Mateo-Couso-Hortas-2026.pdf" download>PDF / CV ↓</a></div><div className="contact-email">contacto@mcouso.es</div></div></section>
       </div>
       <footer className="footer"><span>© {new Date().getFullYear()} MATEO COUSO HORTAS</span><span>{t.footer}</span><a href="#top">{lang === 'es' ? 'VOLVER ARRIBA ↑' : 'BACK TO TOP ↑'}</a></footer>
     </main>
