@@ -9,6 +9,7 @@ export const es: PageCopy = {
     ['#career', 'Trayectoria'],
     ['#network', 'Homelab'],
     ['#notes', 'Proyectos'],
+    ['/notas/', 'Notas'],
     ['#contact', 'Contacto'],
   ],
 
@@ -302,6 +303,12 @@ export const es: PageCopy = {
       href: 'https://www.linkedin.com/posts/mateo-couso-hortas-71ba63164_veeam-cdp-disasterrecovery-activity-7330625843246903297-BRAf',
     },
   ],
+
+  // --- Notas ---
+  notesEyebrow: 'NOTAS',
+  notesTitle: 'Lo que voy apuntando.',
+  notesIntro: 'Notas técnicas sobre cosas que he montado, roto o aprendido.',
+  notesAll: 'Ver todas las notas',
 
   // --- 05 Formación ---
   trainingEyebrow: 'FORMACIÓN',

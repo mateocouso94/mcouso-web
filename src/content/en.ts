@@ -9,6 +9,7 @@ export const en: PageCopy = {
     ['#career', 'Experience'],
     ['#network', 'Homelab'],
     ['#notes', 'Projects'],
+    ['/notas/', 'Notes'],
     ['#contact', 'Contact'],
   ],
 
@@ -300,6 +301,12 @@ export const en: PageCopy = {
       href: 'https://www.linkedin.com/posts/mateo-couso-hortas-71ba63164_veeam-cdp-disasterrecovery-activity-7330625843246903297-BRAf',
     },
   ],
+
+  // --- Notes ---
+  notesEyebrow: 'NOTES',
+  notesTitle: 'Things I write down.',
+  notesIntro: "Technical notes on things I've built, broken or learned. Written in Spanish.",
+  notesAll: 'See all notes',
 
   // --- 05 Education ---
   trainingEyebrow: 'EDUCATION',
