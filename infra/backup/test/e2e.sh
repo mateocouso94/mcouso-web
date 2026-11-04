@@ -27,7 +27,7 @@ last_push() { grep "^$1 " "$T/kuma.log" | tail -n1; }
 echo "config importante" > "$T/data/app/config.yml"
 head -c 2000000 /dev/urandom > "$T/data/app/blob.bin"
 sqlite3 "$T/data/app/app.db" "CREATE TABLE t(x); INSERT INTO t VALUES ('hola'),('adios');"
-mkdir -p "$T/data/cache"; printf "Signature: 8a477f597d28d172789f06886806bc55\n" > "$T/data/cache/CACHEDIR.TAG"; echo basura > "$T/data/app/x.tmp"
+mkdir -p "$T/data/cache"; printf "Signature: 8a477f597d28d172789f06886806bc55\n" > "$T/data/cache/CACHEDIR.TAG"; echo basura > "$T/data/app/x.tmp"; echo temporal > "$T/data/cache/descartable.bin"
 
 echo secreto-de-prueba > "$T/conf/password"
 cat > "$T/conf/backup.conf" <<CONF
@@ -58,7 +58,7 @@ snap() { RESTIC_PASSWORD_FILE=$T/conf/password restic -r "$T/repo-$1" "${@:2}"; 
 LS=$(snap local ls latest)
 grep -q "app/config.yml" <<<"$LS" && pass "config.yml está en la copia" || fail "falta config.yml"
 grep -q "\.tmp$" <<<"$LS" && fail "x.tmp no debería copiarse" || pass "exclusiones aplicadas (*.tmp)"
-grep -q "cache/" <<<"$LS" && fail "la caché no debería copiarse" || pass "carpetas con CACHEDIR.TAG excluidas"
+grep -q "cache/descartable.bin" <<<"$LS" && fail "el contenido de la caché no debería copiarse" || pass "contenido de carpetas con CACHEDIR.TAG excluido"
 grep -q "app.db.sqlite3" <<<"$LS" && pass "volcado SQLite incluido" || fail "falta volcado"
 
 echo "3. retención"
