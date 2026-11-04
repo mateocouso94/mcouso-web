@@ -151,7 +151,20 @@ restic restore latest --target /tmp/restore --include /opt/uptime-kuma   # resta
 restic mount /mnt/restic                                   # navegar por todas las copias como carpetas
 ```
 
-Las bases de datos están en `/var/backups/homelab-dumps/` dentro de cada copia: restaura el `.sqlite3` y cópialo en su sitio con el contenedor parado.
+Las bases de datos están en `/var/backups/homelab-dumps/` dentro de cada copia. Los ficheros en uso
+(`kuma.db*`, `grafana.db`) se excluyen a propósito: el volcado es la copia consistente. Para recuperar una, por ejemplo Kuma en homelab-red:
+
+```bash
+V=/var/lib/docker/volumes/uptime-kuma_uptime-kuma-data/_data
+restic restore latest --target /tmp/r --include /var/backups/homelab-dumps
+docker stop uptime-kuma
+rm -f $V/kuma.db-wal $V/kuma.db-shm
+cp /tmp/r/var/backups/homelab-dumps/var_lib_docker_volumes_uptime-kuma_uptime-kuma-data__data_kuma.db.sqlite3 $V/kuma.db
+chown 1000:1000 $V/kuma.db        # el mismo dueño que tenía (ls -ln $V)
+docker start uptime-kuma
+```
+
+Grafana igual, con `monitoring_grafana-data/_data/grafana.db` y el contenedor `grafana` (dueño `472`).
 
 ### Máquina nueva desde cero
 
