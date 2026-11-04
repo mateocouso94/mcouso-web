@@ -35,21 +35,26 @@ Frente al datacenter antiguo, el salto está sobre todo en el procesador: el dob
 
 Cada host tiene **7 interfaces**, cada una con su función, y todo va por **VLAN separadas con MTU 9000**. El diseño de red de los hosts fue mío.
 
-| Interfaces | Tarjeta | Velocidad | Uso |
-|---|---|---|---|
-| 2 | — | 10 Gb | Salida de los clientes, vía Fortinet |
-| 2 | ConnectX-6 (puerto 1 de cada tarjeta) | 2 × 100 Gb | **SAN**: NVMe over RoCE, una VLAN por puerto, Round Robin |
-| 1 | ConnectX-6 A (puerto 2) | 100 Gb | **Backup** activo · vMotion en espera |
-| 1 | ConnectX-6 B (puerto 2) | 100 Gb | **vMotion** activo · backup en espera |
-| 1 | iDRAC | — | Gestión remota del servidor |
+| Interfaz | Velocidad | Uso |
+|---|---|---|
+| 2 puertos de red | 10 Gb | Salida de los clientes, vía Fortinet |
+| ConnectX-6 A y B, puerto 1 | 2 × 100 Gb | **SAN**: NVMe over RoCE, una VLAN por puerto, Round Robin |
+| ConnectX-6 A, puerto 2 | 100 Gb | **Backup** activo, vMotion en espera |
+| ConnectX-6 B, puerto 2 | 100 Gb | **vMotion** activo, backup en espera |
+| iDRAC | — | Gestión remota del servidor |
 
 Los cuatro puertos de servicio son **dos tarjetas ConnectX-6 de doble puerto**, conectadas a los switches de 100 Gb:
 
 ```
-              ConnectX-6 A                    ConnectX-6 B
- puerto 1  →  SAN (VLAN 1)     · 100 Gb  ·    SAN (VLAN 2)     ← puerto 1
- puerto 2  →  Backup  (activo) · 100 Gb  ·    vMotion (activo) ← puerto 2
-              vMotion (espera)                Backup  (espera)
+ConnectX-6 A
+  puerto 1 → SAN (VLAN 1)      100 Gb
+  puerto 2 → Backup  · activo  100 Gb
+             vMotion · espera
+
+ConnectX-6 B
+  puerto 1 → SAN (VLAN 2)      100 Gb
+  puerto 2 → vMotion · activo  100 Gb
+             Backup  · espera
 ```
 
 Hay tres decisiones detrás de este reparto:
