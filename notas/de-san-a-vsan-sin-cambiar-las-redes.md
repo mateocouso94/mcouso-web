@@ -31,14 +31,9 @@ El clúster nuevo no existía: lo creamos en un **vCenter nuevo**, con los tres 
 
 En total se movieron las **20 máquinas** del clúster. El proyecto, una vez montados los hosts, duró **un mes**. Ese mes incluye medir los tiempos de parada posibles, elegir los momentos de baja carga de cada máquina, instalar, configurar y migrar.
 
-## Lo que dio guerra: los Distributed Switches
-
-Los VDS tenían que funcionar a la vez con hosts en 6.5 y en 7.0.3, y **no nos dejaba migrar en caliente de un VDS 6.5 a uno 7.0.3**. La solución fue crear los VDS **en versión 6.5**, compatibles con todos los hosts durante la migración. Cuando todos los hosts estuvieron en 7.0.3, se actualizaron los VDS. **La actualización no tuvo ningún corte.**
-
 ## Resultado
 
 - Clúster nuevo sobre vSAN all-flash, con todos los hosts en 7.0.3.
 - Las redes y VLAN de los clientes no cambiaron en ningún momento.
 - Las máquinas se movieron en caliente, sin corte, en ventanas aprobadas por el cliente.
 
-Salió bastante bien: incluso la actualización de los VDS se hizo sin ningún corte.

@@ -16,13 +16,13 @@ export const es: PageCopy = {
 
   // --- Portada ---
   role: 'INGENIERO DE INFRAESTRUCTURA HÍBRIDA',
-  headline: 'Llevo ocho años montando y manteniendo infraestructura.',
+  headline: 'Llevo siete años montando y manteniendo infraestructura.',
   intro:
     'Me llamo Mateo y soy de sistemas. La mayor parte de mi carrera ha sido VMware on-premise: he montado un datacenter desde cero, desde las VLAN y la cabina hasta el vCenter y las copias, y he migrado más de 100 clientes entre plataformas. Hoy trabajo también con Linux, Azure, AWS y Proxmox, y hacia ahí quiero crecer: infraestructura híbrida, aprovechando todo lo aprendido en el CPD.',
   cv: 'DESCARGAR CURRÍCULUM',
   linkedin: 'PERFIL DE LINKEDIN',
   location: 'SANTIAGO DE COMPOSTELA · GALICIA',
-  years: 'MÁS DE 8 AÑOS EN SISTEMAS',
+  years: 'MÁS DE 7 AÑOS EN IT',
   credential: 'VMware VCP-DCV · 2023',
   portraitAlt: 'Retrato de Mateo Couso',
 
@@ -185,7 +185,7 @@ export const es: PageCopy = {
       role: 'Administrador de Sistemas VMware',
       place: 'Santiago de Compostela · Remoto',
       description:
-        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos sobre servidores Lenovo, Dell y HP, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. El cliente principal tenía unos 600 servidores y 3.000 máquinas virtuales. También administré un clúster extendido entre dos datacenters, con un vCenter común con vCenter HA, hosts en los dos y reglas de afinidad: si una máquina caía en un datacenter, se levantaba en el otro.',
+        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos sobre servidores Lenovo, Dell y HP, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. El cliente principal tenía unos 600 servidores y 3.000 máquinas virtuales. También administré un stretched cluster con vSAN entre dos datacenters: 12 hosts, 6 en cada uno, con un vCenter común con vCenter HA y reglas de afinidad, para que si una máquina caía en un datacenter se levantase en el otro. Nunca llegó a caer.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -265,12 +265,12 @@ export const es: PageCopy = {
       approachLabel: 'CÓMO LO HICIMOS',
       approach:
         'Por fases. Añadimos discos locales a los hosts y empezamos con tres: los actualizamos, montamos la vSAN con ellos y empezamos a mover máquinas. El clúster nuevo se creó en un vCenter nuevo, y las máquinas pasaron en caliente con Cross vCenter vMotion. Cada host que quedaba libre se actualizaba y entraba en la vSAN, hasta completar el clúster nuevo en 7.0.3. Usamos las mismas redes y las mismas VLAN durante todo el proceso.',
-      outcomeLabel: 'LO COMPLICADO',
+      outcomeLabel: 'RESULTADO',
       outcome:
-        'Los Distributed Switches tenían que funcionar a la vez con hosts en 6.5 y en 7.0.3, así que los creamos en 6.5 y los actualizamos al final, sin ningún corte. Las máquinas tampoco tuvieron corte.',
-      footer: '7 HOSTS · POR FASES · VDS 6.5 → 7.0.3',
+        'Un mes de proyecto y 20 máquinas movidas en caliente, sin corte. El clúster quedó entero en vSAN all-flash con 7.0.3, y las redes de los clientes no cambiaron en ningún momento.',
+      footer: '7 HOSTS · POR FASES · 6.5 / 7.0 → 7.0.3',
       href: '/notas/de-san-a-vsan-sin-cambiar-las-redes/',
-      tags: ['vSphere', 'SAN', 'vSAN', 'Cross vCenter vMotion', 'VDS'],
+      tags: ['vSphere', 'SAN', 'vSAN', 'Cross vCenter vMotion'],
     },
     {
       label: 'MIGRACIONES · VARIOS CPD',

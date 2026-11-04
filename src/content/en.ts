@@ -16,13 +16,13 @@ export const en: PageCopy = {
 
   // --- Hero ---
   role: 'HYBRID INFRASTRUCTURE ENGINEER',
-  headline: 'Eight years building and running infrastructure.',
+  headline: 'Seven years building and running infrastructure.',
   intro:
     "I'm Mateo, a systems engineer. Most of my career has been on-premise VMware: I built a datacenter from scratch, from the VLANs and the storage array up to vCenter and backups, and I've migrated more than 100 customers between platforms. These days I also work with Linux, Azure, AWS and Proxmox, and that's where I want to grow: hybrid infrastructure, built on what I learned in the datacenter.",
   cv: 'DOWNLOAD CV',
   linkedin: 'LINKEDIN PROFILE',
   location: 'SANTIAGO DE COMPOSTELA · GALICIA, SPAIN',
-  years: '8+ YEARS IN SYSTEMS',
+  years: '7+ YEARS IN IT',
   credential: 'VMware VCP-DCV · 2023',
   portraitAlt: 'Portrait of Mateo Couso',
 
@@ -185,7 +185,7 @@ export const en: PageCopy = {
       role: 'VMware Systems Administrator',
       place: 'Santiago de Compostela · Remote',
       description:
-        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters on Lenovo, Dell and HP servers, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. The main customer had about 600 servers and 3,000 virtual machines. I also ran a stretched cluster across two datacenters, with a shared vCenter with vCenter HA, hosts in both sites and affinity rules: if a VM went down in one datacenter, it came back up in the other.',
+        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters on Lenovo, Dell and HP servers, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. The main customer had about 600 servers and 3,000 virtual machines. I also ran a vSAN stretched cluster across two datacenters: 12 hosts, 6 in each, with a shared vCenter with vCenter HA and affinity rules, so that if a VM went down in one datacenter it would come back up in the other. It never went down.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -264,12 +264,12 @@ export const en: PageCopy = {
       approachLabel: 'HOW WE DID IT',
       approach:
         "In phases. We added local disks to the hosts and started with three: we upgraded them, built vSAN on them and began moving VMs. The new cluster was created in a new vCenter, and the VMs moved live with Cross vCenter vMotion. Every host that freed up was upgraded and joined vSAN, until the new 7.0.3 cluster was complete. Same networks and same VLANs throughout.",
-      outcomeLabel: 'THE TRICKY PART',
+      outcomeLabel: 'RESULT',
       outcome:
-        'The Distributed Switches had to work with hosts on 6.5 and 7.0.3 at the same time, so we created them on 6.5 and upgraded them at the end, with no downtime. The VMs had no downtime either.',
-      footer: '7 HOSTS · PHASED · VDS 6.5 → 7.0.3',
+        'One month of project work and 20 VMs moved live, with no downtime. The whole cluster ended up on all-flash vSAN with 7.0.3, and customer networks never changed.',
+      footer: '7 HOSTS · PHASED · 6.5 / 7.0 → 7.0.3',
       href: '/notas/de-san-a-vsan-sin-cambiar-las-redes/',
-      tags: ['vSphere', 'SAN', 'vSAN', 'Cross vCenter vMotion', 'VDS'],
+      tags: ['vSphere', 'SAN', 'vSAN', 'Cross vCenter vMotion'],
     },
     {
       label: 'MIGRATIONS · MULTI-DATACENTER',
