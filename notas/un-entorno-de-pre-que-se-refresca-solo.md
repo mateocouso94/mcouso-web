@@ -32,13 +32,11 @@ bastión
                     2. blobs, AzCopy
 ```
 
-Encadenar los pasos con un timer, en lugar de programar cada uno a una hora fija, evita que la sincronización de ficheros empiece mientras la base de datos aún se está copiando.
+Los pasos van encadenados: **si la copia de la base de datos falla o no termina correctamente, los blob storages no se replican**. Así preproducción nunca se queda con una base de datos a medias y unos ficheros que no le corresponden.
 
 ## Que nunca se escriba en producción
 
-La parte más delicada de un proceso así es la dirección. Un script que copia de PRO a PRE, con un parámetro al revés, escribe en producción.
-
-Por eso el bastión **solo tiene permiso de lectura en producción**. En preproducción puede escribir. En producción, aunque el script fallase o alguien lo lanzase mal, no puede modificar nada.
+En un proceso que copia de PRO a PRE, lo delicado es la dirección. Por eso el bastión **solo tiene permiso de lectura en producción**: en preproducción puede escribir, pero sobre la base de datos de producción no puede hacer nada más que leer. Aunque el proceso se lanzase al revés, no se ejecutaría.
 
 ## Mínimos permisos, también para las personas
 
