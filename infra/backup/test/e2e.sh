@@ -47,7 +47,7 @@ done
 echo "1. init"
 "$HERE/backup.sh" init >/dev/null
 [[ -f $T/repo-local/config && -f $T/repo-nube/config ]] && pass "los dos repositorios creados" || fail "init"
-"$HERE/backup.sh" init | grep -q "ya existe" && pass "init es idempotente" || fail "init repetido"
+out=$("$HERE/backup.sh" init); grep -q "ya existe" <<<"$out" && pass "init es idempotente" || fail "init repetido"
 
 echo "2. copia"
 "$HERE/backup.sh" >/dev/null
@@ -55,10 +55,11 @@ last_push local | grep -q "^local up OK" && pass "aviso up del destino local: $(
 last_push nube  | grep -q "^nube up OK" && pass "aviso up del destino nube" || fail "push nube"
 [[ -s $T/state/local.canary ]] && pass "canario registrado" || fail "canario"
 snap() { RESTIC_PASSWORD_FILE=$T/conf/password restic -r "$T/repo-$1" "${@:2}"; }
-snap local ls latest | grep -q "app/config.yml" && pass "config.yml está en la copia" || fail "falta config.yml"
-snap local ls latest | grep -q "\.tmp$" && fail "x.tmp no debería copiarse" || pass "exclusiones aplicadas (*.tmp)"
-snap local ls latest | grep -q "cache/" && fail "la caché no debería copiarse" || pass "carpetas con CACHEDIR.TAG excluidas"
-snap local ls latest | grep -q "app.db.sqlite3" && pass "volcado SQLite incluido" || fail "falta volcado"
+LS=$(snap local ls latest)
+grep -q "app/config.yml" <<<"$LS" && pass "config.yml está en la copia" || fail "falta config.yml"
+grep -q "\.tmp$" <<<"$LS" && fail "x.tmp no debería copiarse" || pass "exclusiones aplicadas (*.tmp)"
+grep -q "cache/" <<<"$LS" && fail "la caché no debería copiarse" || pass "carpetas con CACHEDIR.TAG excluidas"
+grep -q "app.db.sqlite3" <<<"$LS" && pass "volcado SQLite incluido" || fail "falta volcado"
 
 echo "3. retención"
 echo "cambio" >> "$T/data/app/config.yml"; "$HERE/backup.sh" >/dev/null; "$HERE/backup.sh" >/dev/null
