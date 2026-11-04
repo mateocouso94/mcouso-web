@@ -3,10 +3,7 @@ title: Copias 3-2-1-0 en mi homelab
 date: 2026-11-04
 summary: "Tres copias, dos soportes, una fuera de casa y cero errores: copias con restic entre mis dos mini PC y Backblaze B2, y una restauración real cada semana para comprobar que sirven."
 tags: [Backup, restic, Backblaze B2, Homelab, Uptime Kuma]
-draft: true
 ---
-
-> ✏️ PENDIENTE: publicar cuando esté funcionando en los dos mini PC. Añade el tamaño real de las copias y lo que cuesta B2 al mes. Para publicar, borra la línea `draft: true`.
 
 En el trabajo he montado copias y DR con Veeam para clientes. En casa no tenía nada: si un disco del homelab moría, perdía la configuración de todo. Así que lo he resuelto con la misma regla que aplicaría en un cliente, a escala de dos mini PC.
 
@@ -53,10 +50,25 @@ Los scripts se prueban en GitHub Actions con restic real cada vez que los cambio
 
 La prueba encontró un fallo antes de llegar a producción: si pegaba la URL de Kuma tal cual (`...?status=up&msg=OK`), bash interpretaba los `&` y la verificación nunca avisaba.
 
+## Lo que me encontré al instalarlo
+
+Los scripts estaban probados, pero los servidores reales siempre tienen sorpresas:
+
+- **Datos de Docker en el NVMe.** Kuma, Grafana y Prometheus guardaban sus datos en volúmenes de Docker dentro de `/var/lib/docker`, en el disco del sistema. Si ese disco moría, se iban con él. Los pasé a carpetas junto a cada `compose`, dentro de `/opt` en el SSD. Ahora, si cambio el NVMe, reinstalo, monto el SSD y hago `docker compose up -d`.
+- **La jaula SFTP exige root.** SSH aceptaba la clave y cortaba la conexión al instante. El motivo era que `ChrootDirectory` exige que todas las carpetas del camino (`/`, `/opt`, `/opt/backups`) sean de root y que nadie más pueda escribir en ellas, y `/opt` era de mi usuario.
+- **No todo lo que acaba en `.db` es SQLite.** Los `stats.db` y `sessions.db` de AdGuard son BoltDB, así que no se pueden volcar con `sqlite3`. Se copian como ficheros normales.
+- **Capas de Docker que no hacía falta copiar.** En la otra máquina, `/opt` tenía 11 GB de capas de imágenes y caché de compilación. Se vuelven a descargar solas, así que solo copio lo que tiene valor: `/opt/ci` y `/etc`.
+- **Las URL de Kuma, por IP.** Kuma daba las URL de los avisos con un nombre que solo resuelve mi AdGuard. Si AdGuard se cae, el aviso no llega justo cuando más falta hace.
+
 ## Lo que cuesta
 
-> ✏️ PENDIENTE: tamaño real de las copias y coste mensual en B2.
+| Máquina | Datos copiados | Ocupado en cada destino | Primera copia a B2 |
+|---|---|---|---|
+| homelab-red | 361 MiB | 115 MiB | 7 s |
+| homelab | 53 MiB | 10 MiB | 4 s |
 
-B2 cobra 6,95 $/TB al mes y los primeros 10 GB son gratis. Con la deduplicación, mi homelab cuesta…
+Restic comprime y deduplica: los 414 MiB de datos ocupan unos 125 MiB en B2. Las copias de cada noche solo suben lo que ha cambiado. B2 cobra 6,95 $/TB al mes y **los primeros 10 GB son gratis**, así que ahora mismo esto me cuesta **0 €**.
+
+La primera verificación restauró desde los cuatro destinos y comprobó el canario y las dos bases de datos de homelab-red. Todo correcto.
 
 El código y la guía de instalación están en [github.com/mateocouso94/mcouso-web/tree/main/infra/backup](https://github.com/mateocouso94/mcouso-web/tree/main/infra/backup). El estado de las copias se ve en directo en [/estado/](/estado/) y con el comando `backup` de la consola.
