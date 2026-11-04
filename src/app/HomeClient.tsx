@@ -55,12 +55,31 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
     return [head, ...rows, isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/estado'].join('\n');
   }
 
+  function backupLines(isSpanish: boolean, s: HomelabStatus | null) {
+    if (!s) return isSpanish ? 'Estado no disponible ahora mismo.' : 'Status not available right now.';
+    const isBackup = (m: { group: string; name: string }) => /copia|backup|verific/i.test(m.group) || /^(copia|backup|verific)/i.test(m.name);
+    const mons = s.monitors.filter(isBackup);
+    if (!mons.length) return isSpanish ? 'Todavía no hay monitores de copias publicados.' : 'No backup monitors published yet.';
+    const ok = mons.filter((m) => m.status === 1).length;
+    const rows = mons.map((m) => `${m.status === 1 ? '●' : m.status === 0 ? '✕' : '◌'} ${m.name}`);
+    const head = isSpanish ? `Copias 3-2-1-0: ${ok}/${mons.length} OK` : `3-2-1-0 backups: ${ok}/${mons.length} OK`;
+    const foot = isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/estado';
+    return [head, ...rows, foot].join('\n');
+  }
+
   async function executeCommand(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const cmd = command.trim().toLowerCase();
     const isSpanish = lang === 'es';
     setCommand('');
     if (cmd === 'clear') { setOutput(''); return; }
+    if (cmd === 'backup' || cmd === 'backups' || cmd === 'copias') {
+      setOutput(isSpanish ? 'Consultando Uptime Kuma…' : 'Querying Uptime Kuma…');
+      const s = await fetchHomelabStatus();
+      setStatus(s);
+      setOutput(backupLines(isSpanish, s));
+      return;
+    }
     if (cmd === 'status' || cmd === 'uptime') {
       setOutput(isSpanish ? 'Consultando Uptime Kuma…' : 'Querying Uptime Kuma…');
       const s = await fetchHomelabStatus();
@@ -70,8 +89,8 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
     }
     const responses: Record<string, string> = {
       help: isSpanish
-        ? 'status   estado real del homelab (Uptime Kuma)\ndeploy   versión publicada de esta web\nwhoami · stack · lab · career · contact · clear'
-        : 'status   live homelab status (Uptime Kuma)\ndeploy   live version of this site\nwhoami · stack · lab · career · contact · clear',
+        ? 'status   estado real del homelab (Uptime Kuma)\nbackup   estado de las copias 3-2-1-0\ndeploy   versión publicada de esta web\nwhoami · stack · lab · career · contact · clear'
+        : 'status   live homelab status (Uptime Kuma)\nbackup   3-2-1-0 backup status\ndeploy   live version of this site\nwhoami · stack · lab · career · contact · clear',
       whoami: isSpanish ? 'Mateo Couso Hortas — Ingeniero de Infraestructura Híbrida' : 'Mateo Couso Hortas — Hybrid Infrastructure Engineer',
       stack: 'VMware · SAN / vSAN · Pure Storage · Veeam CDP · Disaster Recovery · Azure · AWS · Terraform',
       lab: 'homelab-red: AdGuard Home, Prometheus, Grafana, Uptime Kuma\nhomelab-apps: Docker Compose, nginx (esta web), cloudflared',

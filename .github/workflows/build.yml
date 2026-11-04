@@ -5,7 +5,9 @@ name: build
 on:
   push:
     branches: [main]
+    paths-ignore: ['infra/**', '.github/workflows/backup-test.yml']
   pull_request:
+    paths-ignore: ['infra/**', '.github/workflows/backup-test.yml']
   workflow_dispatch:
 
 permissions:

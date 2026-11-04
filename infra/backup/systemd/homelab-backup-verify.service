@@ -1,0 +1,10 @@
+[Unit]
+Description=Verificación de las copias del homelab (restaurar y comprobar)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/homelab-backup/verify.sh
+Nice=10
+IOSchedulingClass=idle
