@@ -169,7 +169,7 @@ export const en: PageCopy = {
       role: 'Infrastructure & Systems Engineer',
       place: 'A Coruña · Hybrid',
       description:
-        'The job here is mostly operations. I run Linux servers across production, staging and development, deploy to AWS and also work with Azure. I build and document VMs on Proxmox, set up Restic backups and snapshots, and automate deployments and routine tasks. Lots of log reading: Docker, systemd, Jenkins, GitLab, PostgreSQL. On one project I changed the configuration of a third-party VMware environment to fit what our application needed, acting as the go-between for the customer and our developers.',
+        'The job here is mostly operations. I run Linux servers across production, staging and development, deploy to AWS and also work with Azure. I build and document VMs on Proxmox, set up Restic backups and snapshots, and automate deployments and routine tasks, such as a weekly production-to-staging refresh with anonymised data. I also manage devices and users with Intune, Microsoft 365 and Entra ID. Lots of log reading: Docker, systemd, Jenkins, GitLab, PostgreSQL. On one project I changed the configuration of a third-party VMware environment to fit what our application needed, acting as the go-between for the customer and our developers.',
     },
     {
       period: 'JUL 2024 — MAR 2026',
@@ -185,7 +185,7 @@ export const en: PageCopy = {
       role: 'VMware Systems Administrator',
       place: 'Santiago de Compostela · Remote',
       description:
-        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters on Lenovo, Dell and HP servers, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. The main customer had about 600 servers and 3,000 virtual machines.',
+        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters on Lenovo, Dell and HP servers, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. The main customer had about 600 servers and 3,000 virtual machines. I also ran a stretched cluster across two datacenters, with a shared vCenter with vCenter HA, hosts in both sites and affinity rules: if a VM went down in one datacenter, it came back up in the other.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -203,20 +203,12 @@ export const en: PageCopy = {
       description: 'Application deployments with Git and Jenkins, quality control and infrastructure operations on AWS and GCP.',
     },
     {
-      period: 'AUG 2019 — JUL 2020',
-      company: 'Plexus Tech',
-      role: 'Project Coordinator',
-      place: 'Santiago de Compostela',
-      description:
-        'I coordinated teams of 10 to 15 technicians and national and international support services: planning interventions, tracking deadlines and handling escalations.',
-    },
-    {
-      period: 'JUL 2017 — JUN 2019',
-      company: 'Fermax Electrónica',
-      role: 'Technical Lead · Galicia',
+      period: 'JUL 2017 — JUL 2020',
+      company: 'Plexus Tech · Fermax Electrónica',
+      role: 'Project coordination and technical support',
       place: 'Galicia',
       description:
-        'Technical lead for Galicia: customer support, on-site and remote commissioning, troubleshooting and training.',
+        'Before systems: I coordinated teams of 10 to 15 technicians at Plexus Tech and, before that, was Fermax technical lead for Galicia, with commissioning, troubleshooting and training.',
     },
   ],
 
@@ -257,11 +249,12 @@ export const en: PageCopy = {
       body: 'We needed a new datacenter to move customers into from the old one, which ran vSphere 7. I designed and built it: five Dell hosts with 64-core AMD EPYC 9534 CPUs and 2.25 TB of RAM, Dell switches at 100 Gb and a Pure Storage array over NVMe over RoCE. A single cluster with its own vCenter.',
       approachLabel: 'WHAT I DID',
       approach:
-        'All of the VMware side: compatibility matrix, remote-management firmware, BIOS, drivers, ESXi 8 image, vCenter and cluster. I also initialized the array, working with Pure, and presented the SAN to the hosts. I designed the network of each host: two 100 Gb ConnectX-6 cards giving 200 Gb for SAN plus 100 Gb for backup and 100 Gb for vMotion, crossed active/standby between cards so traffic never mixes. Customer egress runs at 2 × 10 Gb through Fortinet, all on separate VLANs with MTU 9000. The array has 400 Gb. Management and server consoles sit on their own VLAN, reachable only over VPN. Every customer has its own VDS, and the larger ones also get their own virtual Fortinet.',
+        'All of the VMware side, from the compatibility matrix and firmware to vCenter and the cluster. I initialized the array with Pure and designed the network of each host: two ConnectX-6 cards with SAN, backup and vMotion kept apart, on separate VLANs with MTU 9000. Every customer has its own VDS.',
       outcomeLabel: 'MIGRATION & RESULT',
       outcome:
-        'I migrated whole customers, mostly with a full Veeam backup restored into a new VLAN, keeping their segmentation. I decided which customers moved and when. Some later moved on to Cloud Director. The new CPUs and memory improved performance, and backups and file restores got faster. Backups go to a second Pure array, and I added a Veeam proxy with a per-host affinity rule to spread backup and restore load.',
+        'I migrated the customers of the old datacenter into it, deciding which ones moved and when. Restoring a 1 TB backup went from about 20 minutes to 7-8.',
       footer: '5 DELL HOSTS · AMD EPYC · PURE STORAGE · NVMe over RoCE',
+      href: '/notas/un-datacenter-vmware-desde-cero/',
       tags: ['ESXi 8', 'vCenter', 'Dell', 'Pure Storage', 'Veeam', 'VDS'],
     },
     {
@@ -270,12 +263,13 @@ export const en: PageCopy = {
       body: 'A seven-host cluster on a Dell storage array with mixed versions: four hosts on vSphere 6.5 and three on 7.0. It had to move to vSAN on local disks without touching customer networks.',
       approachLabel: 'HOW WE DID IT',
       approach:
-        "In phases. We added local disks to the hosts and started with three: we upgraded them, built vSAN on them and began moving VMs. The source cluster wasn't in vCenter, so live migrations were done with replication. Every host that freed up was upgraded and joined vSAN, until the new 7.0.3 cluster was complete. Same networks and same VLANs throughout.",
+        "In phases. We added local disks to the hosts and started with three: we upgraded them, built vSAN on them and began moving VMs. The new cluster was created in a new vCenter, and the VMs moved live with Cross vCenter vMotion. Every host that freed up was upgraded and joined vSAN, until the new 7.0.3 cluster was complete. Same networks and same VLANs throughout.",
       outcomeLabel: 'THE TRICKY PART',
       outcome:
-        'The Distributed Switches had been created on 6.5 and had to be upgraded to 7.0.3 along the way. Beyond that, the only downtime was short, when each replication was finalized.',
+        'The Distributed Switches had to work with hosts on 6.5 and 7.0.3 at the same time, so we created them on 6.5 and upgraded them at the end, with no downtime. The VMs had no downtime either.',
       footer: '7 HOSTS · PHASED · VDS 6.5 → 7.0.3',
-      tags: ['vSphere', 'SAN', 'vSAN', 'Replication', 'VDS'],
+      href: '/notas/de-san-a-vsan-sin-cambiar-las-redes/',
+      tags: ['vSphere', 'SAN', 'vSAN', 'Cross vCenter vMotion', 'VDS'],
     },
     {
       label: 'MIGRATIONS · MULTI-DATACENTER',
@@ -283,25 +277,26 @@ export const en: PageCopy = {
       body: 'Not everything was building from scratch. A big part of the job was moving things: whole customers between vCenters, data between two arrays and VMs from Azure to VMware.',
       approachLabel: 'WHAT I DID',
       approach:
-        'Depending on the case I used Cross vCenter vMotion, replication or a full Veeam backup restored at the destination. I also built DR between two separate datacenters, with HA for the VMs and replication rules.',
+        'Depending on the case I used Cross vCenter vMotion, replication or a full Veeam backup restored at the destination.',
       outcomeLabel: 'SCALE',
       outcome: 'In total, more than 100 customers onboarded, run or migrated, and around 1,000 virtual machines running 24/7.',
       footer: 'CROSS vCENTER · BETWEEN ARRAYS · AZURE → VMWARE',
+      href: '/notas/migrar-clientes-de-vsphere-7-a-8-con-veeam/',
       tags: ['Cross vCenter', 'Veeam', 'Azure', 'VMware'],
     },
     {
       label: 'DISASTER RECOVERY · VEEAM 13',
       title: 'Veeam DR, actually tested',
-      body: 'Disaster recovery between a customer environment and ours: ten VMs, one of them about 3 TB, with RPO and RTO set for each one.',
+      body: 'Disaster recovery between a customer environment and ours with Veeam CDP: ten VMs from a few GB to 2-3 TB, with a 15-minute RPO for the critical ones, 1 hour for the rest, and a 3-hour RTO.',
       approachLabel: 'WHAT I DID',
       approach:
         "I deployed the Veeam 13 components and proxies, the certificates, and configured the backup jobs, the destination and the recovery VLAN. The customer's environment ran entirely on IP addresses, so I created a DNS zone with its records and moved it to names. In our vCenter the customer had a user that could only see its own folder: no hosts, no networks, nothing else.",
       outcomeLabel: 'THE TEST',
       outcome:
-        'We brought the VMs up on our side and changed the local firewall rules to point to our infrastructure. The tests went well.',
-      footer: 'VEEAM 13 · 10 VMS · RPO / RTO PER VM',
+        'A full day of testing: the copies came up on our infrastructure in about an hour, the Fortinet rules were changed and user access was validated. It all worked, and I left a runbook so the customer could recover without depending on us.',
+      footer: 'VEEAM 13 · 10 VMS · RPO 15 MIN · RTO 3 H',
       tags: ['Veeam CDP', 'Proxies', 'DNS', 'Permissions', 'DR'],
-      href: 'https://www.linkedin.com/posts/mateo-couso-hortas-71ba63164_veeam-cdp-disasterrecovery-activity-7330625843246903297-BRAf',
+      href: '/notas/un-dr-con-veeam-probado-de-verdad/',
     },
   ],
 
@@ -328,7 +323,7 @@ export const en: PageCopy = {
   contactEyebrow: 'CONTACT',
   contactTitle: "Let's talk.",
   contactIntro:
-    "If you need someone for VMware infrastructure, migrations or backup, or you'd like to chat about the site or the homelab, drop me a line.",
+    "If you need a systems engineer for on-premise, cloud or hybrid infrastructure, or you'd like to chat about the site or the homelab, drop me a line.",
   emailCta: 'EMAIL ME',
   footer: 'Built, deployed and run by Mateo Couso on his homelab.',
 };

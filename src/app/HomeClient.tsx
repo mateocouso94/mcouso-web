@@ -222,9 +222,9 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
         <section className="section field-notes" id="notes">
           <div className="section-heading"><span className="section-number">{t.projectsEyebrow}</span><h2>{t.projectsTitle}</h2><p>{t.projectsIntro}</p></div>
           <div className="notes-grid">{t.projects.map((project, index) => {
-            const cardContent = <><div className="note-top"><span>{project.label}</span></div><h3>{project.title}</h3><p className="note-summary">{project.body}</p><div className="note-subsection"><b>{project.approachLabel}</b><p>{project.approach}</p></div><div className="note-subsection outcome"><b>{project.outcomeLabel}</b><p>{project.outcome}</p></div><div className="note-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>{project.href ? <div className="note-bottom">{lang === 'es' ? 'Ver publicación en LinkedIn' : 'See the LinkedIn post'} <span>↗</span></div> : null}</>;
+            const cardContent = <><div className="note-top"><span>{project.label}</span></div><h3>{project.title}</h3><p className="note-summary">{project.body}</p><div className="note-subsection"><b>{project.approachLabel}</b><p>{project.approach}</p></div><div className="note-subsection outcome"><b>{project.outcomeLabel}</b><p>{project.outcome}</p></div><div className="note-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>{project.href ? <div className="note-bottom">{project.href.startsWith('/') ? (lang === 'es' ? 'Leer la nota completa' : 'Read the full note (in Spanish)') : (lang === 'es' ? 'Ver publicación en LinkedIn' : 'See the LinkedIn post')} <span>{project.href.startsWith('/') ? '→' : '↗'}</span></div> : null}</>;
             return project.href
-              ? <a key={project.label} className={`note ${index === 0 ? 'note-featured' : ''}`} href={project.href} target="_blank" rel="noreferrer">{cardContent}</a>
+              ? <a key={project.label} className={`note ${index === 0 ? 'note-featured' : ''}`} href={project.href} {...(project.href.startsWith('/') ? {} : { target: '_blank', rel: 'noreferrer' })}>{cardContent}</a>
               : <article key={project.label} className={`note ${index === 0 ? 'note-featured' : ''}`}>{cardContent}</article>;
           })}</div>
         </section>
