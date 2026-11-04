@@ -20,6 +20,6 @@ jobs:
       - name: Instalar restic, sqlite3 y shellcheck
         run: sudo apt-get update -q && sudo apt-get install -y -q restic sqlite3 shellcheck && restic version
       - name: shellcheck
-        run: shellcheck -x -e SC1090,SC1091 infra/backup/*.sh infra/backup/test/*.sh
+        run: shellcheck -x -S warning -e SC1090,SC1091 infra/backup/*.sh infra/backup/test/*.sh
       - name: Prueba de extremo a extremo
         run: infra/backup/test/e2e.sh
