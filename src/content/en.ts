@@ -221,7 +221,7 @@ export const en: PageCopy = {
   labEyebrow: 'HOMELAB',
   labTitle: 'What I run at home.',
   labIntro:
-    "Two mini PCs running Debian 13. One handles DNS and DHCP with AdGuard Home and monitors everything with Prometheus, Grafana and Uptime Kuma. The other runs the containers, including this website. I use it to try things I can't break at work. The site reaches the Internet through Cloudflare Tunnel, with no ports open on the router, and it redeploys itself every time I push a change to GitHub. You can see the live service status at mcouso.es/estado.",
+    "Two mini PCs running Debian 13. One handles DNS and DHCP with AdGuard Home and monitors everything with Prometheus, Grafana and Uptime Kuma. The other runs the containers, including this website. I use it to try things I can't break at work. The site reaches the Internet through Cloudflare Tunnel, with no ports open on the router, and it redeploys itself every time I push a change to GitHub. You can see the live service status at mcouso.es/estado, and everything is backed up nightly to the other mini PC and to Backblaze B2, with a test restore every week.",
   networkCaption: 'LOGICAL DIAGRAM · HOME NETWORK',
   networkNote: "Simplified diagram. I've left out IP addresses and the details of the remote network.",
   networkLabels: {
