@@ -120,6 +120,7 @@ export const es: PageCopy = {
         'Azure Functions, App Services, Application Gateway y WAF',
         'Refresco semanal de producción a preproducción con datos anonimizados',
         'Key Vault, Bastion y RBAC',
+        'Intune (macOS y Windows), Microsoft 365 y Entra ID',
         'Despliegue y documentación de máquinas en Proxmox',
       ],
       tags: ['Azure', 'AWS', 'Proxmox', 'WAF'],
