@@ -118,6 +118,7 @@ export const en: PageCopy = {
         'VM migrations from Azure to VMware',
         'AWS and Azure in production',
         'Azure Functions, App Services, Application Gateway and WAF',
+        'Weekly production-to-staging refresh with anonymised data',
         'Key Vault, Bastion and RBAC',
         'VM deployment and documentation on Proxmox',
       ],

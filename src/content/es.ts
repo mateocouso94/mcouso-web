@@ -118,6 +118,7 @@ export const es: PageCopy = {
         'Migración de máquinas de Azure a VMware',
         'AWS y Azure en producción',
         'Azure Functions, App Services, Application Gateway y WAF',
+        'Refresco semanal de producción a preproducción con datos anonimizados',
         'Key Vault, Bastion y RBAC',
         'Despliegue y documentación de máquinas en Proxmox',
       ],
