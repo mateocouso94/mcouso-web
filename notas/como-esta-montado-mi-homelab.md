@@ -88,6 +88,16 @@ Lo cuento con detalle en [Cómo se despliega esta web](/notas/como-se-despliega-
 - **Grafana** las dibuja.
 - **Uptime Kuma** vigila que cada servicio responde. Si algo cae, me avisa por **Telegram**. También recibe avisos de los procesos automáticos: el despliegue de la web, cada copia y cada verificación.
 
+Hoy Kuma vigila tres cosas:
+
+| Qué | Cómo |
+|---|---|
+| **La web** | mcouso.es desde fuera, a través de Cloudflare, y la misma web por la red interna. Si falla solo una de las dos, sé si el problema es el túnel o el contenedor. |
+| **La red de casa** | Los dos mini PC, el HGU de Movistar y el Xiaomi AX3600, más un ping a Google para distinguir «se ha caído algo mío» de «se ha caído Internet». |
+| **Los procesos automáticos** | El despliegue de la web y las copias y verificaciones de cada máquina, como monitores *push*: si no llega el aviso a tiempo, salta la alerta. |
+
+El homelab tiene poco tiempo, así que de momento Grafana se queda en un par de dashboards y las alertas salen todas de Kuma.
+
 El estado de Kuma se ve en directo en [/estado/](/estado/). El panel de Kuma no está expuesto: la web solo lee su API de estado, y lo explico en [Una página de estado sin exponer Uptime Kuma](/notas/una-pagina-de-estado-sin-exponer-uptime-kuma/).
 
 ## Las copias: 3-2-1-0
