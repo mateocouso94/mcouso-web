@@ -19,6 +19,8 @@ El homelab son dos mini PC en una estantería de casa. Lo uso para probar lo que
 
 La separación tiene un motivo: si rompo algo jugando con contenedores en una máquina, el DNS y el DHCP de casa siguen funcionando en la otra. Y la máquina que vigila no es la misma que sirve la web, así que si cae una, la otra me avisa.
 
+![Esquema del homelab: homelab sirve la web y sale por Cloudflare Tunnel, homelab-red lleva DNS, DHCP y monitorización, y las copias se cruzan por SFTP y van a Backblaze B2](/notas/homelab.svg)
+
 ## La red
 
 - **HGU de Movistar** como salida a Internet.

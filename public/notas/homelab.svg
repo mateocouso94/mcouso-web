@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="756" viewBox="0 0 400 756" role="img" aria-labelledby="t d">
+  <title id="t">Esquema del homelab</title>
+  <desc id="d">Dos mini PC con Debian. homelab sirve la web y sale a Internet por Cloudflare Tunnel y descarga la imagen de ghcr.io. homelab-red lleva DNS, DHCP y monitorización. Las copias de restic se cruzan por SFTP entre las dos máquinas y van también a Backblaze B2.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#bd573e"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#315e78"/>
+    </marker>
+    <style>
+      text{font-family:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;fill:#172b32}
+      .mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace}
+      .eyebrow{font-size:10px;letter-spacing:.08em;fill:#687473}
+      .title{font-size:17px;font-weight:700}
+      .sub{font-size:11.5px;fill:#687473}
+      .chip{fill:#e7ded0;stroke:#d4c2ae}
+      .chiptx{font-size:11.5px;fill:#963e2d}
+      .lbl{font-size:11px;fill:#963e2d}
+      .lblb{font-size:11px;fill:#1d4359}
+      .ext{fill:#f7f4ec;stroke:#c9c4b7}
+      .box{fill:#f7f4ec;stroke:#172b32;stroke-width:1.4}
+      .line{fill:none;stroke:#bd573e;stroke-width:2}
+      .lineb{fill:none;stroke:#315e78;stroke-width:2;stroke-dasharray:6 5}
+    </style>
+  </defs>
+  <rect width="400" height="756" fill="#eeeae0"/>
+
+  <!-- Internet -->
+  <text class="mono eyebrow" x="20" y="24">INTERNET</text>
+  <rect class="ext" x="20" y="34" width="160" height="50" rx="3"/>
+  <text class="title" x="34" y="57" style="font-size:15px">Cloudflare</text>
+  <text class="mono sub" x="34" y="74">túnel · mcouso.es</text>
+  <rect class="ext" x="200" y="34" width="180" height="50" rx="3"/>
+  <text class="title" x="214" y="57" style="font-size:15px">GitHub · ghcr.io</text>
+  <text class="mono sub" x="214" y="74">código e imagen</text>
+
+  <!-- salientes -->
+  <path class="line" d="M100 150V90" marker-end="url(#a)"/>
+  <path class="line" d="M290 150V90" marker-end="url(#a)"/>
+  <text class="mono lbl" x="108" y="118">cloudflared</text>
+  <text class="mono lbl" x="298" y="114">pull</text>
+  <text class="mono lbl" x="298" y="128">cada 5 min</text>
+  <text class="mono sub" x="380" y="24" text-anchor="end" style="font-size:10px">solo salientes · 0 puertos abiertos</text>
+
+  <!-- homelab -->
+  <rect class="box" x="20" y="156" width="330" height="164" rx="3"/>
+  <rect x="20" y="156" width="5" height="164" fill="#bd573e"/>
+  <text class="mono eyebrow" x="38" y="178">HP PRODESK 400 G6 MINI · DEBIAN 13</text>
+  <text class="title" x="38" y="200">homelab</text>
+  <text class="sub" x="38" y="218">Aplicaciones publicadas</text>
+  <rect class="chip" x="38" y="232" width="138" height="26" rx="2"/><text class="mono chiptx" x="48" y="249">nginx · esta web</text>
+  <rect class="chip" x="184" y="232" width="92" height="26" rx="2"/><text class="mono chiptx" x="194" y="249">cloudflared</text>
+  <rect class="chip" x="38" y="266" width="112" height="26" rx="2"/><text class="mono chiptx" x="48" y="283">node-exporter</text>
+  <rect class="chip" x="158" y="266" width="62" height="26" rx="2"/><text class="mono chiptx" x="168" y="283">restic</text>
+  <text class="mono sub" x="38" y="310" style="font-size:10px">NVMe: sistema · SSD: /opt</text>
+
+  <!-- copias cruzadas -->
+  <path class="lineb" d="M120 326V398" marker-end="url(#ab)"/>
+  <path class="lineb" d="M250 398V326" marker-end="url(#ab)"/>
+  <text class="mono lblb" x="128" y="358">copias</text>
+  <text class="mono lblb" x="128" y="372">SFTP</text>
+  <text class="mono lblb" x="258" y="358">copias</text>
+  <text class="mono lblb" x="258" y="372">SFTP</text>
+  <text class="mono sub" x="185" y="386" text-anchor="middle" style="font-size:10px">misma LAN</text>
+
+  <!-- homelab-red -->
+  <rect class="box" x="20" y="404" width="330" height="198" rx="3"/>
+  <rect x="20" y="404" width="5" height="198" fill="#315e78"/>
+  <text class="mono eyebrow" x="38" y="426">LENOVO M715Q · DEBIAN 13</text>
+  <text class="title" x="38" y="448">homelab-red</text>
+  <text class="sub" x="38" y="466">Red y monitorización</text>
+  <rect class="chip" x="38" y="480" width="166" height="26" rx="2"/><text class="mono chiptx" x="48" y="497">AdGuard · DNS y DHCP</text>
+  <rect class="chip" x="212" y="480" width="104" height="26" rx="2"/><text class="mono chiptx" x="222" y="497">Uptime Kuma</text>
+  <rect class="chip" x="38" y="514" width="94" height="26" rx="2"/><text class="mono chiptx" x="48" y="531">Prometheus</text>
+  <rect class="chip" x="140" y="514" width="70" height="26" rx="2"/><text class="mono chiptx" x="150" y="531">Grafana</text>
+  <rect class="chip" x="218" y="514" width="74" height="26" rx="2"/><text class="mono chiptx" x="228" y="531">Blackbox</text>
+  <rect class="chip" x="38" y="548" width="112" height="26" rx="2"/><text class="mono chiptx" x="48" y="565">node-exporter</text>
+  <rect class="chip" x="158" y="548" width="62" height="26" rx="2"/><text class="mono chiptx" x="168" y="565">restic</text>
+  <text class="mono sub" x="38" y="592" style="font-size:10px">NVMe: sistema · SSD: /opt</text>
+
+  <!-- B2 -->
+  <path class="lineb" d="M350 238H372V676" marker-end="url(#ab)"/>
+  <path class="lineb" d="M350 503H372"/>
+  <text class="mono lblb" x="200" y="648" text-anchor="middle">copias cifradas · cada noche</text>
+  <rect class="ext" x="20" y="682" width="360" height="64" rx="3"/>
+  <text class="title" x="34" y="705" style="font-size:15px">Backblaze B2</text>
+  <text class="mono sub" x="34" y="722">fuera de casa · Ámsterdam</text>
+  <text class="mono sub" x="34" y="738">verificadas cada domingo</text>
+</svg>
