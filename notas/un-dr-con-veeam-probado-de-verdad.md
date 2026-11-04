@@ -1,47 +1,58 @@
 ---
 title: Un DR con Veeam 13, probado de verdad
-date: 2026-11-03
-summary: Diez máquinas replicadas entre la infraestructura de un cliente y la nuestra. Lo que hubo que arreglar antes (todo iba por IP) y cómo hicimos la prueba real.
+date: 2026-11-04
+summary: "Veeam CDP entre la infraestructura de un cliente y la nuestra: RPO de 15 minutos para las máquinas críticas, RTO de 3 horas, un día entero de pruebas y un manual para que el cliente no dependa de nosotros."
 tags: [Veeam, DR, CDP, DNS, VMware]
-draft: true
 ---
 
-> ✏️ PENDIENTE: revisa todo el texto y quita estos avisos antes de publicar. Para publicar, borra la línea `draft: true`.
-
-Un plan de recuperación ante desastres que no se ha probado es solo un documento. En este proyecto el objetivo era montar un DR entre la infraestructura de un cliente y la nuestra, y **demostrar que funcionaba**.
+Un plan de recuperación ante desastres que no se ha probado es solo un documento. En este proyecto el objetivo era montar un DR entre la infraestructura **on-premise de un cliente** y la nuestra, y **demostrar que funcionaba**.
 
 ## El alcance
 
-- **10 máquinas virtuales**, una de ellas de unos **3 TB**.
-- **Veeam 13**, con RPO y RTO definidos **por máquina**.
+- **Veeam 13 con CDP** (Continuous Data Protection), solo para este cliente.
+- **10 máquinas virtuales**, desde unos pocos GB hasta **2-3 TB**.
 - Destino: nuestra infraestructura, en una VLAN de recuperación propia.
 
-> ✏️ PENDIENTE: ¿qué RPO/RTO se acordaron, aunque sea en rangos? ¿Era CDP para todas o solo para las críticas?
+| | Máquinas críticas | Máquinas menos críticas |
+|---|---|---|
+| **RPO** (cuántos datos se pueden perder) | 15 minutos | 1 hora |
+| **RTO** (cuánto se tarda en volver a funcionar) | 3 horas | 3 horas |
 
 ## Lo primero: todo iba por IP
 
-Al revisar la infraestructura del cliente vi que **todo funcionaba por dirección IP**, sin DNS. Para Veeam y sus certificados eso no vale, así que antes de replicar nada:
+Al revisar la infraestructura del cliente vi que **todo funcionaba por dirección IP**, sin DNS. Para Veeam y sus certificados eso no vale, así que antes de replicar nada tuve que desplegar DNS:
 
-- Creé una **zona DNS** con sus registros.
-- Pasé la configuración de IP a **nombres**.
-- Resolví los problemas que salieron por el camino.
+- Creé las **zonas DNS** con sus registros.
+- Cambié las configuraciones para pasar de IP a **nombres**.
 
-> ✏️ PENDIENTE: ¿qué problemas salieron al pasar a DNS? Uno concreto basta.
+No dio problemas, pero era trabajo previo que no aparecía en el plan inicial.
 
 ## El despliegue
 
-Componentes y **proxies de Veeam 13**, **certificados**, configuración de las copias, del destino y de la VLAN de recuperación.
+Desplegué los componentes y los **proxies de Veeam 13** y los **certificados**, y configuré las copias, el destino y la VLAN de recuperación.
 
 ## Permisos: el cliente solo ve lo suyo
 
-El cliente necesitaba acceso a su parte en nuestro vCenter, pero nada más. Le creé un usuario que **solo veía su carpeta**: ni hosts, ni redes, ni datastores, ni ningún otro cambio posible.
+El cliente necesitaba acceso a sus máquinas en nuestro vCenter, pero a nada más. Lo resolví con un **rol personalizado** en el que todo está oculto salvo el estado de sus máquinas. Con ese rol solo puede:
 
-> ✏️ PENDIENTE: ¿cómo lo montaste? (¿rol personalizado, permisos en la carpeta con "propagar", no propagado en el resto?) Esto le interesa mucho a otros técnicos.
+- Ver y listar sus máquinas.
+- Encenderlas, apagarlas y reiniciarlas.
+- Abrir la consola remota.
+
+No ve hosts, ni redes, ni datastores, ni puede cambiar nada más.
 
 ## La prueba
 
-Levantamos las máquinas en nuestro lado y **cambiamos las reglas del firewall local** para que el tráfico apuntase a nuestra infraestructura. Las pruebas salieron bien.
+Las pruebas duraron **un día entero**:
 
-> ✏️ PENDIENTE: ¿cuánto tardó en estar operativo el entorno recuperado? ¿Qué se comprobó para darlo por bueno (acceso de usuarios, aplicaciones, la máquina de 3 TB…)?
+1. Se levantaron las copias en nuestra infraestructura, en **alrededor de una hora**.
+2. Con el equipo de redes, se cambió lo necesario en los **Fortinet** para que el tráfico llegase al entorno recuperado. A partir de ahí, las máquinas estuvieron accesibles enseguida.
+3. Se validó el **acceso de los usuarios**, la **lectura de ficheros** y el resto de comprobaciones.
+
+Todo salió bien.
+
+## Un manual para no depender de nosotros
+
+El último entregable fue un **procedimiento escrito** para que el cliente pudiera ejecutar la recuperación sin depender de nosotros.
 
 También lo conté en [LinkedIn](https://www.linkedin.com/posts/mateo-couso-hortas-71ba63164_veeam-cdp-disasterrecovery-activity-7330625843246903297-BRAf).
