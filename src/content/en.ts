@@ -251,10 +251,10 @@ export const en: PageCopy = {
     {
       label: 'DESIGN & BUILD · VMWARE 8',
       title: 'A new datacenter from scratch',
-      body: 'We needed a new datacenter to move customers into from the old one, which ran vSphere 7. I designed and built it: five Dell hosts with 64-core AMD EPYC CPUs, Dell switches at 100 Gb and a Pure Storage array over NVMe over RoCE. A single cluster with its own vCenter.',
+      body: 'We needed a new datacenter to move customers into from the old one, which ran vSphere 7. I designed and built it: five Dell hosts with 64-core AMD EPYC 9534 CPUs and 2.25 TB of RAM, Dell switches at 100 Gb and a Pure Storage array over NVMe over RoCE. A single cluster with its own vCenter.',
       approachLabel: 'WHAT I DID',
       approach:
-        'All of the VMware side: compatibility matrix, remote-management firmware, BIOS, drivers, ESXi 8 image, vCenter and cluster. I also initialized the array, working with Pure, and presented the SAN to the hosts. Each host has 200 Gb for SAN and another 200 Gb for vMotion, the array has 400 Gb, and Internet egress is 10 Gb through Fortinet. Management and server consoles sit on their own VLAN, reachable only over VPN. Every customer has its own VDS, and the larger ones also get their own virtual Fortinet.',
+        'All of the VMware side: compatibility matrix, remote-management firmware, BIOS, drivers, ESXi 8 image, vCenter and cluster. I also initialized the array, working with Pure, and presented the SAN to the hosts. I designed the network of each host: two 100 Gb ConnectX-6 cards giving 200 Gb for SAN plus 100 Gb for backup and 100 Gb for vMotion, crossed active/standby between cards so traffic never mixes. Customer egress runs at 2 × 10 Gb through Fortinet, all on separate VLANs with MTU 9000. The array has 400 Gb. Management and server consoles sit on their own VLAN, reachable only over VPN. Every customer has its own VDS, and the larger ones also get their own virtual Fortinet.',
       outcomeLabel: 'MIGRATION & RESULT',
       outcome:
         'I migrated whole customers, mostly with a full Veeam backup restored into a new VLAN, keeping their segmentation. I decided which customers moved and when. Some later moved on to Cloud Director. The new CPUs and memory improved performance, and backups and file restores got faster. Backups go to a second Pure array, and I added a Veeam proxy with a per-host affinity rule to spread backup and restore load.',

@@ -1,7 +1,7 @@
 ---
 title: Un datacenter VMware desde cero
 date: 2026-11-04
-summary: "Cinco hosts Dell con ESXi 8, cabinas Pure Storage por NVMe over RoCE en lugar de iSCSI y un VDS por cliente para no arrastrar los standard switches. Las decisiones que tomé y lo que mejoró: restaurar 1 TB pasó de unos 20 minutos a 7-8."
+summary: "Cinco hosts Dell con EPYC 9534 y ESXi 8, cabinas Pure Storage por NVMe over RoCE en lugar de iSCSI y un VDS por cliente para no arrastrar los standard switches. Las decisiones que tomé y lo que mejoró: restaurar 1 TB pasó de unos 20 minutos a 7-8."
 tags: [VMware, ESXi 8, Pure Storage, NVMe-oF, Redes]
 ---
 
@@ -18,22 +18,49 @@ Además, la empresa quería **dos datacenters completamente independientes**, en
 
 ## El hardware
 
-- **5 hosts Dell nuevos** con AMD EPYC de 64 núcleos, en un **único clúster**.
+- **5 hosts Dell nuevos** con **AMD EPYC 9534** de 64 núcleos y **2,25 TB de RAM** por host, en un **único clúster**.
 - **Switches Dell** a 100 Gb.
 - **Cabina Pure Storage** para los datos, conectada por **NVMe over RoCE**, con 400 Gb.
 - **Segunda cabina Pure** para las copias.
 
-## La red: separar todo
+Frente al datacenter antiguo, el salto está sobre todo en el procesador: el doble de núcleos y una generación más nueva.
 
-Cada host tiene:
+| | Datacenter antiguo | Datacenter nuevo |
+|---|---|---|
+| Versión | ESXi 7 | ESXi 8 |
+| Procesador | AMD EPYC 7513 (32 núcleos, Zen 3) | AMD EPYC 9534 (64 núcleos, Zen 4) |
+| RAM por host | 2 TB | 2,25 TB |
 
-| Uso | Ancho de banda |
-|---|---|
-| SAN (NVMe over RoCE) | 200 Gb |
-| vMotion | 200 Gb |
-| Salida a Internet (vía Fortinet) | 10 Gb |
+## La red de cada host
 
-La **red de gestión** va aparte: su propia VLAN, consolas de los servidores separadas y acceso solo por **VPN**. Nada de gestión expuesto en la red de servicio.
+Cada host tiene **7 interfaces**, cada una con su función, y todo va por **VLAN separadas con MTU 9000**. El diseño de red de los hosts fue mío.
+
+| Interfaces | Tarjeta | Velocidad | Uso |
+|---|---|---|---|
+| 2 | — | 10 Gb | Salida de los clientes, vía Fortinet |
+| 2 | ConnectX-6 (puerto 1 de cada tarjeta) | 2 × 100 Gb | **SAN**: NVMe over RoCE, una VLAN por puerto, Round Robin |
+| 1 | ConnectX-6 A (puerto 2) | 100 Gb | **Backup** activo · vMotion en espera |
+| 1 | ConnectX-6 B (puerto 2) | 100 Gb | **vMotion** activo · backup en espera |
+| 1 | iDRAC | — | Gestión remota del servidor |
+
+Los cuatro puertos de servicio son **dos tarjetas ConnectX-6 de doble puerto**, conectadas a los switches de 100 Gb:
+
+```
+              ConnectX-6 A                    ConnectX-6 B
+ puerto 1  →  SAN (VLAN 1)     · 100 Gb  ·    SAN (VLAN 2)     ← puerto 1
+ puerto 2  →  Backup  (activo) · 100 Gb  ·    vMotion (activo) ← puerto 2
+              vMotion (espera)                Backup  (espera)
+```
+
+Hay tres decisiones detrás de este reparto:
+
+- **La SAN usa un puerto de cada tarjeta**, en dos VLAN distintas y con Round Robin entre los dos caminos. Si cae una tarjeta, el almacenamiento sigue funcionando por la otra. En total son **200 Gb para la SAN**.
+- **Backup y vMotion van cruzados.** Cada uno tiene su puerto activo en una tarjeta distinta y el de reserva en la otra. Si cae una tarjeta, los dos servicios siguen funcionando.
+- **Así no se mezcla el tráfico.** vMotion no se puede limitar: cuando mueve una máquina, usa todo el ancho de banda que tiene. Si compartiese enlace con los backups, los frenaría. Con un puerto activo para cada uno, solo comparten enlace si falla una tarjeta.
+
+La **cabina Pure** tiene 4 puertos de 100 Gb, **400 Gb en total**, para atender a los cinco hosts a la vez. En Veeam hay **un proxy por host**, cada uno fijado a su host con una regla de afinidad, para que las copias salgan por el enlace de backup de cada máquina y la carga se reparta.
+
+La **red de gestión** va aparte: su propia VLAN, las iDRAC separadas y acceso solo por **VPN**. Nada de gestión expuesto en la red de servicio.
 
 ## Un VDS por cliente
 
@@ -62,6 +89,5 @@ El motivo era el rendimiento: NVMe over RoCE da menos latencia y más velocidad 
 
 - Más rendimiento por el cambio de CPU, memoria y almacenamiento.
 - **Restaurar un backup de 1 TB pasó de unos 20 minutos a 7-8 minutos**. Son tiempos aproximados.
-- Un proxy de Veeam con regla de afinidad por host para repartir la carga de copias y restauraciones.
 
 Cómo movimos a los clientes al datacenter nuevo lo cuento en [Migrar clientes de vSphere 7 a 8 con Veeam](/notas/migrar-clientes-de-vsphere-7-a-8-con-veeam/).
