@@ -3,7 +3,7 @@
 # Simula dos destinos (local y "nube"), un Uptime Kuma falso y fallos reales.
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")/.." && pwd)
-T=$(mktemp -d); trap 'kill $KUMA_PID 2>/dev/null || true; rm -rf "$T"' EXIT
+T=$(mktemp -d); trap 'kill $KUMA_PID 2>/dev/null || true; chmod -R u+w "$T" 2>/dev/null; rm -rf "$T"' EXIT
 export HOMELAB_BACKUP_CONF_DIR=$T/conf HOMELAB_BACKUP_STATE_DIR=$T/state
 mkdir -p "$T"/{conf/repos.d,state,data/app,dumps,repo-local,repo-nube}
 pass() { echo "  ✓ $*"; }
@@ -78,12 +78,12 @@ cmp "$T/data/app/blob.bin" "$T/restore$T/data/app/blob.bin" && pass "fichero de 
 sqlite3 "$T/restore$T/dumps/"*app.db.sqlite3 "SELECT count(*) FROM t;" | grep -q 2 && pass "base de datos restaurada con sus datos" || fail "BD"
 
 echo "6. detecta un destino corrupto"
-pack=$(find "$T/repo-nube/data" -type f | head -n1); echo "dañado" > "$pack"
+pack=$(find "$T/repo-nube/data" -type f | head -n1); chmod u+w "$pack"; echo "dañado" > "$pack"
 if "$HERE/verify.sh" >/dev/null 2>&1; then fail "verify debería fallar"; fi
 last_push verify | grep -q "^verify down .*nube" && pass "verify avisa down: $(last_push verify | cut -d' ' -f3-)" || fail "push down verify"
 
 echo "7. un destino caído no impide el otro"
-rm -rf "$T/repo-nube"; mkdir "$T/repo-nube"   # repositorio desaparecido
+chmod -R u+w "$T/repo-nube"; rm -rf "$T/repo-nube"; mkdir "$T/repo-nube"   # repositorio desaparecido
 if "$HERE/backup.sh" >/dev/null 2>&1; then fail "backup debería devolver error"; fi
 last_push nube  | grep -q "^nube down" && pass "aviso down del destino caído: $(last_push nube | cut -d' ' -f3- | cut -c1-80)" || fail "push nube down"
 last_push local | grep -q "^local up" && pass "el destino local se copió igualmente" || fail "local tras fallo"
