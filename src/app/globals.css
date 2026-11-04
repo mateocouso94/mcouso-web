@@ -154,3 +154,6 @@
   .intro{order:3}
   .hero-facts{order:4;margin-top:24px}
 }
+
+/* Móvil: el menú baja a una segunda línea en vez de esconder opciones con scroll lateral */
+@media(max-width:650px){.topbar nav{flex-wrap:wrap;overflow:visible;row-gap:8px;column-gap:14px}.topbar nav a{font-size:11px}}

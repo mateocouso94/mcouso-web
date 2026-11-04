@@ -10,6 +10,7 @@ export const es: PageCopy = {
     ['#network', 'Homelab'],
     ['#notes', 'Proyectos'],
     ['/notas/', 'Notas'],
+    ['/estado/', 'Estado'],
     ['#contact', 'Contacto'],
   ],
 
