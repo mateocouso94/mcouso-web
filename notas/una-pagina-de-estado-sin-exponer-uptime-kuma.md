@@ -3,10 +3,7 @@ title: Una página de estado sin exponer Uptime Kuma
 date: 2026-11-03
 summary: "Quería enseñar el estado de mi homelab en la web sin publicar el panel de Uptime Kuma. La solución: que el nginx de la web reenvíe solo dos URLs de lectura."
 tags: [Uptime Kuma, nginx, Seguridad, Homelab]
-draft: true
 ---
-
-> ✏️ PENDIENTE: revisa el texto y quita este aviso antes de publicar. Para publicar, borra la línea `draft: true`.
 
 Uptime Kuma tiene páginas de estado públicas, y lo fácil habría sido publicarlo en un subdominio a través del túnel de Cloudflare. El problema es que entonces también queda en Internet **la pantalla de login del panel de administración**. No quería eso.
 
