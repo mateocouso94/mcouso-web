@@ -63,9 +63,11 @@ grep -q "app.db.sqlite3" <<<"$LS" && pass "volcado SQLite incluido" || fail "fal
 
 echo "3. retención"
 echo "cambio" >> "$T/data/app/config.yml"; "$HERE/backup.sh" >/dev/null; "$HERE/backup.sh" >/dev/null
-n=$(snap local snapshots --json | python3 -c "import sys,json;print(len(json.load(sys.stdin)))")
-if [[ $n != 1 ]]; then snap local snapshots; snap local forget --dry-run --keep-daily 7 --keep-weekly 4 --keep-monthly 1; fail "retención: $n instantáneas"; fi
-pass "3 copias el mismo día → queda 1 (keep-daily)"
+IDS=$(snap local snapshots --json | python3 -c "import sys,json;print(' '.join(s['short_id'] for s in sorted(json.load(sys.stdin),key=lambda s:s['time'])))")
+read -r -a ids <<<"$IDS"
+# restic >= 0.17: mientras no hay 7 días de copias, guarda también la más antigua; borra las intermedias
+[[ ${#ids[@]} == 2 ]] || { snap local snapshots; fail "retención: ${#ids[@]} instantáneas (se esperaban 2)"; }
+pass "3 copias el mismo día → la intermedia se borra (quedan la más antigua y la última)"
 
 echo "4. verificación"
 "$HERE/verify.sh" >/dev/null && last_push verify | grep -q "^verify up" && pass "verify OK: $(last_push verify | cut -d' ' -f3-)" || fail "verify"
