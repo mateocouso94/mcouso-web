@@ -1,0 +1,25 @@
+# Prueba las copias del homelab (infra/backup) con restic real cada vez que cambian.
+name: backup-test
+
+on:
+  push:
+    branches: [main]
+    paths: ['infra/backup/**', '.github/workflows/backup-test.yml']
+  pull_request:
+    paths: ['infra/backup/**', '.github/workflows/backup-test.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Instalar restic, sqlite3 y shellcheck
+        run: sudo apt-get update -q && sudo apt-get install -y -q restic sqlite3 shellcheck && restic version
+      - name: shellcheck
+        run: shellcheck -x -e SC1090,SC1091 infra/backup/*.sh infra/backup/test/*.sh
+      - name: Prueba de extremo a extremo
+        run: infra/backup/test/e2e.sh

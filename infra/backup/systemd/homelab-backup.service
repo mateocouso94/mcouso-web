@@ -1,0 +1,10 @@
+[Unit]
+Description=Copia del homelab (restic, 3-2-1-0)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/homelab-backup/backup.sh
+Nice=10
+IOSchedulingClass=idle
