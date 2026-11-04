@@ -21,5 +21,11 @@ jobs:
         run: sudo apt-get update -q && sudo apt-get install -y -q restic sqlite3 shellcheck && restic version
       - name: shellcheck
         run: shellcheck -x -S warning -e SC1090,SC1091,SC2034 infra/backup/*.sh infra/backup/test/*.sh
+      - name: Los ejemplos se cargan sin errores
+        run: |
+          set -euo pipefail
+          for f in infra/backup/examples/backup.conf infra/backup/examples/repos.d/*.env; do
+            bash -n "$f" && bash -c "set -euo pipefail; . '$f'" && echo "OK $f"
+          done
       - name: Prueba de extremo a extremo
         run: infra/backup/test/e2e.sh
