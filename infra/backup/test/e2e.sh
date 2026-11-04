@@ -73,7 +73,7 @@ echo "4. verificación"
 "$HERE/verify.sh" >/dev/null && last_push verify | grep -q "^verify up" && pass "verify OK: $(last_push verify | cut -d' ' -f3-)" || fail "verify"
 
 echo "5. restauración real"
-snap local restore latest --target "$T/restore" --include "$T/data/app" >/dev/null
+snap local restore latest --target "$T/restore" --include "$T/data/app" --include "$T/dumps" >/dev/null
 cmp "$T/data/app/blob.bin" "$T/restore$T/data/app/blob.bin" && pass "fichero de 2 MB restaurado idéntico" || fail "restore"
 sqlite3 "$T/restore$T/dumps/"*app.db.sqlite3 "SELECT count(*) FROM t;" | grep -q 2 && pass "base de datos restaurada con sus datos" || fail "BD"
 
