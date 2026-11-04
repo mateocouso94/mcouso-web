@@ -15,6 +15,9 @@ load_conf() {
   DUMP_DIR=${DUMP_DIR:-/var/backups/homelab-dumps}
   KEEP_DAILY=${KEEP_DAILY:-7}; KEEP_WEEKLY=${KEEP_WEEKLY:-4}; KEEP_MONTHLY=${KEEP_MONTHLY:-1}
   VERIFY_READ_SUBSET=${VERIFY_READ_SUBSET:-5%}
+  # La URL de Kuma se lee sin ejecutar el fichero: si se pega con ?status=up&msg=...,
+  # los "&" harían que bash la tratase como un comando en segundo plano
+  VERIFY_PUSH_URL=$(env_get "$CONF_DIR/backup.conf" VERIFY_PUSH_URL)
   mkdir -p "$STATE_DIR" "$DUMP_DIR"
 }
 
@@ -29,7 +32,7 @@ with_repo() {
 }
 
 # Lee una variable de un .env sin ejecutar nada más (para las URLs de Kuma)
-env_get() { grep -E "^$2=" "$1" 2>/dev/null | head -n1 | cut -d= -f2- | sed 's/[?].*$//' || true; }
+env_get() { grep -E "^$2=" "$1" 2>/dev/null | head -n1 | cut -d= -f2- | sed -E 's/^["'\'']//; s/["'\'']$//; s/[?].*$//' || true; }
 
 # Avisa a un monitor Push de Uptime Kuma: push <url> <up|down> <mensaje>
 push() {
