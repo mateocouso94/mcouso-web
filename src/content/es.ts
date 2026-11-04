@@ -169,7 +169,7 @@ export const es: PageCopy = {
       role: 'Ingeniero de Infraestructura y Sistemas',
       place: 'A Coruña · Híbrido',
       description:
-        'Aquí mi trabajo es sobre todo de operación. Administro servidores Linux en producción, preproducción y desarrollo, despliego en AWS y también trabajo con Azure. Monto y documento máquinas en Proxmox, configuro copias con Restic y snapshots y automatizo despliegues y tareas. Reviso muchos logs: Docker, systemd, Jenkins, GitLab, PostgreSQL. En un proyecto adapté la configuración del VMware de un tercero a lo que necesitaba nuestra aplicación, haciendo de interlocutor entre el cliente y nuestros desarrolladores.',
+        'Aquí mi trabajo es sobre todo de operación. Administro servidores Linux en producción, preproducción y desarrollo, despliego en AWS y también trabajo con Azure. Monto y documento máquinas en Proxmox, configuro copias con Restic y snapshots y automatizo despliegues y tareas, como el refresco semanal de producción a preproducción con datos anonimizados. También gestiono equipos y usuarios con Intune, Microsoft 365 y Entra ID. Reviso muchos logs: Docker, systemd, Jenkins, GitLab, PostgreSQL. En un proyecto adapté la configuración del VMware de un tercero a lo que necesitaba nuestra aplicación, haciendo de interlocutor entre el cliente y nuestros desarrolladores.',
     },
     {
       period: 'JUL 2024 — MAR 2026',
@@ -185,7 +185,7 @@ export const es: PageCopy = {
       role: 'Administrador de Sistemas VMware',
       place: 'Santiago de Compostela · Remoto',
       description:
-        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos sobre servidores Lenovo, Dell y HP, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. El cliente principal tenía unos 600 servidores y 3.000 máquinas virtuales.',
+        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos sobre servidores Lenovo, Dell y HP, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. El cliente principal tenía unos 600 servidores y 3.000 máquinas virtuales. También administré un clúster extendido entre dos datacenters, con un vCenter común con vCenter HA, hosts en los dos y reglas de afinidad: si una máquina caía en un datacenter, se levantaba en el otro.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -204,20 +204,12 @@ export const es: PageCopy = {
         'Despliegues de aplicaciones con Git y Jenkins, control de calidad y operación de infraestructura en AWS y GCP.',
     },
     {
-      period: 'AGO 2019 — JUL 2020',
-      company: 'Plexus Tech',
-      role: 'Coordinador de Proyectos',
-      place: 'Santiago de Compostela',
-      description:
-        'Coordinaba equipos de 10 a 15 técnicos y servicios de soporte nacionales e internacionales: planificar intervenciones, controlar plazos y gestionar escalados.',
-    },
-    {
-      period: 'JUL 2017 — JUN 2019',
-      company: 'Fermax Electrónica',
-      role: 'Responsable Técnico · Galicia',
+      period: 'JUL 2017 — JUL 2020',
+      company: 'Plexus Tech · Fermax Electrónica',
+      role: 'Coordinación de proyectos y soporte técnico',
       place: 'Galicia',
       description:
-        'Responsable técnico para Galicia: atención a clientes, puestas en marcha presenciales y en remoto, diagnóstico de averías y formación.',
+        'Antes de sistemas: coordinaba equipos de 10 a 15 técnicos en Plexus Tech y, antes, fui responsable técnico de Fermax para Galicia, con puestas en marcha, averías y formación.',
     },
   ],
 
@@ -258,11 +250,12 @@ export const es: PageCopy = {
       body: 'Hacía falta un datacenter nuevo al que mover los clientes del antiguo, que estaba en vSphere 7. Lo diseñé y lo monté: cinco hosts Dell con AMD EPYC 9534 de 64 núcleos y 2,25 TB de RAM, switches Dell a 100 Gb y una cabina Pure Storage conectada por NVMe over RoCE. Un único clúster con su propio vCenter.',
       approachLabel: 'QUÉ HICE',
       approach:
-        'Toda la parte de VMware: matriz de compatibilidad, firmware de la gestión remota, BIOS, drivers, imagen de ESXi 8, vCenter y clúster. También inicialicé la cabina, en contacto con Pure, y presenté la SAN a los hosts. Diseñé la red de cada host: dos tarjetas ConnectX-6 a 100 Gb con 200 Gb para la SAN y 100 Gb para backup y otros 100 para vMotion, cruzados en activo/pasivo entre tarjetas para no mezclar tráfico. La salida de los clientes va a 2 × 10 Gb a través de Fortinet, y todo en VLAN separadas con MTU 9000. La cabina tiene 400 Gb. La gestión y las consolas de los servidores van en su propia VLAN, a la que solo se accede por VPN. Cada cliente tiene su VDS, y los grandes, además, su propio Fortinet virtual.',
+        'Toda la parte de VMware, desde la matriz de compatibilidad y el firmware hasta el vCenter y el clúster. Inicialicé la cabina con Pure y diseñé la red de cada host: dos tarjetas ConnectX-6 con SAN, backup y vMotion separados, en VLAN distintas con MTU 9000. Cada cliente tiene su propio VDS.',
       outcomeLabel: 'MIGRACIÓN Y RESULTADO',
       outcome:
-        'Migré clientes completos, casi todos con un backup completo de Veeam restaurado en una VLAN nueva y respetando su segmentación. Yo decidía qué clientes pasaban y cuándo. Algunos fueron después a Cloud Director. Con el cambio de CPU y memoria el rendimiento mejoró, y las copias y las restauraciones de ficheros se hicieron más rápidas. Las copias van a una segunda cabina Pure, y añadí un proxy de Veeam con regla de afinidad por host para repartir la carga de backups y restauraciones.',
+        'Migré a él los clientes del datacenter antiguo, decidiendo yo cuáles pasaban y cuándo. Restaurar un backup de 1 TB pasó de unos 20 minutos a 7-8.',
       footer: '5 HOSTS DELL · AMD EPYC · PURE STORAGE · NVMe over RoCE',
+      href: '/notas/un-datacenter-vmware-desde-cero/',
       tags: ['ESXi 8', 'vCenter', 'Dell', 'Pure Storage', 'Veeam', 'VDS'],
     },
     {
@@ -271,12 +264,13 @@ export const es: PageCopy = {
       body: 'Un clúster de siete hosts con almacenamiento en una cabina Dell y versiones mezcladas: cuatro hosts en vSphere 6.5 y tres en 7.0. Había que pasarlo a vSAN con discos locales sin tocar las redes de los clientes.',
       approachLabel: 'CÓMO LO HICIMOS',
       approach:
-        'Por fases. Añadimos discos locales a los hosts y empezamos con tres: los actualizamos, montamos la vSAN con ellos y empezamos a mover máquinas. El clúster de origen no estaba en el vCenter, así que las migraciones en caliente se hicieron con replicación. Cada host que quedaba libre se actualizaba y entraba en la vSAN, hasta completar el clúster nuevo en 7.0.3. Usamos las mismas redes y las mismas VLAN durante todo el proceso.',
+        'Por fases. Añadimos discos locales a los hosts y empezamos con tres: los actualizamos, montamos la vSAN con ellos y empezamos a mover máquinas. El clúster nuevo se creó en un vCenter nuevo, y las máquinas pasaron en caliente con Cross vCenter vMotion. Cada host que quedaba libre se actualizaba y entraba en la vSAN, hasta completar el clúster nuevo en 7.0.3. Usamos las mismas redes y las mismas VLAN durante todo el proceso.',
       outcomeLabel: 'LO COMPLICADO',
       outcome:
-        'Los Distributed Switches se habían creado en 6.5 y hubo que actualizarlos a 7.0.3 por el camino. Aparte de eso, las únicas paradas fueron cortas, al finalizar cada replicación.',
+        'Los Distributed Switches tenían que funcionar a la vez con hosts en 6.5 y en 7.0.3, así que los creamos en 6.5 y los actualizamos al final, sin ningún corte. Las máquinas tampoco tuvieron corte.',
       footer: '7 HOSTS · POR FASES · VDS 6.5 → 7.0.3',
-      tags: ['vSphere', 'SAN', 'vSAN', 'Replicación', 'VDS'],
+      href: '/notas/de-san-a-vsan-sin-cambiar-las-redes/',
+      tags: ['vSphere', 'SAN', 'vSAN', 'Cross vCenter vMotion', 'VDS'],
     },
     {
       label: 'MIGRACIONES · VARIOS CPD',
@@ -284,26 +278,27 @@ export const es: PageCopy = {
       body: 'No todo era montar desde cero. Buena parte del trabajo era mover cosas: clientes completos entre vCenters, datos entre dos cabinas y máquinas de Azure a VMware.',
       approachLabel: 'QUÉ HICE',
       approach:
-        'Según el caso usaba Cross vCenter vMotion, replicación o un backup completo con Veeam y restauración en destino. También monté un DR entre dos datacenters distintos, con HA para las máquinas y reglas de replicación.',
+        'Según el caso usaba Cross vCenter vMotion, replicación o un backup completo con Veeam y restauración en destino.',
       outcomeLabel: 'VOLUMEN',
       outcome:
         'En total, más de 100 clientes creados, administrados o migrados, y alrededor de 1.000 máquinas virtuales en servicio 24/7.',
       footer: 'CROSS vCENTER · ENTRE CABINAS · AZURE → VMWARE',
+      href: '/notas/migrar-clientes-de-vsphere-7-a-8-con-veeam/',
       tags: ['Cross vCenter', 'Veeam', 'Azure', 'VMware'],
     },
     {
       label: 'DISASTER RECOVERY · VEEAM 13',
       title: 'Un DR con Veeam probado de verdad',
-      body: 'Recuperación ante desastres entre la infraestructura de un cliente y la nuestra: diez máquinas, una de ellas de unos 3 TB, con RPO y RTO definidos para cada una.',
+      body: 'Recuperación ante desastres entre la infraestructura de un cliente y la nuestra con Veeam CDP: diez máquinas de unos pocos GB a 2-3 TB, con un RPO de 15 minutos para las críticas y de 1 hora para el resto, y un RTO de 3 horas.',
       approachLabel: 'QUÉ HICE',
       approach:
         'Desplegué los componentes y los proxies de Veeam 13, los certificados y la configuración de las copias, el destino y la VLAN de recuperación. En la infraestructura del cliente todo funcionaba por IP, así que creé una zona DNS con sus registros y lo pasé a nombres. En nuestro vCenter el cliente tenía un usuario que solo veía su carpeta: ni hosts, ni redes, ni nada más.',
       outcomeLabel: 'LA PRUEBA',
       outcome:
-        'Levantamos las máquinas en nuestro lado y cambiamos las reglas del firewall local para que apuntaran a nuestra infraestructura. Las pruebas salieron bien.',
-      footer: 'VEEAM 13 · 10 VMS · RPO / RTO POR MÁQUINA',
+        'Un día entero de pruebas: las copias se levantaron en nuestra infraestructura en alrededor de una hora, se cambió lo necesario en los Fortinet y se validó el acceso de los usuarios. Todo salió bien, y dejé un manual para que el cliente pudiera recuperar sin depender de nosotros.',
+      footer: 'VEEAM 13 · 10 VMS · RPO 15 MIN · RTO 3 H',
       tags: ['Veeam CDP', 'Proxies', 'DNS', 'Permisos', 'DR'],
-      href: 'https://www.linkedin.com/posts/mateo-couso-hortas-71ba63164_veeam-cdp-disasterrecovery-activity-7330625843246903297-BRAf',
+      href: '/notas/un-dr-con-veeam-probado-de-verdad/',
     },
   ],
 
@@ -330,7 +325,7 @@ export const es: PageCopy = {
   contactEyebrow: 'CONTACTO',
   contactTitle: '¿Hablamos?',
   contactIntro:
-    'Si buscas a alguien para infraestructura VMware, migraciones o backup, o quieres comentar algo de la web o del homelab, escríbeme.',
+    'Si buscas a alguien de sistemas para infraestructura on-premise, cloud o híbrida, o quieres comentar algo de la web o del homelab, escríbeme.',
   emailCta: 'ESCRÍBEME',
   footer: 'Hecha, desplegada y mantenida por Mateo Couso en su homelab.',
 };
