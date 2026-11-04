@@ -41,6 +41,11 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now mcouso-web-update.timer
 ```
 
+### Copias del homelab (3-2-1-0)
+
+En [`infra/backup/`](infra/backup/) están las copias con restic de los dos mini PC: copia cruzada por SFTP,
+Backblaze B2 y verificación semanal con restauración real. Tienen su propia guía y su propia prueba en CI.
+
 ### Estado del homelab (consola y /estado/)
 
 La web lee el estado de Uptime Kuma a través de su propio nginx (solo dos URLs de lectura;
