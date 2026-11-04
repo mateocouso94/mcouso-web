@@ -9,7 +9,7 @@ Con el [datacenter nuevo](/notas/un-datacenter-vmware-desde-cero/) montado, qued
 
 ## Por qué Veeam y no vMotion
 
-La empresa quería **dos datacenters completamente independientes**, sin conexión directa entre ellos: ni puertos ni rutas. Sin esa conexión, Cross vCenter vMotion no era una opción. La solución fue **Veeam**: copiar en un lado y restaurar en el otro.
+La empresa quería **dos datacenters completamente independientes**, en ubicaciones distintas y sin conexión directa entre ellos: ni puertos ni rutas. Sin esa conexión, Cross vCenter vMotion no era una opción. La solución fue **Veeam**: copiar en un lado y restaurar en el otro.
 
 ## El método
 

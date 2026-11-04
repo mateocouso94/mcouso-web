@@ -14,11 +14,11 @@ Hacía falta un datacenter nuevo al que mover los clientes del antiguo, que esta
 - Aprovechar las ventajas de **ESXi 8**.
 - **No arrastrar los standard switches** del datacenter antiguo, ni los problemas que traían.
 
-Además, la empresa quería **dos datacenters completamente independientes**, sin conexión directa entre ellos. Por eso el nuevo tiene **su propio vCenter**, en lugar de ampliar el que ya había.
+Además, la empresa quería **dos datacenters completamente independientes**, en ubicaciones distintas y sin conexión directa entre ellos. Por eso el nuevo tiene **su propio vCenter**, en lugar de ampliar el que ya había.
 
 ## El hardware
 
-- **5 hosts Dell** con AMD EPYC de 64 núcleos, en un **único clúster**.
+- **5 hosts Dell nuevos** con AMD EPYC de 64 núcleos, en un **único clúster**.
 - **Switches Dell** a 100 Gb.
 - **Cabina Pure Storage** para los datos, conectada por **NVMe over RoCE**, con 400 Gb.
 - **Segunda cabina Pure** para las copias.
