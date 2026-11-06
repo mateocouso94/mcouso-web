@@ -10,11 +10,11 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://mcouso.es'),
-  title: 'Mateo Couso Hortas · Hybrid Infrastructure Engineer',
+  title: 'Mateo Couso Hortas · Ingeniero de Infraestructura Híbrida',
   description: 'Mateo Couso Hortas, ingeniero de sistemas en Galicia. Datacenters VMware, almacenamiento Pure Storage, migraciones y DR con Veeam. Ahora también Linux, Azure y AWS.',
   alternates: { canonical: '/', languages: { es: '/', en: '/en/' } },
   openGraph: {
-    title: 'Mateo Couso Hortas · Hybrid Infrastructure Engineer',
+    title: 'Mateo Couso Hortas · Ingeniero de Infraestructura Híbrida',
     description: 'Ingeniero de sistemas: datacenters VMware, migraciones y DR con Veeam. Ahora también Linux, Azure y AWS.',
     url: 'https://mcouso.es',
     siteName: 'Mateo Couso',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mateo Couso Hortas · Hybrid Infrastructure Engineer',
+    title: 'Mateo Couso Hortas · Ingeniero de Infraestructura Híbrida',
     description: 'Ingeniero de sistemas: datacenters VMware, migraciones y DR con Veeam. Ahora también Linux, Azure y AWS.',
     images: ['/og.png'],
   },

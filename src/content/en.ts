@@ -16,13 +16,13 @@ export const en: PageCopy = {
 
   // --- Hero ---
   role: 'HYBRID INFRASTRUCTURE ENGINEER',
-  headline: 'Seven years building and running infrastructure.',
+  headline: 'Nine years in IT, building and running infrastructure.',
   intro:
     "I'm Mateo, a systems engineer. Most of my career has been on-premise VMware: I built a datacenter from scratch, from the VLANs and the storage array up to vCenter and backups, and I've migrated more than 100 customers between platforms. These days I also work with Linux, Azure, AWS and Proxmox, and that's where I want to grow: hybrid infrastructure, built on what I learned in the datacenter.",
   cv: 'DOWNLOAD CV',
   linkedin: 'LINKEDIN PROFILE',
   location: 'SANTIAGO DE COMPOSTELA · GALICIA, SPAIN',
-  years: '7+ YEARS IN IT',
+  years: '9+ YEARS IN IT',
   credential: 'VMware VCP-DCV · 2023',
   portraitAlt: 'Portrait of Mateo Couso',
 

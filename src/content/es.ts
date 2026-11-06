@@ -16,13 +16,13 @@ export const es: PageCopy = {
 
   // --- Portada ---
   role: 'INGENIERO DE INFRAESTRUCTURA HÍBRIDA',
-  headline: 'Llevo siete años montando y manteniendo infraestructura.',
+  headline: 'Llevo nueve años en IT montando y manteniendo infraestructura.',
   intro:
     'Me llamo Mateo y soy de sistemas. La mayor parte de mi carrera ha sido VMware on-premise: he montado un datacenter desde cero, desde las VLAN y la cabina hasta el vCenter y las copias, y he migrado más de 100 clientes entre plataformas. Hoy trabajo también con Linux, Azure, AWS y Proxmox, y hacia ahí quiero crecer: infraestructura híbrida, aprovechando todo lo aprendido en el CPD.',
   cv: 'DESCARGAR CURRÍCULUM',
   linkedin: 'PERFIL DE LINKEDIN',
   location: 'SANTIAGO DE COMPOSTELA · GALICIA',
-  years: 'MÁS DE 7 AÑOS EN IT',
+  years: 'MÁS DE 9 AÑOS EN IT',
   credential: 'VMware VCP-DCV · 2023',
   portraitAlt: 'Retrato de Mateo Couso',
 
