@@ -24,7 +24,7 @@ La separación tiene un motivo: si rompo algo jugando con contenedores en una m�
 - **HGU de Movistar** como salida a Internet.
 - **Switch Gigabyte** de 5 puertos para la red de cable.
 - **Xiaomi AX3600 con OpenWrt** para el Wi-Fi y una **VPN LAN-to-LAN** hacia una red remota.
-- **DHCP centralizado en AdGuard Home**, no en el router. AdGuard tiene su propia IP en la red gracias a una interfaz *macvlan*, así que ve las IPs reales de cada equipo y filtra el DNS de toda la casa.
+- **DHCP centralizado en AdGuard Home**, no en el router. AdGuard tiene su propia IP en la red gracias a una interfaz *macvlan*, así que ve las IPs reales de cada equipo y filtra el DNS de toda la casa. Un detalle de macvlan: el propio host no puede hablar con ese contenedor, así que homelab-red tiene una pequeña interfaz *shim* que crea un servicio de systemd al arrancar ([`infra/homelab-red/macvlan-shim.service`](https://github.com/mateocouso94/mcouso-web/blob/main/infra/homelab-red/macvlan-shim.service)). Lo descubrí al reiniciar: sin ella, Uptime Kuma se quedaba sin DNS y marcaba media casa como caída.
 
 Ningún servicio tiene puertos abiertos en el router. La web sale a Internet por **Cloudflare Tunnel**: un contenedor `cloudflared` abre la conexión hacia fuera.
 

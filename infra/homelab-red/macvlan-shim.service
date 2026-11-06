@@ -1,0 +1,31 @@
+# Interfaz "shim" para que homelab-red llegue a su propio contenedor de AdGuard.
+#
+# AdGuard usa una red macvlan (adguard_lan) con IP propia, 192.168.0.21. Con macvlan,
+# el host no puede hablar con sus propios contenedores: sin esta interfaz, homelab-red
+# (y con él Uptime Kuma) se queda sin DNS. Si se crea a mano no sobrevive a un reinicio,
+# por eso va como servicio de systemd.
+#
+# Instalación (en homelab-red):
+#   sudo cp macvlan-shim.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now macvlan-shim.service
+#
+# Ajustar si cambia: interfaz física (enp1s0f0), IP de la shim (192.168.0.22, fuera del
+# rango DHCP) e IP de AdGuard (192.168.0.21).
+[Unit]
+Description=Interfaz macvlan para que el host llegue a AdGuard (192.168.0.21)
+Wants=network-online.target
+After=network-online.target
+Before=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=-/usr/sbin/ip link del macvlan-shim
+ExecStart=/usr/sbin/ip link add macvlan-shim link enp1s0f0 type macvlan mode bridge
+ExecStart=/usr/sbin/ip addr add 192.168.0.22/32 dev macvlan-shim
+ExecStart=/usr/sbin/ip link set macvlan-shim up
+ExecStart=/usr/sbin/ip route add 192.168.0.21/32 dev macvlan-shim
+ExecStop=/usr/sbin/ip link del macvlan-shim
+
+[Install]
+WantedBy=multi-user.target
