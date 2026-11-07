@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function EnglishHome() {
-  return <HomeClient notes={getNotes().slice(0, 3)} initialLang="en" />;
+  return <HomeClient notes={getNotes('en').slice(0, 3)} initialLang="en" />;
 }

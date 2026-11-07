@@ -1,13 +1,16 @@
-// Lee las notas en Markdown de la carpeta /notas y las convierte en HTML al compilar.
+// Lee las notas en Markdown y las convierte en HTML al compilar.
+// Español en /notas, inglés en /notas/en (mismo nombre de fichero = misma nota).
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
-import type { NoteMeta } from '../content/types';
+import type { Lang, NoteMeta } from '../content/types';
 
-const DIR = path.join(process.cwd(), 'notas');
+const ROOT = path.join(process.cwd(), 'notas');
+const dirFor = (lang: Lang) => (lang === 'en' ? path.join(ROOT, 'en') : ROOT);
 
-function readAll() {
+function readAll(lang: Lang) {
+  const DIR = dirFor(lang);
   if (!fs.existsSync(DIR)) return [];
   return fs
     .readdirSync(DIR)
@@ -28,12 +31,17 @@ function readAll() {
     .sort((a, b) => b.meta.date.localeCompare(a.meta.date));
 }
 
-export function getNotes(): NoteMeta[] {
-  return readAll().map((n) => n.meta);
+export function getNotes(lang: Lang = 'es'): NoteMeta[] {
+  return readAll(lang).map((n) => n.meta);
 }
 
-export function getNote(slug: string) {
-  const note = readAll().find((n) => n.meta.slug === slug);
+// ¿Existe la misma nota en el otro idioma? (para el botón ES/EN y hreflang)
+export function hasNote(slug: string, lang: Lang) {
+  return readAll(lang).some((n) => n.meta.slug === slug);
+}
+
+export function getNote(slug: string, lang: Lang = 'es') {
+  const note = readAll(lang).find((n) => n.meta.slug === slug);
   if (!note) return null;
   const words = note.content.split(/\s+/).filter(Boolean).length;
   return { ...note.meta, minutes: Math.max(1, Math.round(words / 200)), html: marked.parse(note.content, { async: false }) as string };

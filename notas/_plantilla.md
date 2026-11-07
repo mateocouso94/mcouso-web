@@ -2,6 +2,7 @@
 # Copia este fichero con otro nombre (sin el _ delante) para crear una nota nueva.
 # El nombre del fichero será la dirección: notas/mi-nota.md → mcouso.es/notas/mi-nota/
 # Mientras pongas "draft: true" no se publica.
+# Versión en inglés: el mismo nombre de fichero en notas/en/ → mcouso.es/en/notes/mi-nota/
 title: Título de la nota
 date: 2026-11-03
 summary: Una o dos frases que resuman de qué va. Aparece en la lista y en Google.
