@@ -52,7 +52,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
     const icon = (n: number) => (n === 1 ? '●' : n === 0 ? '✕' : '◌');
     const rows = s.monitors.map((m) => `${icon(m.status)} ${m.name.padEnd(22, ' ')} ${m.uptime24 != null ? (m.uptime24 * 100).toFixed(2) + '%' : '—'}${m.ping != null ? `  ${fmtPing(m.ping)}` : ''}`);
     const head = isSpanish ? `Homelab: ${s.up}/${s.total} servicios OK · uptime 24 h` : `Homelab: ${s.up}/${s.total} services up · 24 h uptime`;
-    return [head, ...rows, isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/estado'].join('\n');
+    return [head, ...rows, isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/en/status'].join('\n');
   }
 
   function backupLines(isSpanish: boolean, s: HomelabStatus | null) {
@@ -63,7 +63,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
     const ok = mons.filter((m) => m.status === 1).length;
     const rows = mons.map((m) => `${m.status === 1 ? '●' : m.status === 0 ? '✕' : '◌'} ${m.name}`);
     const head = isSpanish ? `Copias 3-2-1-0: ${ok}/${mons.length} OK` : `3-2-1-0 backups: ${ok}/${mons.length} OK`;
-    const foot = isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/estado';
+    const foot = isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/en/status';
     return [head, ...rows, foot].join('\n');
   }
 
@@ -131,7 +131,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
           <div className="console-heading"><span className="console-light" /><span>{t.terminalTitle}</span></div>
           <div className="console-content"><p className="console-intro">{t.terminalHint} <span>status · deploy · whoami · help</span></p><form className="console-form" onSubmit={executeCommand}><label htmlFor="command">mateo@infra:~$</label><input id="command" value={command} onChange={(event) => setCommand(event.target.value)} placeholder={t.terminalPlaceholder} autoComplete="off" /><button type="submit" aria-label={lang === 'es' ? 'Ejecutar comando' : 'Run command'}>↵</button></form><div className="console-output" aria-live="polite">{output || <span className="empty-output">&nbsp;</span>}</div></div>
           <div className="console-status">
-            <a href="/estado/" className="console-live">
+            <a href={lang === 'es' ? '/estado/' : '/en/status/'} className="console-live">
               {status === undefined ? <span>…</span> : status ? <span><i className={status.up === status.total ? 'ok' : 'warn'} /> {lang === 'es' ? 'HOMELAB' : 'HOMELAB'} {status.up}/{status.total} OK</span> : <span><i className="off" /> {lang === 'es' ? 'ESTADO N/D' : 'STATUS N/A'}</span>}
             </a>
             <span title={buildInfo.time}>{buildInfo.sha.slice(0, 7)}{mounted && buildInfo.time ? ` · ${timeAgo(buildInfo.time, lang)}` : ''}</span>
@@ -222,7 +222,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
         <section className="section field-notes" id="notes">
           <div className="section-heading"><span className="section-number">{t.projectsEyebrow}</span><h2>{t.projectsTitle}</h2><p>{t.projectsIntro}</p></div>
           <div className="notes-grid">{t.projects.map((project, index) => {
-            const cardContent = <><div className="note-top"><span>{project.label}</span></div><h3>{project.title}</h3><p className="note-summary">{project.body}</p><div className="note-subsection"><b>{project.approachLabel}</b><p>{project.approach}</p></div><div className="note-subsection outcome"><b>{project.outcomeLabel}</b><p>{project.outcome}</p></div><div className="note-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>{project.href ? <div className="note-bottom">{project.href.startsWith('/') ? (lang === 'es' ? 'Leer la nota completa' : 'Read the full note (in Spanish)') : (lang === 'es' ? 'Ver publicación en LinkedIn' : 'See the LinkedIn post')} <span>{project.href.startsWith('/') ? '→' : '↗'}</span></div> : null}</>;
+            const cardContent = <><div className="note-top"><span>{project.label}</span></div><h3>{project.title}</h3><p className="note-summary">{project.body}</p><div className="note-subsection"><b>{project.approachLabel}</b><p>{project.approach}</p></div><div className="note-subsection outcome"><b>{project.outcomeLabel}</b><p>{project.outcome}</p></div><div className="note-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>{project.href ? <div className="note-bottom">{project.href.startsWith('/') ? (lang === 'es' ? 'Leer la nota completa' : 'Read the full note') : (lang === 'es' ? 'Ver publicación en LinkedIn' : 'See the LinkedIn post')} <span>{project.href.startsWith('/') ? '→' : '↗'}</span></div> : null}</>;
             return project.href
               ? <a key={project.label} className={`note ${index === 0 ? 'note-featured' : ''}`} href={project.href} {...(project.href.startsWith('/') ? {} : { target: '_blank', rel: 'noreferrer' })}>{cardContent}</a>
               : <article key={project.label} className={`note ${index === 0 ? 'note-featured' : ''}`}>{cardContent}</article>;
@@ -232,8 +232,8 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
         {notes.length > 0 ? (
           <section className="section notes-home" id="notas">
             <div className="section-heading"><span className="section-number">{t.notesEyebrow}</span><h2>{t.notesTitle}</h2><p>{t.notesIntro}</p></div>
-            <ul className="notes-list">{notes.map((n) => <li key={n.slug}><a href={`/notas/${n.slug}/`}><time dateTime={n.date}>{formatDate(n.date, lang)}</time><b>{n.title}</b><span>{n.summary}</span></a></li>)}</ul>
-            <a className="link-arrow" href="/notas/">{t.notesAll} →</a>
+            <ul className="notes-list">{notes.map((n) => <li key={n.slug}><a href={lang === 'es' ? `/notas/${n.slug}/` : `/en/notes/${n.slug}/`}><time dateTime={n.date}>{formatDate(n.date, lang)}</time><b>{n.title}</b><span>{n.summary}</span></a></li>)}</ul>
+            <a className="link-arrow" href={lang === 'es' ? '/notas/' : '/en/notes/'}>{t.notesAll} →</a>
           </section>
         ) : null}
 

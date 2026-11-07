@@ -9,8 +9,8 @@ export const en: PageCopy = {
     ['#career', 'Experience'],
     ['#network', 'Homelab'],
     ['#notes', 'Projects'],
-    ['/notas/', 'Notes'],
-    ['/estado/', 'Status'],
+    ['/en/notes/', 'Notes'],
+    ['/en/status/', 'Status'],
     ['#contact', 'Contact'],
   ],
 
@@ -216,7 +216,7 @@ export const en: PageCopy = {
   labEyebrow: 'HOMELAB',
   labTitle: 'What I run at home.',
   labIntro:
-    "Two mini PCs running Debian 13. One handles DNS and DHCP with AdGuard Home and monitors everything with Prometheus, Grafana and Uptime Kuma. The other runs the containers, including this website. I use it to try things I can't break at work. The site reaches the Internet through Cloudflare Tunnel, with no ports open on the router, and it redeploys itself every time I push a change to GitHub. You can see the live service status at mcouso.es/estado, and everything is backed up nightly to the other mini PC and to Backblaze B2, with a test restore every week.",
+    "Two mini PCs running Debian 13. One handles DNS and DHCP with AdGuard Home and monitors everything with Prometheus, Grafana and Uptime Kuma. The other runs the containers, including this website. I use it to try things I can't break at work. The site reaches the Internet through Cloudflare Tunnel, with no ports open on the router, and it redeploys itself every time I push a change to GitHub. You can see the live service status at mcouso.es/en/status, and everything is backed up nightly to the other mini PC and to Backblaze B2, with a test restore every week.",
   networkCaption: 'LOGICAL DIAGRAM · HOME NETWORK',
   networkNote: "Simplified diagram. I've left out IP addresses and the details of the remote network.",
   networkLabels: {
@@ -254,7 +254,7 @@ export const en: PageCopy = {
       outcome:
         'I migrated the customers of the old datacenter into it, deciding which ones moved and when. Restoring a 1 TB backup went from about 20 minutes to 7-8.',
       footer: '5 DELL HOSTS · AMD EPYC · PURE STORAGE · NVMe over RoCE',
-      href: '/notas/un-datacenter-vmware-desde-cero/',
+      href: '/en/notes/un-datacenter-vmware-desde-cero/',
       tags: ['ESXi 8', 'vCenter', 'Dell', 'Pure Storage', 'Veeam', 'VDS'],
     },
     {
@@ -268,7 +268,7 @@ export const en: PageCopy = {
       outcome:
         'One month of project work and 20 VMs moved live, with no downtime. The whole cluster ended up on all-flash vSAN with 7.0.3, and customer networks never changed.',
       footer: '7 HOSTS · PHASED · 6.5 / 7.0 → 7.0.3',
-      href: '/notas/de-san-a-vsan-sin-cambiar-las-redes/',
+      href: '/en/notes/de-san-a-vsan-sin-cambiar-las-redes/',
       tags: ['vSphere', 'SAN', 'vSAN', 'Cross vCenter vMotion'],
     },
     {
@@ -281,7 +281,7 @@ export const en: PageCopy = {
       outcomeLabel: 'SCALE',
       outcome: 'In total, more than 100 customers onboarded, run or migrated, and around 1,000 virtual machines running 24/7.',
       footer: 'CROSS vCENTER · BETWEEN ARRAYS · AZURE → VMWARE',
-      href: '/notas/migrar-clientes-de-vsphere-7-a-8-con-veeam/',
+      href: '/en/notes/migrar-clientes-de-vsphere-7-a-8-con-veeam/',
       tags: ['Cross vCenter', 'Veeam', 'Azure', 'VMware'],
     },
     {
@@ -296,7 +296,7 @@ export const en: PageCopy = {
         'A full day of testing: the copies came up on our infrastructure in about an hour, the Fortinet rules were changed and user access was validated. It all worked, and I left a runbook so the customer could recover without depending on us.',
       footer: 'VEEAM 13 · 10 VMS · RPO 15 MIN · RTO 3 H',
       tags: ['Veeam CDP', 'Proxies', 'DNS', 'Permissions', 'DR'],
-      href: '/notas/un-dr-con-veeam-probado-de-verdad/',
+      href: '/en/notes/un-dr-con-veeam-probado-de-verdad/',
     },
   ],
 
