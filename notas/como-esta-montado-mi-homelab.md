@@ -140,8 +140,6 @@ La copia cruzada entre los dos mini PC ya me da una copia local rápida de resta
 
 Las dos máquinas están configuradas en la BIOS para encenderse solas al volver la corriente. Docker espera a que esté montado `/opt` antes de arrancar, para no levantar los servicios sobre carpetas vacías, y cada contenedor tiene `restart: unless-stopped`. Lo probé reiniciando las dos: en un par de minutos todo estaba otra vez en verde, sin tocar nada.
 
-No tengo SAI. Me caben 10 o 15 minutos de web caída, y el router está fuera de la habitación, así que un SAI solo protegería el apagado de los mini PC, no la conexión.
-
 ## Lo siguiente
 
 - Aplicar las PR de Renovate automáticamente, como ya hace la web con su imagen.
