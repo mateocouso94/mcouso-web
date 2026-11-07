@@ -1,7 +1,7 @@
 ---
 title: Cómo está montado mi homelab
 date: 2026-11-04
-summary: "Dos mini PC con Debian, el sistema en el NVMe y los datos en el SSD, cada servicio en su carpeta con Docker Compose, monitorización con Prometheus y Uptime Kuma, y copias 3-2-1-0 a Backblaze B2. Qué hay, cómo está organizado y por qué."
+summary: "Dos mini PC con Debian, el sistema en el NVMe y los datos en el SSD, cada servicio en su carpeta con Docker Compose y en git, monitorización con Prometheus y Uptime Kuma, y copias 3-2-1-0 a Backblaze B2. Qué hay, cómo está organizado y por qué."
 tags: [Homelab, Debian, Docker, Backup, Backblaze B2, Arquitectura]
 ---
 
@@ -15,7 +15,7 @@ El homelab son dos mini PC en una estantería de casa. Lo uso para probar lo que
 | Sistema | Debian 13 | Debian 13 |
 | Función | Red y monitorización | Aplicaciones publicadas |
 | Servicios | AdGuard Home (DNS y DHCP), Prometheus, Grafana, Blackbox Exporter, Uptime Kuma | Esta web (nginx), cloudflared |
-| En las dos | Node Exporter, Docker Compose, copias con restic | |
+| En las dos | Node Exporter, smartctl_exporter, Docker Compose, copias con restic, parches de seguridad automáticos | |
 
 La separación tiene un motivo: si rompo algo jugando con contenedores en una máquina, el DNS y el DHCP de casa siguen funcionando en la otra. Y la máquina que vigila no es la misma que sirve la web, así que si cae una, la otra me avisa.
 
@@ -25,6 +25,7 @@ La separación tiene un motivo: si rompo algo jugando con contenedores en una m�
 - **Switch Gigabyte** de 5 puertos para la red de cable.
 - **Xiaomi AX3600 con OpenWrt** para el Wi-Fi y una **VPN LAN-to-LAN** hacia una red remota.
 - **DHCP centralizado en AdGuard Home**, no en el router. AdGuard tiene su propia IP en la red gracias a una interfaz *macvlan*, así que ve las IPs reales de cada equipo y filtra el DNS de toda la casa. Un detalle de macvlan: el propio host no puede hablar con ese contenedor, así que homelab-red tiene una pequeña interfaz *shim* que crea un servicio de systemd al arrancar ([`infra/homelab-red/macvlan-shim.service`](https://github.com/mateocouso94/mcouso-web/blob/main/infra/homelab-red/macvlan-shim.service)). Lo descubrí al reiniciar: sin ella, Uptime Kuma se quedaba sin DNS y marcaba media casa como caída.
+- **Un DNS de respaldo repartido por DHCP.** AdGuard anuncia dos servidores: él mismo y `1.1.1.1`. Si homelab-red se apaga, la casa sigue teniendo Internet. El precio es que algunas consultas se saltan el filtrado, porque los clientes no usan el segundo DNS solo cuando falla el primero. Para casa me compensa: un segundo AdGuard en la otra máquina rompería la separación de papeles por un caso que casi nunca pasa.
 
 Ningún servicio tiene puertos abiertos en el router. La web sale a Internet por **Cloudflare Tunnel**: un contenedor `cloudflared` abre la conexión hacia fuera.
 
@@ -58,6 +59,8 @@ Cada servicio tiene su carpeta en `/opt/ci`, con su `docker-compose.yml` y sus d
 ├── adguard/        conf/  work/
 ├── monitoring/     docker-compose.yml  prometheus/  blackbox/  data/
 ├── uptime-kuma/    docker-compose.yml  data/
+├── smartctl-exporter/  docker-compose.yml
+├── cloudflared/    docker-compose.yml  .env
 └── portfolio/      compose.yaml  .env   (esta web)
 ```
 
@@ -70,6 +73,20 @@ Las reglas son pocas y las mismas en todos los servicios:
 - **Las imágenes no se copian.** Son reproducibles: se vuelven a descargar.
 
 En la máquina de la web, el directorio de Docker también está en el SSD (`/opt/docker-data`). En homelab-red sigue en el NVMe, porque ahí ya solo quedan imágenes, que se descargan de nuevo.
+
+### `/opt/ci` también está en git
+
+Cada máquina tiene su `/opt/ci` en un repositorio privado de GitHub. No hubo que mover nada: un `git init` en el sitio y un `.gitignore` que deja fuera los datos (`data/`, `work/`), los `.env` y la web, que tiene su propio repositorio.
+
+- **Cada noche, a las 03:00**, un timer de systemd hace commit de lo que haya cambiado y lo sube. Antes revisa el diff: si ve algo con pinta de secreto, no sube nada y el servicio queda en fallo.
+- **Renovate** lee los `compose` y, los sábados, me abre una PR por cada imagen con versión nueva, con sus notas de la versión. Las versiones mayores solo me las propone en un panel y las apruebo yo. Así las versiones siguen fijadas, pero me entero de cuándo hay que subirlas.
+- Para aplicar una actualización: `git pull` y `docker compose up -d` en la carpeta del servicio.
+
+Al preparar el primer commit encontré el token de Cloudflare Tunnel escrito directamente en el `compose`. Ahora está en un `.env`, como dice la regla de arriba.
+
+### El sistema se parchea solo
+
+Las dos Debian instalan solas los **parches de seguridad** con `unattended-upgrades`. Solo los de Debian: Docker Engine lo actualizo yo, una máquina detrás de otra. Tampoco reinician solas; si un parche del kernel lo pide, reinicio cuando me viene bien.
 
 ## Esta web
 
@@ -85,6 +102,8 @@ Lo cuento con detalle en [Cómo se despliega esta web](/notas/como-se-despliega-
 - **Prometheus** recoge métricas: de las dos máquinas con Node Exporter, y de comprobaciones desde fuera con Blackbox Exporter. Guarda 30 días.
 - **Grafana** las dibuja.
 - **Uptime Kuma** vigila que cada servicio responde. Si algo cae, me avisa por **Telegram**. También recibe avisos de los procesos automáticos: el despliegue de la web, cada copia y cada verificación.
+- **Los discos** los vigila `smartctl_exporter` en cada máquina. Grafana me avisa por Telegram si un disco falla su autodiagnóstico SMART, si el NVMe pasa del 80 % de vida usada o si aparecen errores de lectura.
+- **Un vigilante de fuera.** Kuma vive dentro de casa: si se va la luz o Internet, cae con todo lo demás y no puede avisar. Por eso UptimeRobot comprueba mcouso.es cada 5 minutos desde fuera y me escribe al correo.
 
 El estado de Kuma se ve en directo en [/estado/](/estado/). El panel de Kuma no está expuesto: la web solo lee su API de estado, y lo explico en [Una página de estado sin exponer Uptime Kuma](/notas/una-pagina-de-estado-sin-exponer-uptime-kuma/).
 
@@ -117,7 +136,13 @@ Me planteé comprar un NAS para las copias. Al final me quedé con Backblaze B2,
 
 La copia cruzada entre los dos mini PC ya me da una copia local rápida de restaurar. Con B2 completo el 3-2-1 sin comprar nada. No descarto un NAS más adelante, pero para guardar más cosas, no por las copias del homelab.
 
+## Si se va la luz
+
+Las dos máquinas están configuradas en la BIOS para encenderse solas al volver la corriente. Docker espera a que esté montado `/opt` antes de arrancar, para no levantar los servicios sobre carpetas vacías, y cada contenedor tiene `restart: unless-stopped`. Lo probé reiniciando las dos: en un par de minutos todo estaba otra vez en verde, sin tocar nada.
+
+No tengo SAI. Me caben 10 o 15 minutos de web caída, y el router está fuera de la habitación, así que un SAI solo protegería el apagado de los mini PC, no la conexión.
+
 ## Lo siguiente
 
-- Un repositorio privado con los `compose` y las configuraciones de todos los servicios, con el mismo despliegue automático que la web.
+- Aplicar las PR de Renovate automáticamente, como ya hace la web con su imagen.
 - Más monitores de servicio en Kuma: DNS contra AdGuard, Grafana, Prometheus y la VPN.
