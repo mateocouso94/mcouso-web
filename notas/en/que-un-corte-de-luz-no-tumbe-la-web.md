@@ -48,6 +48,15 @@ Is the homelab's cloudflared connected?
 - The API token is **read-only**: it can look at the tunnel, not change it.
 - The Pi updates the same way as the homelab: a systemd timer that pulls the new image every 5 minutes.
 
+## The missing alert
+
+When the Pi takes over, and when it hands back, it alerts me on Telegram. It sounds like a detail, but it's the only alert I get that my home has gone down:
+
+- **Uptime Kuma** lives in the homelab, so it goes down with it and can't alert anyone.
+- **The external monitor** no longer sees any downtime, because the site keeps answering from the Pi.
+
+So, without planning it, the replica has also become the one watching my home from outside. If the alert says the Pi has taken over, the homelab (or at least the machine serving the site) has lost power, lost internet or been switched off.
+
 ## If the site comes from the Pi, the homelab is down
 
 The Pi only starts its `cloudflared` when the homelab has been disconnected for a few minutes. So if the site is being served from the Pi, **the homelab is down**: there's no other way to get there.
@@ -62,11 +71,11 @@ During an outage, the site stays up and also tells you what's going on.
 
 ## The test
 
-I set it up during another power cut, with the homelab off. As soon as I enabled the timers, the Pi saw that the home connector had been gone for several minutes, started its `cloudflared`, and mcouso.es was back up, now from another home.
+I set it up during another power cut, with the homelab off. As soon as I enabled the timers, the Pi saw that the home connector had been gone for several minutes, started its `cloudflared`, and mcouso.es was back up, now from another home. When the power came back, the homelab reconnected and, five minutes later, the Pi handed the site back on its own.
 
 ## What's left
 
-- **Monitoring the replica itself**: Telegram alerts when the Pi takes over or hands back, and an external monitor that can tell which machine is serving the site.
+- **An external monitor that can tell which machine is serving the site**, as a second alert path besides Telegram.
 - **A drill with everything on**: stop the home `cloudflared` on purpose and time the takeover and the handback.
 - A known limitation: the script detects that the homelab connector is gone (power, internet, mini PC off), but not nginx failing while the connector stays up. Uptime Kuma and the external monitor still catch that.
 
