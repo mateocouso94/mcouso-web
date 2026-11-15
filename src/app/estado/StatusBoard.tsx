@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { fetchHomelabStatus, buildInfo, timeAgo, fmtPing } from '../../lib/status';
+import { fetchHomelabStatus, fetchServedFromReplica, replicaMessage, buildInfo, timeAgo, fmtPing } from '../../lib/status';
 import type { HomelabStatus } from '../../lib/status';
 import type { Lang } from '../../content/types';
 
@@ -18,15 +18,21 @@ const CLS: Record<number, string> = { 1: 'ok', 0: 'down', 2: 'warn', 3: 'warn', 
 export default function StatusBoard({ lang = 'es' }: { lang?: Lang }) {
   const isEs = lang === 'es';
   const [status, setStatus] = useState<HomelabStatus | null | undefined>(undefined);
+  const [replica, setReplica] = useState(false);
   useEffect(() => {
     let alive = true;
-    const load = () => fetchHomelabStatus().then((s) => alive && setStatus(s));
+    const load = () =>
+      fetchHomelabStatus().then(async (s) => {
+        const r = s === null ? await fetchServedFromReplica() : false;
+        if (alive) { setReplica(r); setStatus(s); }
+      });
     load();
     const id = setInterval(load, 60_000);
     return () => { alive = false; clearInterval(id); };
   }, []);
 
   if (status === undefined) return <p className="status-summary">{isEs ? 'Consultando Uptime Kuma…' : 'Asking Uptime Kuma…'}</p>;
+  if (status === null && replica) return <p className="status-summary"><i className="status-dot down" /> {replicaMessage(lang)}</p>;
   if (status === null) return <p className="status-summary"><i className="status-dot down" /> {isEs ? 'El estado no está disponible ahora mismo. Si la web carga pero esto no, lo que falla es la monitorización, no la web.' : 'Status is not available right now. If the site loads but this does not, it is the monitoring that is failing, not the site.'}</p>;
 
   const allOk = status.up === status.total;

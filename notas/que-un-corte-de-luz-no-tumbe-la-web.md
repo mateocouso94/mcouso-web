@@ -40,13 +40,17 @@ En la Pi la web está siempre encendida, con la misma imagen Docker que en casa 
 - El token de la API es de **solo lectura**: puede consultar el túnel, pero no tocarlo.
 - La Pi se actualiza igual que el homelab: un timer de systemd que descarga la imagen nueva cada 5 minutos.
 
-## La monitorización no viaja con la web
+## Si la web sale de la Pi, el homelab está caído
 
-Hay algo que se ve distinto cuando la web sale de la Pi: la [página de estado](/estado/) y el comando `status` de la consola dicen **"estado no disponible ahora mismo"**.
+La Pi solo enciende su `cloudflared` cuando el homelab lleva unos minutos desconectado. Así que, si la web sale de la Pi, **es que el homelab está caído**: no hay otra forma de llegar ahí.
 
-No es un fallo de la réplica. El estado lo da [Uptime Kuma](/notas/una-pagina-de-estado-sin-exponer-uptime-kuma/), que vive en el homelab. Si en mi casa no hay luz, no hay monitorización que enseñar, la sirva la máquina que la sirva. Con el homelab apagado, la página de estado diría lo mismo aunque la web siguiera saliendo de casa. La Pi tampoco puede consultar Kuma, porque no hay conexión entre las dos redes, y así lo quiero.
+Eso afecta a la [página de estado](/estado/) y al comando `status` de la consola. El estado lo da [Uptime Kuma](/notas/una-pagina-de-estado-sin-exponer-uptime-kuma/), que vive en el homelab. Si en mi casa no hay luz, no hay monitorización que enseñar, la sirva la máquina que la sirva. Y la Pi tampoco puede consultar Kuma, porque no hay conexión entre las dos redes, y así lo quiero.
 
-Así que, durante un corte, la web sigue en pie y es honesta: el contenido está, pero el estado del homelab no se puede ver.
+En lugar de un "estado no disponible" a secas, la web lo explica. Cada nginx sabe quién es (`/api/origin` devuelve `homelab` o `replica`), y cuando la que responde es la réplica, la página de estado y la consola dicen:
+
+> El homelab no responde ahora mismo (corte de luz o de internet en casa). Esta web la está sirviendo una réplica de reserva en otra vivienda. La monitorización vive en el homelab, así que volverá cuando vuelva él.
+
+Durante un corte, la web sigue en pie y además cuenta lo que pasa.
 
 ## La prueba
 
@@ -54,7 +58,7 @@ Lo monté durante otro corte de luz, con el homelab apagado. En cuanto activé l
 
 ## Lo que me queda por hacer
 
-- **Monitorizar la propia réplica**: avisos por Telegram cuando la Pi toma o devuelve el relevo, y saber desde fuera desde qué máquina sale la web.
+- **Monitorizar la propia réplica**: avisos por Telegram cuando la Pi toma o devuelve el relevo, y que el monitor externo distinga desde qué máquina sale la web.
 - **Un simulacro con todo encendido**: apagar el `cloudflared` de casa a propósito y cronometrar el relevo y la vuelta.
 - Una limitación conocida: el script detecta que el conector del homelab ha desaparecido (luz, internet, mini PC apagado), pero no que nginx falle con el conector conectado. Eso lo siguen avisando Uptime Kuma y el monitor externo.
 

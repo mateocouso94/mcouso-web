@@ -40,13 +40,17 @@ Is the homelab's cloudflared connected?
 - The API token is **read-only**: it can look at the tunnel, not change it.
 - The Pi updates the same way as the homelab: a systemd timer that pulls the new image every 5 minutes.
 
-## Monitoring doesn't travel with the site
+## If the site comes from the Pi, the homelab is down
 
-One thing looks different when the site is served from the Pi: the [status page](/en/status/) and the console's `status` command say **"status not available right now"**.
+The Pi only starts its `cloudflared` when the homelab has been disconnected for a few minutes. So if the site is being served from the Pi, **the homelab is down**: there's no other way to get there.
 
-That isn't a replica bug. The status comes from [Uptime Kuma](/en/notes/una-pagina-de-estado-sin-exponer-uptime-kuma/), which lives in the homelab. If there's no power at my place, there's no monitoring to show, whichever machine serves the site. With the homelab off, the status page would say the same even if the site were still coming from home. The Pi can't reach Kuma either, because there's no link between the two networks, and that's how I want it.
+That affects the [status page](/en/status/) and the console's `status` command. The status comes from [Uptime Kuma](/en/notes/una-pagina-de-estado-sin-exponer-uptime-kuma/), which lives in the homelab. If there's no power at my place, there's no monitoring to show, whichever machine serves the site. And the Pi can't reach Kuma either, because there's no link between the two networks, and that's how I want it.
 
-So during a power cut the site stays up and stays honest: the content is there, but the homelab's status can't be seen.
+Instead of a bare "status not available", the site explains it. Each nginx knows which one it is (`/api/origin` returns `homelab` or `replica`), and when the replica is the one answering, the status page and the console say:
+
+> The homelab is not responding right now (a power or internet outage at home). This site is being served by a standby replica in another home. Monitoring lives in the homelab, so it will be back when the homelab is.
+
+During an outage, the site stays up and also tells you what's going on.
 
 ## The test
 
@@ -54,7 +58,7 @@ I set it up during another power cut, with the homelab off. As soon as I enabled
 
 ## What's left
 
-- **Monitoring the replica itself**: Telegram alerts when the Pi takes over or hands back, and a way to tell from outside which machine is serving the site.
+- **Monitoring the replica itself**: Telegram alerts when the Pi takes over or hands back, and an external monitor that can tell which machine is serving the site.
 - **A drill with everything on**: stop the home `cloudflared` on purpose and time the takeover and the handback.
 - A known limitation: the script detects that the homelab connector is gone (power, internet, mini PC off), but not nginx failing while the connector stays up. Uptime Kuma and the external monitor still catch that.
 

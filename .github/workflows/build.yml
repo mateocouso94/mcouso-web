@@ -72,6 +72,7 @@ jobs:
           echo "api/status sin Kuma -> $code (se espera 502)"; [ "$code" = "502" ]
           code=$(curl -s -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3000/api/status/homelab)
           echo "POST api/status -> $code (se espera 403)"; [ "$code" = "403" ]
+          curl -fsS http://127.0.0.1:3000/api/origin | grep -q '"origin":"homelab"'
           echo "OK"
 
       - name: Logs del contenedor si la prueba falla

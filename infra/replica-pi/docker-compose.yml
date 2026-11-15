@@ -16,6 +16,9 @@ services:
     networks:
       web:
         aliases: [mcouso-origin]
+    environment:
+      # La web explica que está saliendo de la réplica (y que, por tanto, el homelab está caído)
+      SERVED_BY: replica
     read_only: true
     tmpfs:
       - /var/cache/nginx

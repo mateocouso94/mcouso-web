@@ -50,6 +50,15 @@ server {
         add_header X-Content-Type-Options "nosniff" always;
     }
 
+    # Qué máquina está sirviendo la web: "homelab" o "replica" (la Pi de reserva, ver infra/replica-pi).
+    # Si es la réplica, el homelab está caído y la web lo explica en vez de decir solo "no disponible".
+    location = /api/origin {
+        default_type application/json;
+        add_header Cache-Control "no-store" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        return 200 '{"origin":"${SERVED_BY}"}';
+    }
+
     location = /.well-known/security.txt {
         default_type text/plain;
         add_header Cache-Control "public, max-age=86400";

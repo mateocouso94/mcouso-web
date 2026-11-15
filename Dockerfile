@@ -23,6 +23,8 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/var/run
 COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
 # Dirección interna de Uptime Kuma (se sobrescribe en compose.yaml / .env)
 ENV KUMA_URL=http://127.0.0.1:9
+# Qué máquina sirve la web (/api/origin). La réplica de la Pi pone "replica".
+ENV SERVED_BY=homelab
 COPY --from=builder /app/out /usr/share/nginx/html
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
