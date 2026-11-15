@@ -16,7 +16,16 @@ STATE="$STATE_DIR/counters"   # "<minutos sin homelab> <minutos con homelab>"
 account=$(env_get CF_ACCOUNT_ID); tunnel=$(env_get CF_TUNNEL_ID); token=$(env_get CF_API_TOKEN)
 homelab_arch=$(env_get HOMELAB_ARCH linux_amd64)
 takeover_after=$(env_get TAKEOVER_AFTER 3); release_after=$(env_get RELEASE_AFTER 5)
-[[ -n "$account" && -n "$tunnel" && -n "$token" ]] || { echo "Faltan CF_ACCOUNT_ID, CF_TUNNEL_ID o CF_API_TOKEN en .env"; exit 1; }
+# Si no se han puesto, el ID de cuenta y el del túnel salen del propio TUNNEL_TOKEN
+# (es un JSON en base64: {"a": cuenta, "t": túnel, "s": secreto}).
+if [[ -z "$account" || -z "$tunnel" ]]; then
+  tt=$(env_get TUNNEL_TOKEN)
+  tt+=$(printf '%*s' $(( (4 - ${#tt} % 4) % 4 )) '' | tr ' ' '=')
+  tt_json=$(printf '%s' "$tt" | base64 -d 2>/dev/null || true)
+  [[ -n "$account" ]] || account=$(jq -r '.a // empty' <<<"$tt_json" 2>/dev/null || true)
+  [[ -n "$tunnel" ]] || tunnel=$(jq -r '.t // empty' <<<"$tt_json" 2>/dev/null || true)
+fi
+[[ -n "$account" && -n "$tunnel" && -n "$token" ]] || { echo "Faltan CF_API_TOKEN o TUNNEL_TOKEN en .env"; exit 1; }
 
 # 1. ¿Está conectado el cloudflared de homelab?
 if ! resp=$(curl -fsS -m 15 -H "Authorization: Bearer $token" \
