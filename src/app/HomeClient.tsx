@@ -8,7 +8,7 @@ import type { PageCopy, NoteMeta } from '../content/types';
 import { es } from '../content/es';
 import { en } from '../content/en';
 import { formatDate } from '../lib/date';
-import { fetchHomelabStatus, buildInfo, timeAgo, fmtPing } from '../lib/status';
+import { fetchHomelabStatus, fetchServedFromReplica, replicaMessage, buildInfo, timeAgo, fmtPing } from '../lib/status';
 import type { HomelabStatus } from '../lib/status';
 
 const content: Record<Lang, PageCopy> = { es, en };
@@ -47,16 +47,21 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
       : `Live version: commit ${sha}, built ${when} (${timeAgo(buildInfo.time, 'en')}).\nSource: github.com/mateocouso94/mcouso-web`;
   }
 
-  function statusLines(isSpanish: boolean, s: HomelabStatus | null) {
-    if (!s) return isSpanish ? 'Estado no disponible ahora mismo.' : 'Status not available right now.';
+  function unavailable(isSpanish: boolean, replica: boolean) {
+    if (replica) return replicaMessage(isSpanish ? 'es' : 'en').replace(/\. /g, '.\n');
+    return isSpanish ? 'Estado no disponible ahora mismo.' : 'Status not available right now.';
+  }
+
+  function statusLines(isSpanish: boolean, s: HomelabStatus | null, replica = false) {
+    if (!s) return unavailable(isSpanish, replica);
     const icon = (n: number) => (n === 1 ? '●' : n === 0 ? '✕' : '◌');
     const rows = s.monitors.map((m) => `${icon(m.status)} ${m.name.padEnd(22, ' ')} ${m.uptime24 != null ? (m.uptime24 * 100).toFixed(2) + '%' : '—'}${m.ping != null ? `  ${fmtPing(m.ping)}` : ''}`);
     const head = isSpanish ? `Homelab: ${s.up}/${s.total} servicios OK · uptime 24 h` : `Homelab: ${s.up}/${s.total} services up · 24 h uptime`;
     return [head, ...rows, isSpanish ? 'Detalle: mcouso.es/estado' : 'Details: mcouso.es/en/status'].join('\n');
   }
 
-  function backupLines(isSpanish: boolean, s: HomelabStatus | null) {
-    if (!s) return isSpanish ? 'Estado no disponible ahora mismo.' : 'Status not available right now.';
+  function backupLines(isSpanish: boolean, s: HomelabStatus | null, replica = false) {
+    if (!s) return unavailable(isSpanish, replica);
     const isBackup = (m: { group: string; name: string }) => /copia|backup|verific/i.test(m.group) || /^(copia|backup|verific)/i.test(m.name);
     const mons = s.monitors.filter(isBackup);
     if (!mons.length) return isSpanish ? 'Todavía no hay monitores de copias publicados.' : 'No backup monitors published yet.';
@@ -77,14 +82,14 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
       setOutput(isSpanish ? 'Consultando Uptime Kuma…' : 'Querying Uptime Kuma…');
       const s = await fetchHomelabStatus();
       setStatus(s);
-      setOutput(backupLines(isSpanish, s));
+      setOutput(backupLines(isSpanish, s, s === null && (await fetchServedFromReplica())));
       return;
     }
     if (cmd === 'status' || cmd === 'uptime') {
       setOutput(isSpanish ? 'Consultando Uptime Kuma…' : 'Querying Uptime Kuma…');
       const s = await fetchHomelabStatus();
       setStatus(s);
-      setOutput(statusLines(isSpanish, s));
+      setOutput(statusLines(isSpanish, s, s === null && (await fetchServedFromReplica())));
       return;
     }
     const responses: Record<string, string> = {

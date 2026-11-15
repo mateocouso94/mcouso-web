@@ -41,6 +41,24 @@ export async function fetchHomelabStatus(signal?: AbortSignal): Promise<HomelabS
   }
 }
 
+// Qué máquina sirve la web ahora mismo (nginx → /api/origin). "replica" = la Pi de reserva,
+// lo que significa que el homelab está caído (corte de luz o de internet en casa).
+export async function fetchServedFromReplica(signal?: AbortSignal): Promise<boolean> {
+  try {
+    const res = await fetch('/api/origin', { signal, cache: 'no-store' });
+    if (!res.ok) return false;
+    return ((await res.json()) as { origin?: string }).origin === 'replica';
+  } catch {
+    return false;
+  }
+}
+
+export function replicaMessage(lang: 'es' | 'en') {
+  return lang === 'es'
+    ? 'El homelab no responde ahora mismo (corte de luz o de internet en casa). Esta web la está sirviendo una réplica de reserva en otra vivienda. La monitorización vive en el homelab, así que volverá cuando vuelva él.'
+    : 'The homelab is not responding right now (a power or internet outage at home). This site is being served by a standby replica in another home. Monitoring lives in the homelab, so it will be back when the homelab is.';
+}
+
 // Datos de la versión publicada, inyectados al compilar (ver Dockerfile y build.yml)
 export const buildInfo = {
   sha: process.env.NEXT_PUBLIC_GIT_SHA || 'local',
