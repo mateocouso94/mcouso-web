@@ -22,7 +22,8 @@ ghcr.io/mateocouso94/mcouso-web:latest
 homelab-apps ── timer de systemd → docker compose pull + up -d
    │
    ▼
-nginx :3000 ◄── cloudflared ◄── Cloudflare ◄── mcouso.es
+nginx :3000   ◄── cloudflared ◄─┬─ Cloudflare ◄── mcouso.es
+réplica en Pi ◄── cloudflared ◄─┘  (solo si el homelab está caído)
 ```
 
 ## La web: ficheros estáticos y nginx

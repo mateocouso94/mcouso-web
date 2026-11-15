@@ -23,7 +23,7 @@ La separación tiene un motivo: si rompo algo jugando con contenedores en una m�
 
 - **HGU de Movistar** como salida a Internet.
 - **Switch Gigabyte** de 5 puertos para la red de cable.
-- **Xiaomi AX3600 con OpenWrt** para el Wi-Fi y una **VPN LAN-to-LAN** hacia una red remota.
+- **Xiaomi AX3600 con OpenWrt** para el Wi-Fi y una **VPN LAN-to-LAN** hacia una red remota, en otra vivienda. Allí está también la Raspberry Pi que hace de [réplica de reserva de la web](/notas/que-un-corte-de-luz-no-tumbe-la-web/), aunque la réplica no usa la VPN.
 - **DHCP centralizado en AdGuard Home**, no en el router. AdGuard tiene su propia IP en la red gracias a una interfaz *macvlan*, así que ve las IPs reales de cada equipo y filtra el DNS de toda la casa. Un detalle de macvlan: el propio host no puede hablar con ese contenedor, así que homelab-red tiene una pequeña interfaz *shim* que crea un servicio de systemd al arrancar ([`infra/homelab-red/macvlan-shim.service`](https://github.com/mateocouso94/mcouso-web/blob/main/infra/homelab-red/macvlan-shim.service)). Lo descubrí al reiniciar: sin ella, Uptime Kuma se quedaba sin DNS y marcaba media casa como caída.
 - **Un DNS de respaldo repartido por DHCP.** AdGuard anuncia dos servidores: él mismo y `1.1.1.1`. Si homelab-red se apaga, la casa sigue teniendo Internet. El precio es que algunas consultas se saltan el filtrado, porque los clientes no usan el segundo DNS solo cuando falla el primero. Para casa me compensa: un segundo AdGuard en la otra máquina rompería la separación de papeles por un caso que casi nunca pasa.
 
@@ -139,6 +139,8 @@ La copia cruzada entre los dos mini PC ya me da una copia local rápida de resta
 ## Si se va la luz
 
 Las dos máquinas están configuradas en la BIOS para encenderse solas al volver la corriente. Docker espera a que esté montado `/opt` antes de arrancar, para no levantar los servicios sobre carpetas vacías, y cada contenedor tiene `restart: unless-stopped`. Lo probé reiniciando las dos: en un par de minutos todo estaba otra vez en verde, sin tocar nada.
+
+Mientras dura el corte, la web no se cae: una Raspberry Pi en otra vivienda toma el relevo a los pocos minutos y lo devuelve cuando el homelab vuelve. Está contado en [Que un corte de luz no tumbe la web](/notas/que-un-corte-de-luz-no-tumbe-la-web/).
 
 ## Lo siguiente
 

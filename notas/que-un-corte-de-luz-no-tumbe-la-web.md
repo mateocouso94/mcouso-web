@@ -1,7 +1,7 @@
 ---
 title: Que un corte de luz no tumbe la web
 date: 2026-11-15
-summary: "Una noche se fue la luz en casa y la web estuvo caída varias horas. Ahora, si el homelab se queda sin luz o sin internet, una Raspberry Pi en otra vivienda toma el relevo sola en unos minutos. Sin VPN entre las dos casas y sin balanceador de pago."
+summary: "Una noche se fue la luz en casa y la web estuvo caída varias horas. Ahora, si el homelab se queda sin luz o sin internet, una Raspberry Pi en otra vivienda toma el relevo sola en unos minutos. Sin depender de la VPN entre las dos casas y sin balanceador de pago."
 tags: [Cloudflare Tunnel, Alta disponibilidad, Raspberry Pi, Homelab, systemd]
 ---
 
@@ -15,7 +15,7 @@ Tengo una Raspberry Pi 3 en otra vivienda, con su propia luz y su propia conexi�
 
 Puse dos condiciones:
 
-- **Nada de conectar las dos casas.** Ni VPN entre redes ni puertos abiertos. La Pi no sabe nada de mi red, y mi red no sabe nada de la Pi.
+- **Que no dependa del enlace entre las dos casas.** Hay una VPN entre las dos redes, pero no tiene nada que ver con la web y la réplica no la usa: si la VPN se cae, o se cae justo por el corte, la réplica tiene que funcionar igual. Tampoco hay puertos abiertos.
 - **Nada de pagar un balanceador** para una web personal.
 
 ## Cómo lo resuelve Cloudflare Tunnel
@@ -34,7 +34,7 @@ En la Pi la web está siempre encendida, con la misma imagen Docker que en casa 
    └─ sí, durante 5 minutos seguidos  → la Pi lo apaga y devuelve el relevo
 ```
 
-- Quien "vigila" mi casa es **Cloudflare**, no la Pi. Por eso no hace falta ninguna conexión entre las dos viviendas.
+- Quien "vigila" mi casa es **Cloudflare**, no la Pi. Por eso la réplica no necesita llegar a mi red para saber si está caída.
 - Los minutos de margen evitan ir y volver por un corte de segundos.
 - Si la API no responde (por ejemplo, porque se cae internet en la Pi), el script no cambia nada.
 - El token de la API es de **solo lectura**: puede consultar el túnel, pero no tocarlo.
@@ -44,7 +44,7 @@ En la Pi la web está siempre encendida, con la misma imagen Docker que en casa 
 
 La Pi solo enciende su `cloudflared` cuando el homelab lleva unos minutos desconectado. Así que, si la web sale de la Pi, **es que el homelab está caído**: no hay otra forma de llegar ahí.
 
-Eso afecta a la [página de estado](/estado/) y al comando `status` de la consola. El estado lo da [Uptime Kuma](/notas/una-pagina-de-estado-sin-exponer-uptime-kuma/), que vive en el homelab. Si en mi casa no hay luz, no hay monitorización que enseñar, la sirva la máquina que la sirva. Y la Pi tampoco puede consultar Kuma, porque no hay conexión entre las dos redes, y así lo quiero.
+Eso afecta a la [página de estado](/estado/) y al comando `status` de la consola. El estado lo da [Uptime Kuma](/notas/una-pagina-de-estado-sin-exponer-uptime-kuma/), que vive en el homelab. Si en mi casa no hay luz, no hay monitorización que enseñar, la sirva la máquina que la sirva. Y la réplica no consulta Kuma a través de la VPN: no quiero que la web pública dependa de ese enlace.
 
 En lugar de un "estado no disponible" a secas, la web lo explica. Cada nginx sabe quién es (`/api/origin` devuelve `homelab` o `replica`), y cuando la que responde es la réplica, la página de estado y la consola dicen:
 
