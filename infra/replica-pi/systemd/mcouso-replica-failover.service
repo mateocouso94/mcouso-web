@@ -1,0 +1,9 @@
+[Unit]
+Description=Réplica mcouso.es: toma o devuelve el relevo según el conector de homelab
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/ci/portfolio/infra/replica-pi/failover.sh

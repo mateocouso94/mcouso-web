@@ -1,0 +1,44 @@
+# Réplica de reserva de mcouso.es en la Raspberry Pi (casa de mis padres).
+#
+# - portfolio: la misma imagen que en homelab, siempre encendida (en caliente).
+#   Sin KUMA_URL: la consola y /estado/ muestran "estado no disponible",
+#   que es lo correcto mientras el homelab está caído.
+# - cloudflared: el mismo túnel que en homelab. NO arranca con "up -d";
+#   lo enciende y lo apaga failover.sh según si el conector de homelab está vivo.
+#
+# La ruta del túnel debe apuntar a http://mcouso-origin:3000 (ver README.md de esta carpeta).
+services:
+  portfolio:
+    image: ghcr.io/mateocouso94/mcouso-web:latest
+    pull_policy: always
+    container_name: mcouso-portfolio
+    restart: unless-stopped
+    networks:
+      web:
+        aliases: [mcouso-origin]
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: mcouso-cloudflared
+    profiles: [failover]
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:?Falta TUNNEL_TOKEN en .env}
+    # "no": si la Pi se reinicia, failover.sh decide si hay que encenderlo.
+    restart: "no"
+    depends_on: [portfolio]
+    networks: [web]
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+
+networks:
+  web:
