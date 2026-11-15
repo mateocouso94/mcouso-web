@@ -217,7 +217,7 @@ export const es: PageCopy = {
   labEyebrow: 'HOMELAB',
   labTitle: 'Lo que tengo montado en casa.',
   labIntro:
-    'Dos mini PC con Debian 13. Uno hace de DNS y DHCP con AdGuard Home y monitoriza todo con Prometheus, Grafana y Uptime Kuma. El otro ejecuta los contenedores, entre ellos esta web. Lo uso para probar lo que en el trabajo no puedo romper. La web sale a Internet por Cloudflare Tunnel, sin abrir puertos en el router, y se actualiza sola cada vez que subo un cambio a GitHub. El estado de los servicios se puede ver en directo en mcouso.es/estado, y todo se copia cada noche al otro mini PC y a Backblaze B2, con una restauración de prueba cada semana.',
+    'Dos mini PC con Debian 13. Uno hace de DNS y DHCP con AdGuard Home y monitoriza todo con Prometheus, Grafana y Uptime Kuma. El otro ejecuta los contenedores, entre ellos esta web. Lo uso para probar lo que en el trabajo no puedo romper. La web sale a Internet por Cloudflare Tunnel, sin abrir puertos en el router, y se actualiza sola cada vez que subo un cambio a GitHub. El estado de los servicios se puede ver en directo en mcouso.es/estado, y todo se copia cada noche al otro mini PC y a Backblaze B2, con una restauración de prueba cada semana. Si en casa se va la luz o internet, una Raspberry Pi en otra vivienda sirve la web hasta que el homelab vuelve.',
   networkCaption: 'DIAGRAMA LÓGICO · RED DE CASA',
   networkNote: 'Diagrama simplificado. He quitado las direcciones IP y los detalles de la red remota.',
   networkLabels: {
@@ -236,6 +236,8 @@ export const es: PageCopy = {
     portfolio: 'Docker Compose · esta web y otras apps',
     tunnel: 'VPN LAN-to-LAN',
     logical: 'TOPOLOGÍA LÓGICA',
+    remoteSite: 'OTRA VIVIENDA',
+    replica: 'Pi 3B · réplica web',
   },
 
   // --- 04 Proyectos ---

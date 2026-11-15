@@ -1,21 +1,29 @@
 ---
 title: Keeping the site up through a power cut
 date: 2026-11-15
-summary: "One night the power went out at home and the site was down for hours. Now, if the homelab loses power or internet, a Raspberry Pi in another home takes over on its own within minutes. No VPN between the two homes and no paid load balancer."
-tags: [Cloudflare Tunnel, High availability, Raspberry Pi, Homelab, systemd]
+summary: "One night the power went out at home and the site was down for hours. Now, if the homelab loses power or internet, a Raspberry Pi in another home serves the site within minutes. Only the site: the rest of the homelab has no replica, and that's on purpose."
+tags: [Cloudflare Tunnel, Failover, Raspberry Pi, Homelab, systemd]
 ---
 
 This site is served from a mini PC in my [homelab](/en/notes/como-esta-montado-mi-homelab/). One night there was a long power cut and mcouso.es stopped responding for several hours. It isn't a critical site and a few minutes of downtime don't bother me, but hours do.
 
-The answer wasn't to make my home more resilient, but to have the site **somewhere else** as well.
+The answer wasn't to make my home more resilient, but to have the site **somewhere else** as well. Just the site.
 
-## The idea: a replica in another home
+## Only the site, on purpose
+
+The replica covers the site and nothing else. DNS, DHCP, monitoring and the rest of the homelab have no second machine anywhere else: if the power goes out at home, they go down. They have [backups of their data](/en/notes/copias-3-2-1-0/) so I can recover them, but nothing that serves them in the meantime.
+
+And that makes sense. Those services are for my home: if there's no power at home, nobody is using the DNS or the DHCP, and a second AdGuard in another home would be of no use to anyone. The site is the only part of the homelab used from outside, so it's the only part that has to stay up when my home is down.
+
+I wouldn't call it high availability either: there are a few minutes of downtime before the replica steps in, and the replica is a single Raspberry Pi with a microSD card. For a personal site that can live with a few minutes of downtime, that's enough.
+
+## Where: another home
 
 I have a Raspberry Pi 3 in another home, with its own power and its own internet connection. Until now it did almost nothing, so it's perfect for this: if the power goes out at my place, there's no reason for it to go out there too.
 
 I set two conditions:
 
-- **No linking the two homes.** No VPN between networks and no open ports. The Pi knows nothing about my network, and my network knows nothing about the Pi.
+- **No reliance on the link between the two homes.** There is a VPN between the two networks, but it has nothing to do with the site and the replica doesn't use it: if the VPN goes down, or goes down precisely because of the outage, the replica has to keep working. No open ports either.
 - **No paying for a load balancer** for a personal site.
 
 ## How Cloudflare Tunnel handles it
@@ -34,7 +42,7 @@ Is the homelab's cloudflared connected?
    └─ yes, for 5 minutes in a row  → the Pi stops it and hands back
 ```
 
-- It's **Cloudflare** that "watches" my home, not the Pi. That's why no connection between the two homes is needed.
+- It's **Cloudflare** that "watches" my home, not the Pi. That's why the replica doesn't need to reach my network to know it's down.
 - The minutes of margin avoid flapping over a cut of a few seconds.
 - If the API doesn't respond (for example, because the Pi's internet is down), the script changes nothing.
 - The API token is **read-only**: it can look at the tunnel, not change it.
@@ -44,7 +52,7 @@ Is the homelab's cloudflared connected?
 
 The Pi only starts its `cloudflared` when the homelab has been disconnected for a few minutes. So if the site is being served from the Pi, **the homelab is down**: there's no other way to get there.
 
-That affects the [status page](/en/status/) and the console's `status` command. The status comes from [Uptime Kuma](/en/notes/una-pagina-de-estado-sin-exponer-uptime-kuma/), which lives in the homelab. If there's no power at my place, there's no monitoring to show, whichever machine serves the site. And the Pi can't reach Kuma either, because there's no link between the two networks, and that's how I want it.
+That affects the [status page](/en/status/) and the console's `status` command. The status comes from [Uptime Kuma](/en/notes/una-pagina-de-estado-sin-exponer-uptime-kuma/), which lives in the homelab. If there's no power at my place, there's no monitoring to show, whichever machine serves the site. And the replica doesn't query Kuma over the VPN: I don't want the public site to depend on that link.
 
 Instead of a bare "status not available", the site explains it. Each nginx knows which one it is (`/api/origin` returns `homelab` or `replica`), and when the replica is the one answering, the status page and the console say:
 

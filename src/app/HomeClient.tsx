@@ -98,7 +98,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
         : 'status   live homelab status (Uptime Kuma)\nbackup   3-2-1-0 backup status\ndeploy   live version of this site\nwhoami · stack · lab · career · contact · clear',
       whoami: isSpanish ? 'Mateo Couso Hortas — Ingeniero de Infraestructura Híbrida' : 'Mateo Couso Hortas — Hybrid Infrastructure Engineer',
       stack: 'VMware · SAN / vSAN · Pure Storage · Veeam CDP · Disaster Recovery · Azure · AWS · Terraform',
-      lab: 'homelab-red: AdGuard Home, Prometheus, Grafana, Uptime Kuma\nhomelab-apps: Docker Compose, nginx (esta web), cloudflared',
+      lab: 'homelab-red: AdGuard Home, Prometheus, Grafana, Uptime Kuma\nhomelab-apps: Docker Compose, nginx (esta web), cloudflared\nréplica (Pi 3B, otra vivienda): nginx + cloudflared de reserva',
       career: 'Fermax → Plexus → Evelb → Landra → DXC → cloud.gal → Enxenio',
       contact: 'contacto(at)mcouso.es',
       deploy: deployLine(isSpanish),
@@ -167,7 +167,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
           <div className="network-panel">
             <div className="network-topline"><span>{t.networkCaption}</span></div>
             <div className="network-scroll">
-              <svg className="network-svg" viewBox="0 0 1360 590" role="img" aria-label={lang === 'es' ? 'Diagrama de red doméstica: Internet, HGU Movistar, switch Gigabyte, Xiaomi OpenWrt, homelab-red, AdGuard, homelab-apps y red remota por VPN.' : 'Home network diagram: Internet, Movistar HGU, Gigabyte switch, Xiaomi OpenWrt, homelab-red, AdGuard, homelab-apps and remote VPN network.'}>
+              <svg className="network-svg" viewBox="0 0 1360 590" role="img" aria-label={lang === 'es' ? 'Diagrama de red doméstica: Internet, HGU Movistar, switch Gigabyte, Xiaomi OpenWrt, homelab-red, AdGuard, homelab-apps y red remota por VPN, en otra vivienda, con la Raspberry Pi que hace de réplica de reserva de la web.' : 'Home network diagram: Internet, Movistar HGU, Gigabyte switch, Xiaomi OpenWrt, homelab-red, AdGuard, homelab-apps and remote VPN network in another home, with the Raspberry Pi that acts as the site\'s standby replica.'}>
                 <defs>
                   <pattern id="gridDots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#b6b0a2" opacity=".55" /></pattern>
                   <marker id="arrowLine" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#bd573e" strokeWidth="1.2" /></marker>
@@ -181,7 +181,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
                 <path className="node-shell" d="M245 245 h220 v130 h-220 z" /><path className="node-accent" d="M245 245 h220 v7 h-220 z" /><text className="node-eyebrow" x="266" y="279">GATEWAY / ROUTER</text><text className="node-title" x="266" y="310">{t.networkLabels.gateway}</text><text className="node-small" x="266" y="344">{t.networkLabels.dhcpOff}</text>
                 <path className="node-shell dark" d="M550 245 h230 v130 h-230 z" /><path className="node-accent blue" d="M550 245 h230 v7 h-230 z" /><text className="node-eyebrow light" x="571" y="279">{lang === 'es' ? 'CONMUTACIÓN' : 'SWITCHING'}</text><text className="node-title light" x="571" y="310">{t.networkLabels.switch}</text><text className="node-small light" x="571" y="344">{lang === 'es' ? 'DISTRIBUCIÓN LAN · 5 PUERTOS' : 'LAN DISTRIBUTION · 5 PORTS'}</text>
                 <path className="node-shell" d="M880 80 h220 v120 h-220 z" /><path className="node-accent blue" d="M880 80 h220 v7 h-220 z" /><text className="node-eyebrow" x="901" y="112">ROUTER / WIRELESS</text><text className="node-title" x="901" y="141">{t.networkLabels.router}</text><text className="node-small" x="901" y="164">{t.networkLabels.wifi}</text>
-                <path className="node-shell" d="M1120 80 h195 v120 h-195 z" /><path className="node-accent red" d="M1120 80 h195 v7 h-195 z" /><text className="node-eyebrow" x="1138" y="112">{t.networkLabels.tunnel}</text><text className="node-title compact" x="1138" y="141">{t.networkLabels.remote}</text><text className="node-small" x="1138" y="166">{lang === 'es' ? 'RED PRIVADA REMOTA' : 'PRIVATE REMOTE NETWORK'}</text>
+                <path className="node-shell" d="M1120 80 h195 v120 h-195 z" /><path className="node-accent red" d="M1120 80 h195 v7 h-195 z" /><text className="node-eyebrow" x="1138" y="112">{t.networkLabels.tunnel}</text><text className="node-title compact" x="1138" y="138">{t.networkLabels.remote}</text><text className="node-small" x="1138" y="157">{t.networkLabels.remoteSite}</text><rect className="service-chip" x="1138" y="168" width="160" height="22" /><text className="service-chip-text" x="1147" y="183">{t.networkLabels.replica}</text>
                 <path className="node-shell" d="M880 235 h435 v170 h-435 z" /><path className="node-accent" d="M880 235 h435 v7 h-435 z" /><text className="node-eyebrow" x="901" y="269">LENOVO THINKCENTRE M715q TINY</text><text className="node-title" x="901" y="300">{t.networkLabels.host}</text><text className="node-small" x="901" y="324">{lang === 'es' ? 'DEBIAN 13 · DNS / DHCP / MONITORIZACIÓN' : 'DEBIAN 13 · DNS / DHCP / MONITORING'}</text><rect className="service-chip" x="901" y="340" width="390" height="25" /><text className="service-chip-text" x="912" y="357">{t.networkLabels.macvlan}</text><text className="node-small" x="901" y="386">{t.networkLabels.monitoring}</text>
                 <path className="node-shell" d="M880 440 h435 v115 h-435 z" /><path className="node-accent blue" d="M880 440 h435 v7 h-435 z" /><text className="node-eyebrow" x="901" y="474">HP PRODESK 400 G6 MINI</text><text className="node-title" x="901" y="504">{t.networkLabels.app}</text><text className="node-small" x="901" y="527">DEBIAN 13 · DOCKER HOST</text><text className="node-small" x="901" y="545">{t.networkLabels.portfolio}</text>
                 <circle className="junction" cx="840" cy="310" r="5" />
@@ -193,7 +193,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
               <li className="dark"><small>{lang === 'es' ? 'CONMUTACIÓN' : 'SWITCHING'}</small><b>{t.networkLabels.switch}</b></li>
               <li className="branch">
                 <ul>
-                  <li><small>ROUTER / WIRELESS</small><b>{t.networkLabels.router}</b><span>{t.networkLabels.wifi}</span><em>{t.networkLabels.tunnel} → {t.networkLabels.remote}</em></li>
+                  <li><small>ROUTER / WIRELESS</small><b>{t.networkLabels.router}</b><span>{t.networkLabels.wifi}</span><em>{t.networkLabels.tunnel} → {t.networkLabels.remote} ({t.networkLabels.remoteSite.toLowerCase()}) · {t.networkLabels.replica}</em></li>
                   <li><small>LENOVO THINKCENTRE M715q</small><b>{t.networkLabels.host}</b><span>{t.networkLabels.macvlan}</span><span>{t.networkLabels.monitoring}</span></li>
                   <li><small>HP PRODESK 400 G6 MINI</small><b>{t.networkLabels.app}</b><span>{t.networkLabels.portfolio}</span></li>
                 </ul>
@@ -220,6 +220,12 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
               <h3>{lang === 'es' ? 'Servicios de red' : 'Network services'}</h3>
               <p>Movistar HGU · Xiaomi AX3600 / OpenWrt · {lang === 'es' ? 'switch Gigabyte' : 'Gigabyte switch'}</p>
               <small>{lang === 'es' ? 'LAN principal con DHCP centralizado en el homelab y VPN LAN-to-LAN hacia una red remota. Direccionamiento y datos de acceso omitidos en la versión pública.' : 'Main LAN with DHCP centralized on the homelab and a LAN-to-LAN VPN to a remote network. Addressing and access details are omitted from this public version.'}</small>
+            </article>
+            <article>
+              <span>{lang === 'es' ? 'RÉPLICA DE RESERVA' : 'STANDBY REPLICA'}</span>
+              <h3>Raspberry Pi</h3>
+              <p>Raspberry Pi 3B · Debian 13</p>
+              <small>{lang === 'es' ? <>En otra vivienda. Tiene la web siempre lista y solo la publica si el homelab se queda sin luz o sin internet: lo detecta preguntando a Cloudflare, sin usar la VPN. <a href="/notas/que-un-corte-de-luz-no-tumbe-la-web/">Cómo funciona</a>.</> : <>In another home. It keeps the site ready and only publishes it if the homelab loses power or internet: it finds out by asking Cloudflare, without using the VPN. <a href="/en/notes/que-un-corte-de-luz-no-tumbe-la-web/">How it works</a>.</>}</small>
             </article>
           </div>
         </section>

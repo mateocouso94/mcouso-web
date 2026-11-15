@@ -44,7 +44,7 @@ export type PageCopy = {
   labIntro: string;
   networkCaption: string;
   networkNote: string;
-  networkLabels: { wan: string; gateway: string; switch: string; router: string; host: string; app: string; remote: string; link: string; wifi: string; dhcpOff: string; macvlan: string; monitoring: string; portfolio: string; tunnel: string; logical: string };
+  networkLabels: { wan: string; gateway: string; switch: string; router: string; host: string; app: string; remote: string; link: string; wifi: string; dhcpOff: string; macvlan: string; monitoring: string; portfolio: string; tunnel: string; logical: string; remoteSite: string; replica: string };
   projectsEyebrow: string;
   projectsTitle: string;
   projectsIntro: string;

@@ -22,7 +22,8 @@ git push (main) ──► GitHub Actions ──► ghcr.io/mateocouso94/mcouso-w
                                               │
                      docker compose pull + up -d (solo si la imagen cambió)
                                               │
-                      nginx :3000  ◄── cloudflared ◄── Cloudflare ◄── mcouso.es
+                      nginx :3000  ◄── cloudflared ◄─┬─ Cloudflare ◄── mcouso.es
+                      réplica Pi   ◄── cloudflared ◄─┘  (solo si homelab cae, ver infra/replica-pi)
 ```
 
 - `deploy/update.sh` hace también `git pull`, así que los cambios en `compose.yaml` se aplican solos.

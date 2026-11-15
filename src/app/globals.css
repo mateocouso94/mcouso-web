@@ -161,3 +161,13 @@
 
 /* Móvil: el menú baja a una segunda línea en vez de esconder opciones con scroll lateral */
 @media(max-width:650px){.topbar nav{flex-wrap:wrap;overflow:visible;row-gap:8px;column-gap:14px}.topbar nav a{font-size:11px}}
+
+/* Homelab: cuatro tarjetas (la cuarta es la réplica de reserva en la Raspberry Pi) */
+.lab-details{grid-template-columns:repeat(4,1fr)}
+.lab-details small a{color:var(--red-dark);border-bottom:1px solid currentColor}
+@media(min-width:651px) and (max-width:950px){
+  .lab-details{grid-template-columns:1fr 1fr}
+  .lab-details article:last-child{grid-column:auto;border-top:1px solid var(--line);border-left:1px solid var(--line);padding-left:20px}
+  .lab-details article:nth-child(3){border-left:0;padding-left:0;border-top:1px solid var(--line)}
+}
+@media(max-width:650px){.lab-details{grid-template-columns:1fr}}

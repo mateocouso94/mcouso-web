@@ -23,7 +23,7 @@ The split has a reason: if I break something playing with containers on one mach
 
 - **Movistar HGU** as the Internet gateway.
 - A 5-port **Gigabyte switch** for the wired network.
-- **Xiaomi AX3600 running OpenWrt** for Wi-Fi and a **LAN-to-LAN VPN** to a remote network.
+- **Xiaomi AX3600 running OpenWrt** for Wi-Fi and a **LAN-to-LAN VPN** to a remote network in another home. That's also where the Raspberry Pi that acts as the [site's standby replica](/en/notes/que-un-corte-de-luz-no-tumbe-la-web/) lives, although the replica doesn't use the VPN.
 - **DHCP centralised in AdGuard Home**, not on the router. AdGuard has its own IP on the network thanks to a *macvlan* interface, so it sees each device's real IP and filters DNS for the whole house. One macvlan detail: the host itself can't talk to that container, so homelab-red has a small *shim* interface created by a systemd service at boot ([`infra/homelab-red/macvlan-shim.service`](https://github.com/mateocouso94/mcouso-web/blob/main/infra/homelab-red/macvlan-shim.service)). I found out when I rebooted: without it, Uptime Kuma lost DNS and flagged half the house as down.
 - **A backup DNS handed out by DHCP.** AdGuard announces two servers: itself and `1.1.1.1`. If homelab-red goes off, the house still has Internet. The price is that some queries skip the filtering, because clients don't only use the second DNS when the first one fails. For a home it's worth it: a second AdGuard on the other machine would break the separation of roles for a case that almost never happens.
 
@@ -139,6 +139,8 @@ The cross-backup between the two mini PCs already gives me a local copy that's q
 ## If the power goes
 
 Both machines are set in the BIOS to power on by themselves when the power comes back. Docker waits for `/opt` to be mounted before starting, so services never come up on empty folders, and every container has `restart: unless-stopped`. I tested it by rebooting both: within a couple of minutes everything was green again, without touching anything.
+
+While the outage lasts, the site doesn't go down: a Raspberry Pi in another home takes over within a few minutes and hands back when the homelab returns. The details are in [Keeping the site up through a power cut](/en/notes/que-un-corte-de-luz-no-tumbe-la-web/).
 
 ## Next
 
