@@ -48,6 +48,15 @@ En la Pi la web está siempre encendida, con la misma imagen Docker que en casa 
 - El token de la API es de **solo lectura**: puede consultar el túnel, pero no tocarlo.
 - La Pi se actualiza igual que el homelab: un timer de systemd que descarga la imagen nueva cada 5 minutos.
 
+## El aviso que faltaba
+
+Cuando la Pi toma el relevo, y cuando lo devuelve, me avisa por Telegram. Parece un detalle, pero es el único aviso que tengo de que mi casa se ha caído:
+
+- **Uptime Kuma** vive en el homelab, así que cae con él y no puede avisar de nada.
+- **El monitor externo** ya no ve ninguna caída, porque la web sigue respondiendo desde la Pi.
+
+Así que, sin buscarlo, la réplica se ha convertido también en el vigilante de mi casa desde fuera. Si el aviso dice que la Pi ha tomado el relevo, es que el homelab (o al menos la máquina de la web) se ha quedado sin luz, sin internet o apagado.
+
 ## Si la web sale de la Pi, el homelab está caído
 
 La Pi solo enciende su `cloudflared` cuando el homelab lleva unos minutos desconectado. Así que, si la web sale de la Pi, **es que el homelab está caído**: no hay otra forma de llegar ahí.
@@ -62,11 +71,11 @@ Durante un corte, la web sigue en pie y además cuenta lo que pasa.
 
 ## La prueba
 
-Lo monté durante otro corte de luz, con el homelab apagado. En cuanto activé los timers, la Pi vio que el conector de casa llevaba varios minutos desaparecido, encendió su `cloudflared` y mcouso.es volvió a responder, ahora desde otra vivienda.
+Lo monté durante otro corte de luz, con el homelab apagado. En cuanto activé los timers, la Pi vio que el conector de casa llevaba varios minutos desaparecido, encendió su `cloudflared` y mcouso.es volvió a responder, ahora desde otra vivienda. Cuando volvió la luz, el homelab se reconectó y, cinco minutos después, la Pi le devolvió la web sola.
 
 ## Lo que me queda por hacer
 
-- **Monitorizar la propia réplica**: avisos por Telegram cuando la Pi toma o devuelve el relevo, y que el monitor externo distinga desde qué máquina sale la web.
+- **Que el monitor externo distinga desde qué máquina sale la web**, como segunda vía de aviso además de Telegram.
 - **Un simulacro con todo encendido**: apagar el `cloudflared` de casa a propósito y cronometrar el relevo y la vuelta.
 - Una limitación conocida: el script detecta que el conector del homelab ha desaparecido (luz, internet, mini PC apagado), pero no que nginx falle con el conector conectado. Eso lo siguen avisando Uptime Kuma y el monitor externo.
 
