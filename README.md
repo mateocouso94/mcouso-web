@@ -41,6 +41,12 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now mcouso-web-update.timer
 ```
 
+### Réplica de reserva (Raspberry Pi)
+
+En [`infra/replica-pi/`](infra/replica-pi/) está la réplica que sirve la web desde otra casa si homelab se queda
+sin luz o sin internet. Solo se activa cuando la API de Cloudflare deja de ver el conector de homelab.
+Por eso la imagen se publica para `linux/amd64` y `linux/arm64`.
+
 ### Copias del homelab (3-2-1-0)
 
 En [`infra/backup/`](infra/backup/) están las copias con restic de los dos mini PC: copia cruzada por SFTP,

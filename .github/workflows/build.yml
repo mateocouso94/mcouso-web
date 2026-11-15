@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # QEMU: para la parte arm64 de la imagen (réplica en la Raspberry Pi)
+      - uses: docker/setup-qemu-action@v4
+
       - uses: docker/setup-buildx-action@v4
 
       - name: Login en ghcr.io
@@ -81,6 +84,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.sha }}

@@ -1,0 +1,10 @@
+[Unit]
+Description=Comprueba cada minuto si homelab está conectado al túnel
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

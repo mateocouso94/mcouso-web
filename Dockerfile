@@ -1,5 +1,7 @@
 # --- 1. Compilación: genera la web estática en /app/out ---
-FROM node:22-alpine AS builder
+# Se compila siempre en la arquitectura del runner (BUILDPLATFORM): el resultado es HTML/JS/CSS,
+# igual para amd64 (homelab) que para arm64 (réplica en la Raspberry Pi), y así no se emula Node.
+FROM --platform=$BUILDPLATFORM node:22-alpine AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY package.json package-lock.json ./

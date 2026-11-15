@@ -1,0 +1,9 @@
+[Unit]
+Description=Réplica mcouso.es: actualiza la web si hay imagen nueva en ghcr.io
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/ci/portfolio/infra/replica-pi/update.sh
