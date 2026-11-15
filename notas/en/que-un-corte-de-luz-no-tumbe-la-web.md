@@ -1,15 +1,23 @@
 ---
 title: Keeping the site up through a power cut
 date: 2026-11-15
-summary: "One night the power went out at home and the site was down for hours. Now, if the homelab loses power or internet, a Raspberry Pi in another home takes over on its own within minutes. No reliance on the VPN between the two homes and no paid load balancer."
-tags: [Cloudflare Tunnel, High availability, Raspberry Pi, Homelab, systemd]
+summary: "One night the power went out at home and the site was down for hours. Now, if the homelab loses power or internet, a Raspberry Pi in another home serves the site within minutes. Only the site: the rest of the homelab has no replica, and that's on purpose."
+tags: [Cloudflare Tunnel, Failover, Raspberry Pi, Homelab, systemd]
 ---
 
 This site is served from a mini PC in my [homelab](/en/notes/como-esta-montado-mi-homelab/). One night there was a long power cut and mcouso.es stopped responding for several hours. It isn't a critical site and a few minutes of downtime don't bother me, but hours do.
 
-The answer wasn't to make my home more resilient, but to have the site **somewhere else** as well.
+The answer wasn't to make my home more resilient, but to have the site **somewhere else** as well. Just the site.
 
-## The idea: a replica in another home
+## Only the site, on purpose
+
+The replica covers the site and nothing else. DNS, DHCP, monitoring and the rest of the homelab have no second machine anywhere else: if the power goes out at home, they go down. They have [backups of their data](/en/notes/copias-3-2-1-0/) so I can recover them, but nothing that serves them in the meantime.
+
+And that makes sense. Those services are for my home: if there's no power at home, nobody is using the DNS or the DHCP, and a second AdGuard in another home would be of no use to anyone. The site is the only part of the homelab used from outside, so it's the only part that has to stay up when my home is down.
+
+I wouldn't call it high availability either: there are a few minutes of downtime before the replica steps in, and the replica is a single Raspberry Pi with a microSD card. For a personal site that can live with a few minutes of downtime, that's enough.
+
+## Where: another home
 
 I have a Raspberry Pi 3 in another home, with its own power and its own internet connection. Until now it did almost nothing, so it's perfect for this: if the power goes out at my place, there's no reason for it to go out there too.
 
