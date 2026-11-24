@@ -36,7 +36,7 @@ Para no escribir el código a mano usé `cf-terraforming`, la herramienta oficia
 
 **El estado no va a git.** Es el fichero donde Terraform apunta lo que gestiona, y puede contener datos sensibles. Lo guardo en B2, donde ya tenía las [copias del homelab](/notas/copias-3-2-1-0/), pero en un bucket aparte, privado y con versiones: si algo sale mal, puedo volver a cualquier estado anterior. B2 es compatible con la API de S3, así que Terraform lo usa con su backend `s3` y unos cuantos ajustes, porque la compatibilidad no es total.
 
-**El token, con lo mínimo.** El token de Cloudflare solo puede editar los DNS de este dominio, leer la zona y gestionar túneles. Nada más. Mi primer intento fue un token con permiso de edición sobre todas las zonas y todas las categorías: la plantilla del panel lo pone muy fácil. Es lo mismo que reviso a diario en Azure y AWS, así que no tenía sentido saltármelo en casa.
+**El token, con lo mínimo.** El token de Cloudflare solo puede editar los DNS de este dominio, leer la zona y gestionar túneles. Nada más. Es el mismo criterio de permisos mínimos que aplico a diario en Azure y AWS, y no tenía sentido saltármelo en casa.
 
 ## Los tropiezos
 
@@ -54,7 +54,7 @@ El código que genera `cf-terraforming` funciona, pero no se lee bien: recursos 
 
 ```hcl
 locals {
-  origen    = "http://mcouso-origin:3000"
+  origen    = "http://origen-web:3000"
   hostnames = ["www.mcouso.es", "mcouso.es"]
 }
 

@@ -36,7 +36,7 @@ To avoid writing the code by hand I used `cf-terraforming`, Cloudflare's officia
 
 **State doesn't go in git.** It's the file where Terraform records what it manages, and it can contain sensitive data. I keep it in B2, where I already had the [homelab backups](/en/notes/copias-3-2-1-0/), but in a separate, private, versioned bucket: if something goes wrong, I can go back to any previous state. B2 is compatible with the S3 API, so Terraform uses it through its `s3` backend plus a few settings, because the compatibility isn't complete.
 
-**The token, with the bare minimum.** The Cloudflare token can only edit this domain's DNS, read the zone and manage tunnels. Nothing else. My first attempt was a token with edit rights on every zone and every category: the dashboard template makes that very easy. It's the same thing I check every day in Azure and AWS, so there was no reason to skip it at home.
+**The token, with the bare minimum.** The Cloudflare token can only edit this domain's DNS, read the zone and manage tunnels. Nothing else. It's the same least-privilege approach I apply every day in Azure and AWS, and there was no reason to skip it at home.
 
 ## The stumbles
 
@@ -54,7 +54,7 @@ The code `cf-terraforming` generates works, but it's hard to read: resources wit
 
 ```hcl
 locals {
-  origen    = "http://mcouso-origin:3000"
+  origen    = "http://origen-web:3000"
   hostnames = ["www.mcouso.es", "mcouso.es"]
 }
 
