@@ -186,7 +186,7 @@ export const es: PageCopy = {
       role: 'Administrador de Sistemas VMware',
       place: 'Santiago de Compostela · Remoto',
       description:
-        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos sobre servidores Lenovo, Dell y HP, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. El cliente principal tenía unos 600 servidores y 3.000 máquinas virtuales. También administré un stretched cluster con vSAN entre dos datacenters: 12 hosts, 6 en cada uno, con un vCenter común con vCenter HA y reglas de afinidad, para que si una máquina caía en un datacenter se levantase en el otro. Nunca llegó a caer.',
+        'Administraba clústeres VMware para AMTEGA y CIXTEC: instalación y configuración de clústeres nuevos sobre servidores Lenovo, Dell y HP, ciclo de vida, parcheo y despliegue de máquinas. Preparaba matrices de compatibilidad, ejecutaba y adaptaba scripts de PowerShell y usaba vRealize Orchestrator y Terraform. En total eran unos 20 clústeres, 300 hosts y 8.000 máquinas virtuales; el cliente principal tenía unos 600 servidores y 3.000. Migré clústeres de vSphere 6.5 sobre SAN a 7.0 sobre vSAN. También administré un stretched cluster con vSAN entre dos datacenters: 12 hosts, 6 en cada uno, con un vCenter común con vCenter HA y reglas de afinidad, para que si una máquina caía en un datacenter se levantase en el otro. Nunca llegó a caer.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -205,7 +205,7 @@ export const es: PageCopy = {
         'Despliegues de aplicaciones con Git y Jenkins, control de calidad y operación de infraestructura en AWS y GCP.',
     },
     {
-      period: 'JUL 2017 — JUL 2020',
+      period: 'JUN 2017 — JUL 2020',
       company: 'Plexus Tech · Fermax Electrónica',
       role: 'Coordinación de proyectos y soporte técnico',
       place: 'Galicia',

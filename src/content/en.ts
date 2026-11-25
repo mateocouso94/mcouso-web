@@ -186,7 +186,7 @@ export const en: PageCopy = {
       role: 'VMware Systems Administrator',
       place: 'Santiago de Compostela · Remote',
       description:
-        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters on Lenovo, Dell and HP servers, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. The main customer had about 600 servers and 3,000 virtual machines. I also ran a vSAN stretched cluster across two datacenters: 12 hosts, 6 in each, with a shared vCenter with vCenter HA and affinity rules, so that if a VM went down in one datacenter it would come back up in the other. It never went down.',
+        'I ran VMware clusters for AMTEGA and CIXTEC: installing and configuring new clusters on Lenovo, Dell and HP servers, lifecycle, patching and VM provisioning. I prepared compatibility matrices, ran and adapted PowerShell scripts, and used vRealize Orchestrator and Terraform. In total there were about 20 clusters, 300 hosts and 8,000 virtual machines; the main customer had about 600 servers and 3,000. I migrated clusters from vSphere 6.5 on SAN to 7.0 on vSAN. I also ran a vSAN stretched cluster across two datacenters: 12 hosts, 6 in each, with a shared vCenter with vCenter HA and affinity rules, so that if a VM went down in one datacenter it would come back up in the other. It never went down.',
     },
     {
       period: 'MAR 2021 — FEB 2023',
@@ -204,7 +204,7 @@ export const en: PageCopy = {
       description: 'Application deployments with Git and Jenkins, quality control and infrastructure operations on AWS and GCP.',
     },
     {
-      period: 'JUL 2017 — JUL 2020',
+      period: 'JUN 2017 — JUL 2020',
       company: 'Plexus Tech · Fermax Electrónica',
       role: 'Project coordination and technical support',
       place: 'Galicia',
