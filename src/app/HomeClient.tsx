@@ -96,7 +96,7 @@ export default function Home({ notes, initialLang = 'es' }: { notes: NoteMeta[];
       help: isSpanish
         ? 'status   estado real del homelab (Uptime Kuma)\nbackup   estado de las copias 3-2-1-0\ndeploy   versión publicada de esta web\nwhoami · stack · lab · career · contact · clear'
         : 'status   live homelab status (Uptime Kuma)\nbackup   3-2-1-0 backup status\ndeploy   live version of this site\nwhoami · stack · lab · career · contact · clear',
-      whoami: isSpanish ? 'Mateo Couso Hortas — Ingeniero de Infraestructura Híbrida' : 'Mateo Couso Hortas — Hybrid Infrastructure Engineer',
+      whoami: isSpanish ? 'Mateo Couso Hortas — Ingeniero de Virtualización e Infraestructura' : 'Mateo Couso Hortas — Virtualization & Infrastructure Engineer',
       stack: 'VMware · SAN / vSAN · Pure Storage · Veeam CDP · Disaster Recovery · Azure · AWS · Terraform',
       lab: 'homelab-red: AdGuard Home, Prometheus, Grafana, Uptime Kuma\nhomelab-apps: Docker Compose, nginx (esta web), cloudflared\nréplica (Pi 3B, otra vivienda): nginx + cloudflared de reserva',
       career: 'Fermax → Plexus → Evelb → Landra → DXC → cloud.gal → Enxenio',

@@ -15,10 +15,10 @@ export const es: PageCopy = {
   ],
 
   // --- Portada ---
-  role: 'INGENIERO DE INFRAESTRUCTURA HÍBRIDA',
+  role: 'INGENIERO DE VIRTUALIZACIÓN E INFRAESTRUCTURA',
   headline: 'Llevo nueve años en IT montando y manteniendo infraestructura.',
   intro:
-    'Me llamo Mateo y soy de sistemas. La mayor parte de mi carrera ha sido VMware on-premise: he montado un datacenter desde cero, desde las VLAN y la cabina hasta el vCenter y las copias, y he migrado más de 100 clientes entre plataformas. Hoy trabajo también con Linux, Azure, AWS y Proxmox, y hacia ahí quiero crecer: infraestructura híbrida, aprovechando todo lo aprendido en el CPD.',
+    'Me llamo Mateo y soy de sistemas. La mayor parte de mi carrera ha sido VMware on-premise: he montado un datacenter desde cero, desde las VLAN y la cabina hasta el vCenter y las copias, y he migrado más de 100 clientes entre plataformas. Hoy trabajo también con Linux, Azure, AWS y Proxmox. Quiero seguir en virtualización, almacenamiento y backup, y crecer en migraciones entre plataformas (VMware, Proxmox y cloud), aprovechando todo lo aprendido en el CPD.',
   cv: 'DESCARGAR CURRÍCULUM',
   linkedin: 'PERFIL DE LINKEDIN',
   location: 'SANTIAGO DE COMPOSTELA · GALICIA',
@@ -146,7 +146,8 @@ export const es: PageCopy = {
       body: 'Scripts para no repetir a mano lo que se puede automatizar, y monitorización para enterarme de los problemas antes que el usuario.',
       details: [
         'PowerShell y VMware PowerCLI',
-        'Terraform y vRealize Orchestrator',
+        'vRealize Orchestrator en DXC',
+        'Terraform: uso puntual en DXC y, en el homelab, Cloudflare gestionado como código',
         'Jenkins, GitLab CI/CD y GitHub Actions',
         'Prometheus, Grafana y Uptime Kuma en el homelab',
         'Copias y despliegues automatizados con Restic y snapshots',
@@ -327,7 +328,7 @@ export const es: PageCopy = {
   contactEyebrow: 'CONTACTO',
   contactTitle: '¿Hablamos?',
   contactIntro:
-    'Si buscas a alguien de sistemas para infraestructura on-premise, cloud o híbrida, o quieres comentar algo de la web o del homelab, escríbeme.',
+    'Si buscas a alguien de sistemas para virtualización, almacenamiento, backup o infraestructura híbrida, o quieres comentar algo de la web o del homelab, escríbeme.',
   emailCta: 'ESCRÍBEME',
   footer: 'Hecha, desplegada y mantenida por Mateo Couso en su homelab.',
 };

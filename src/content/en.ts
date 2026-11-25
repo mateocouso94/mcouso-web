@@ -15,10 +15,10 @@ export const en: PageCopy = {
   ],
 
   // --- Hero ---
-  role: 'HYBRID INFRASTRUCTURE ENGINEER',
+  role: 'VIRTUALIZATION & INFRASTRUCTURE ENGINEER',
   headline: 'Nine years in IT, building and running infrastructure.',
   intro:
-    "I'm Mateo, a systems engineer. Most of my career has been on-premise VMware: I built a datacenter from scratch, from the VLANs and the storage array up to vCenter and backups, and I've migrated more than 100 customers between platforms. These days I also work with Linux, Azure, AWS and Proxmox, and that's where I want to grow: hybrid infrastructure, built on what I learned in the datacenter.",
+    "I'm Mateo, a systems engineer. Most of my career has been on-premise VMware: I built a datacenter from scratch, from the VLANs and the storage array up to vCenter and backups, and I've migrated more than 100 customers between platforms. These days I also work with Linux, Azure, AWS and Proxmox. I want to keep working in virtualization, storage and backup, and grow in cross-platform migrations (VMware, Proxmox and cloud), building on what I learned in the datacenter.",
   cv: 'DOWNLOAD CV',
   linkedin: 'LINKEDIN PROFILE',
   location: 'SANTIAGO DE COMPOSTELA · GALICIA, SPAIN',
@@ -146,7 +146,8 @@ export const en: PageCopy = {
       body: "Scripts so I don't repeat by hand what can be automated, and monitoring so I hear about problems before the users do.",
       details: [
         'PowerShell and VMware PowerCLI',
-        'Terraform and vRealize Orchestrator',
+        'vRealize Orchestrator at DXC',
+        'Terraform: occasional use at DXC and, in the homelab, Cloudflare managed as code',
         'Jenkins, GitLab CI/CD and GitHub Actions',
         'Prometheus, Grafana and Uptime Kuma in the homelab',
         'Automated backups and deployments with Restic and snapshots',
@@ -325,7 +326,7 @@ export const en: PageCopy = {
   contactEyebrow: 'CONTACT',
   contactTitle: "Let's talk.",
   contactIntro:
-    "If you need a systems engineer for on-premise, cloud or hybrid infrastructure, or you'd like to chat about the site or the homelab, drop me a line.",
+    "If you need a systems engineer for virtualization, storage, backup or hybrid infrastructure, or you'd like to chat about the site or the homelab, drop me a line.",
   emailCta: 'EMAIL ME',
   footer: 'Built, deployed and run by Mateo Couso on his homelab.',
 };
